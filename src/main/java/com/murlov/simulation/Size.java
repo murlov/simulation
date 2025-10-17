@@ -4,6 +4,11 @@ public class Size {
     public final int width;
     public final int length;
 
+    public Size() {
+        width = 0;
+        length = 0;
+    }
+
     public Size(int width, int length) {
         this.width = width;
         this.length = length;

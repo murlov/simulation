@@ -4,9 +4,9 @@ import com.murlov.factory.*;
 import com.murlov.model.Entity;
 import com.murlov.model.EntityGroup;
 import com.murlov.model.EntityType;
+import com.murlov.settings.SimulationSettings;
 
 import java.util.HashMap;
-import java.util.Random;
 
 public class Map {
 
@@ -22,19 +22,19 @@ public class Map {
     }
 
     public void setRandomEntitiesPositions () {
-        Coordinates coordinates = Coordinates.getRandom(SimulationSettings.getSizeOfMap());
+        SimulationSettings settings = SimulationSettings.getInstance();
+        Coordinates coordinates = Coordinates.getRandom(settings.getSizeOfMap());
         Entity entity;
         for (EntityGroup entityGroup : EntityGroup.values()) {
-            for (int i = 0; i < SimulationSettings.getGroupCount(); i++) {
+            for (int i = 0; i < settings.getGroupCount(); i++) {
                 while (entities.containsKey(coordinates)) {
-                    coordinates = Coordinates.getRandom(SimulationSettings.getSizeOfMap());
+                    coordinates = Coordinates.getRandom(settings.getSizeOfMap());
                 }
                 EntityFactory entityFactory = getFactoryByName(EntityType.getRandom(entityGroup));
-                entity = entityFactory.createEntity();
+                entity = entityFactory.create();
                 setEntity(coordinates, entity);
             }
         }
-
     }
 
     private EntityFactory getFactoryByName (EntityType entityType) {

@@ -6,7 +6,7 @@ import com.murlov.model.Rock;
 public class RockFactory implements EntityFactory {
 
     @Override
-    public Entity createEntity() {
+    public Entity create() {
         return new Rock();
     }
 }

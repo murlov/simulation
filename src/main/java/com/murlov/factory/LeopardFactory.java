@@ -6,7 +6,7 @@ import com.murlov.model.Leopard;
 public class LeopardFactory implements EntityFactory {
 
     @Override
-    public Entity createEntity() {
+    public Entity create() {
         return new Leopard(1, 10, 1);
     }
 }

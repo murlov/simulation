@@ -4,9 +4,9 @@ import com.murlov.model.Entity;
 import com.murlov.model.Zebra;
 
 public class ZebraFactory implements EntityFactory{
-    @Override
 
-    public Entity createEntity() {
+    @Override
+    public Entity create() {
         return new Zebra(1, 10);
     }
 }

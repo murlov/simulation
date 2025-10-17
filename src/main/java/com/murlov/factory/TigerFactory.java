@@ -6,7 +6,7 @@ import com.murlov.model.Tiger;
 public class TigerFactory implements EntityFactory {
 
     @Override
-    public Entity createEntity() {
+    public Entity create() {
         return new Tiger(1, 10, 1);
     }
 }
