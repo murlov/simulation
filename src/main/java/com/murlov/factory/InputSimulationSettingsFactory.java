@@ -10,9 +10,9 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
     public SimulationSettings get() {
         SimulationSettings settings = SimulationSettings.getInstance();
 
-        System.out.print("Введите данные");
+        System.out.println("Введите данные");
         String failMessage = "Некорректный ввод";
-        settings.setDensity(input("Плотность заполнения. Например, 5 = каждая группа займёт 1/5 карты", failMessage, 5, 100));
+        settings.setFillPercentage(input("Процент заполнения сущностями (25 — 25% карты заполнено сущностями)", failMessage, 5, 100));
         int x = input("Ширина карты", failMessage, 6, 15);
         int y = input("Длина карты", failMessage, 6, 15);
         settings.setSizeOfMap(x, y);

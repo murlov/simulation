@@ -6,33 +6,36 @@ public class SimulationSettings {
     private final  int COUNT_OF_GROUPS = 4;
 
     private static SimulationSettings instance;
-    private int density;
-    private int groupCount;
+    private double fillPercentage;
+    private int perGroup;
     private Size sizeOfMap;
+    private int remainingEntities;
 
     @Override
     public String toString() {
-        return "SimulationSettings {density=" + density +
-                ", groupCount=" + groupCount +
+        return "SimulationSettings {density=" + fillPercentage +
+                ", groupCount=" + perGroup +
                 ", sizeOfMap=" + sizeOfMap +
                 "}";
     }
 
     private SimulationSettings() {
         sizeOfMap = new Size();
-        density = 0;
-        groupCount = 0;
+        fillPercentage = 0;
+        perGroup = 0;
+        remainingEntities = 0;
     }
 
-    private SimulationSettings(int width, int length, int density) {
+    private SimulationSettings(int width, int length, int fillPercentage) {
         sizeOfMap = new Size(width, length);
-        this.density = density;
-        groupCount = sizeOfMap.getArea()/ density;
+        this.fillPercentage = fillPercentage * 0.01;
+        perGroup = (int)(sizeOfMap.getArea()*this.fillPercentage)/COUNT_OF_GROUPS;
+        remainingEntities = (int)(sizeOfMap.getArea()*this.fillPercentage) - perGroup*COUNT_OF_GROUPS;
     }
 
-    public static SimulationSettings getInstance(int width, int length, int density) {
+    public static SimulationSettings getInstance(int width, int length, int fillPercentage) {
         if (instance == null) {
-            instance = new SimulationSettings(width, length, density);
+            instance = new SimulationSettings(width, length, fillPercentage);
         }
         return instance;
     }
@@ -44,17 +47,18 @@ public class SimulationSettings {
         return instance;
     }
 
-    public int getDensity() {
-        return density;
+    public double getFillPercentage() {
+        return fillPercentage;
     }
 
-    public void setDensity(int density) {
-        this.density = density;
-        groupCount = sizeOfMap.getArea()/density;
+    public void setFillPercentage(int fillPercentage) {
+        this.fillPercentage = fillPercentage*0.01;
+        perGroup = (int)(sizeOfMap.getArea()*this.fillPercentage)/COUNT_OF_GROUPS;
+        remainingEntities = (int)(sizeOfMap.getArea()*this.fillPercentage) - perGroup*COUNT_OF_GROUPS;
     }
 
-    public int getGroupCount() {
-        return groupCount;
+    public int getPerGroup() {
+        return perGroup;
     }
 
     public Size getSizeOfMap() {
@@ -63,7 +67,8 @@ public class SimulationSettings {
 
     public void setSizeOfMap(int x, int y) {
         sizeOfMap = new Size(x, y);
-        groupCount = sizeOfMap.getArea()/ density;
+        perGroup = (int)(sizeOfMap.getArea()*this.fillPercentage)/COUNT_OF_GROUPS;
+        remainingEntities = (int)(sizeOfMap.getArea()*this.fillPercentage) - perGroup*COUNT_OF_GROUPS;
     }
 
     public int getCountOfGroups() {
@@ -71,6 +76,10 @@ public class SimulationSettings {
     }
 
     public int getCountOfEntities() {
-        return groupCount*COUNT_OF_GROUPS;
+        return perGroup*COUNT_OF_GROUPS;
+    }
+
+    public int getRemainingEntities() {
+        return remainingEntities;
     }
 }

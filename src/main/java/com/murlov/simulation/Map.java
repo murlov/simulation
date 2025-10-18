@@ -26,11 +26,24 @@ public class Map {
         Coordinates coordinates = Coordinates.getRandom(settings.getSizeOfMap());
         Entity entity;
         for (EntityGroup entityGroup : EntityGroup.values()) {
-            for (int i = 0; i < settings.getGroupCount(); i++) {
+            for (int i = 0; i < settings.getPerGroup(); i++) {
                 while (entities.containsKey(coordinates)) {
                     coordinates = Coordinates.getRandom(settings.getSizeOfMap());
                 }
-                EntityFactory entityFactory = getFactoryByName(EntityType.getRandom(entityGroup));
+                EntityType entityType = EntityType.getRandom(entityGroup);
+                EntityFactory entityFactory = getFactoryByName(entityType);
+                entity = entityFactory.create();
+                setEntity(coordinates, entity);
+            }
+        }
+
+        if (settings.getRemainingEntities() != 0) {
+            for (int i = 0; i < settings.getRemainingEntities(); i++) {
+                while (entities.containsKey(coordinates)) {
+                    coordinates = Coordinates.getRandom(settings.getSizeOfMap());
+                }
+                EntityType entityType = EntityType.getRandom(EntityGroup.getRandom());
+                EntityFactory entityFactory = getFactoryByName(entityType);
                 entity = entityFactory.create();
                 setEntity(coordinates, entity);
             }
