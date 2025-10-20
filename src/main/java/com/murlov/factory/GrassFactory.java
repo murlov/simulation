@@ -6,7 +6,7 @@ import com.murlov.model.Grass;
 public class GrassFactory implements EntityFactory{
 
     @Override
-    public Entity create() {
+public Entity create() {
         return new Grass();
     }
 }

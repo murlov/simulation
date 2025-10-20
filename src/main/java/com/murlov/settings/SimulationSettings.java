@@ -13,7 +13,7 @@ public class SimulationSettings {
 
     @Override
     public String toString() {
-        return "SimulationSettings {density=" + fillPercentage +
+        return "SimulationSettings {fillPercentage=" + fillPercentage +
                 ", groupCount=" + perGroup +
                 ", sizeOfMap=" + sizeOfMap +
                 "}";

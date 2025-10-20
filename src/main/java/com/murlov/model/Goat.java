@@ -2,7 +2,11 @@ package com.murlov.model;
 
 public class Goat extends Herbivore {
 
-    public Goat(Integer speed, Integer health) {
+    public Goat() {
         super("\uD83D\uDC10");
+    }
+
+    public Goat(Integer speed, Integer health) {
+        super(speed, health,"\uD83D\uDC10");
     }
 }

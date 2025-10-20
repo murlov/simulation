@@ -12,7 +12,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
 
         System.out.println("Введите данные");
         String failMessage = "Некорректный ввод";
-        settings.setFillPercentage(input("Процент заполнения сущностями (25 — 25% карты заполнено сущностями)", failMessage, 5, 100));
+        settings.setFillPercentage(input("Процент заполнения. При вводе 25 — 25% карты заполнится объектами)", failMessage, 5, 100));
         int x = input("Ширина карты", failMessage, 6, 15);
         int y = input("Длина карты", failMessage, 6, 15);
         settings.setSizeOfMap(x, y);

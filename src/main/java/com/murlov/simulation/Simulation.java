@@ -1,5 +1,6 @@
 package com.murlov.simulation;
 
+import com.murlov.action.InitEntitiesAction;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.view.Renderer;
 
@@ -20,8 +21,8 @@ public class Simulation {
     }
 
     private void nextTurn() {
-        map.setRandomEntitiesPositions();
-        renderer.viewMap(map.entities);
+        InitEntitiesAction.execute(map);
+        renderer.viewMap(map);
     }
 
     public void stopSimulation() {
