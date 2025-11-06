@@ -9,4 +9,8 @@ public class Leopard extends Predator{
     public Leopard(Integer speed, Integer health, Integer damage) {
         super(speed, health, damage,"\uD83D\uDC06");
     }
+
+    public EntityType getType() {
+        return EntityType.LEOPARD;
+    }
 }

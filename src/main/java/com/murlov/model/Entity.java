@@ -2,7 +2,7 @@ package com.murlov.model;
 
 import com.murlov.simulation.Coordinates;
 
-abstract public class Entity {
+public abstract class Entity {
     private Coordinates coordinates;
     private final String icon;
 
@@ -14,7 +14,15 @@ abstract public class Entity {
         this.coordinates = coordinates;
     }
 
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
     public String getIcon () {
         return icon;
     }
+
+    public abstract EntityType getType();
+
+    public abstract EntityGroup getGroup();
 }

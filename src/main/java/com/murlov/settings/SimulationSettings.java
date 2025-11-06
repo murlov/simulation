@@ -29,8 +29,8 @@ public class SimulationSettings {
     private SimulationSettings(int width, int length, int fillPercentage) {
         sizeOfMap = new Size(width, length);
         this.fillPercentage = fillPercentage * 0.01;
-        perGroup = (int)(sizeOfMap.getArea()*this.fillPercentage)/COUNT_OF_GROUPS;
-        remainingEntities = (int)(sizeOfMap.getArea()*this.fillPercentage) - perGroup*COUNT_OF_GROUPS;
+        perGroup = (int)(getCountOfCells()*this.fillPercentage)/COUNT_OF_GROUPS;
+        remainingEntities = (int)(getCountOfCells()*this.fillPercentage) - perGroup*COUNT_OF_GROUPS;
     }
 
     public static SimulationSettings getInstance(int width, int length, int fillPercentage) {
@@ -53,8 +53,8 @@ public class SimulationSettings {
 
     public void setFillPercentage(int fillPercentage) {
         this.fillPercentage = fillPercentage*0.01;
-        perGroup = (int)(sizeOfMap.getArea()*this.fillPercentage)/COUNT_OF_GROUPS;
-        remainingEntities = (int)(sizeOfMap.getArea()*this.fillPercentage) - perGroup*COUNT_OF_GROUPS;
+        perGroup = (int)(getCountOfCells()*this.fillPercentage)/COUNT_OF_GROUPS;
+        remainingEntities = (int)(getCountOfCells()*this.fillPercentage) - perGroup*COUNT_OF_GROUPS;
     }
 
     public int getPerGroup() {
@@ -67,8 +67,8 @@ public class SimulationSettings {
 
     public void setSizeOfMap(int x, int y) {
         sizeOfMap = new Size(x, y);
-        perGroup = (int)(sizeOfMap.getArea()*this.fillPercentage)/COUNT_OF_GROUPS;
-        remainingEntities = (int)(sizeOfMap.getArea()*this.fillPercentage) - perGroup*COUNT_OF_GROUPS;
+        perGroup = (int)(getCountOfCells()*this.fillPercentage)/COUNT_OF_GROUPS;
+        remainingEntities = (int)(getCountOfCells()*this.fillPercentage) - perGroup*COUNT_OF_GROUPS;
     }
 
     public int getCountOfGroups() {
@@ -81,5 +81,9 @@ public class SimulationSettings {
 
     public int getRemainingEntities() {
         return remainingEntities;
+    }
+
+    public int getCountOfCells() {
+        return sizeOfMap.getArea();
     }
 }

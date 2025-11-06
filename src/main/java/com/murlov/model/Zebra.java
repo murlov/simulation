@@ -9,4 +9,8 @@ public class Zebra extends Herbivore {
     public Zebra(Integer speed, Integer health) {
         super(speed, health,"\uD83E\uDD93");
     }
+
+    public EntityType getType() {
+        return EntityType.ZEBRA;
+    }
 }

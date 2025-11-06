@@ -1,6 +1,6 @@
 package com.murlov.model;
 
-abstract public class Creature extends Entity {
+public abstract class Creature extends Entity {
     private Integer speed;
     private Integer health;
 

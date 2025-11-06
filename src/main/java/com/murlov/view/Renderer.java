@@ -6,7 +6,7 @@ import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 
 public class Renderer {
-    public void viewMap (Map map) {
+    public void viewMap(Map map) {
         SimulationSettings settings = SimulationSettings.getInstance();
         for (int y = 0; y < settings.getSizeOfMap().getLength(); y++) {
             for (int x = 0; x < settings.getSizeOfMap().getWidth(); x++) {
@@ -21,5 +21,9 @@ public class Renderer {
             }
             System.out.println();
         }
+    }
+
+    public void suggestContinue() {
+        System.out.println("Для выполнения хода нажмите Enter. Для завершения симуляции — введите 0.\n");
     }
 }

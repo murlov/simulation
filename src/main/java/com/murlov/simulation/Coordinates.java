@@ -3,8 +3,8 @@ package com.murlov.simulation;
 import java.util.Random;
 
 public class Coordinates {
-    public final int x;
-    public final int y;
+    private final int x;
+    private final int y;
 
     public Coordinates () {
         this.x = 0;
@@ -14,6 +14,14 @@ public class Coordinates {
     public Coordinates(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     @Override
@@ -38,6 +46,4 @@ public class Coordinates {
         int y = rand.nextInt(size.getLength());
         return new Coordinates(x, y);
     }
-
-
 }

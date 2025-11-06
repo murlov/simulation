@@ -18,7 +18,7 @@ public class Main {
         SimulationSettings settings = settingsFactory.get();
 
         Simulation simulation = new Simulation();
-        simulation.startSimulation();
+        simulation.start();
     }
 
     private static int getSettingsMode() {
