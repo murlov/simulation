@@ -9,21 +9,22 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
 
     @Override
     public SimulationSettings get() {
+        Renderer renderer = new Renderer();
         SimulationSettings settings = SimulationSettings.getInstance();
-        Renderer.inputMessage();
+        renderer.inputMessage();
         String failMessage = "Некорректный ввод";
-        settings.setFillPercentage(input("Процент заполнения. При вводе 25 — 25% карты заполнится объектами.", failMessage, 5, 100));
-        int x = input("Ширина карты", failMessage, 6, 15);
-        int y = input("Длина карты", failMessage, 6, 15);
+        settings.setFillPercentage(input(renderer, "Процент заполнения. При вводе 25 — 25% карты заполнится объектами.", failMessage, 5, 100));
+        int x = input(renderer, "Ширина карты", failMessage, 6, 15);
+        int y = input(renderer, "Длина карты", failMessage, 6, 15);
         settings.setSizeOfMap(x, y);
         return settings;
     }
 
-    private int input(String title, String failMessage, int min, int max) {
+    private int input(Renderer renderer, String title, String failMessage, int min, int max) {
         Scanner scanner = new Scanner(System.in);
 
         while(true) {
-            Renderer.inputMessage(title, min, max);
+            renderer.inputMessage(title, min, max);
             String input = scanner.nextLine();
             if (isInteger(input)) {
                 int value = Integer.parseInt(input);
@@ -31,7 +32,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
                     return value;
                 }
             }
-            Renderer.message(failMessage);
+            renderer.message(failMessage);
         }
     }
 

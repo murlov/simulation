@@ -14,7 +14,8 @@ public class Main {
     private final static int INPUT_SETTINGS = 2;
 
     public static void main(String[] args) {
-        int settingsMode = getSettingsMode();
+        Renderer renderer = new Renderer();
+        int settingsMode = getSettingsMode(renderer);
         SimulationSettingsFactory settingsFactory = getSettingsFactory(settingsMode);
         SimulationSettings settings = settingsFactory.get();
 
@@ -22,12 +23,12 @@ public class Main {
         simulation.start();
     }
 
-    private static int getSettingsMode() {
+    private static int getSettingsMode(Renderer renderer) {
         Scanner scanner = new Scanner(System.in);
 
-        Renderer.settingsChoiceMessage( );
+        renderer.settingsChoiceMessage();
         while (true) {
-            Renderer.settingsMenuMessage();
+            renderer.settingsMenuMessage();
             String input = scanner.nextLine();
             if (isInteger(input)) {
                 int value = Integer.parseInt(input);
@@ -36,10 +37,10 @@ public class Main {
                 } else if (value == INPUT_SETTINGS) {
                     return INPUT_SETTINGS;
                 } else {
-                    Renderer.optionNoFoundMessage();
+                    renderer.optionNoFoundMessage();
                 }
             } else {
-                Renderer.invalidInputMessage();
+                renderer.invalidInputMessage();
             }
         }
     }

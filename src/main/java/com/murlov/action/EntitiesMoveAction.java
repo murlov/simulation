@@ -4,9 +4,10 @@ import com.murlov.model.Creature;
 import com.murlov.model.Entity;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
+import com.murlov.view.Renderer;
 
-public class EntitiesMoveAction {
-    public static boolean execute(Map map) {
+public class EntitiesMoveAction implements Action {
+    public boolean execute(Map map) {
         Coordinates newCoordinates = new Coordinates();
         Coordinates oldCoordinates = new Coordinates();
         Entity entity = null;
@@ -23,6 +24,8 @@ public class EntitiesMoveAction {
             map.getEntities().remove(oldCoordinates);
             return true;
         }
+        Renderer renderer = new Renderer();
+        renderer.noResourcesMessage();
         return false;
     }
 }

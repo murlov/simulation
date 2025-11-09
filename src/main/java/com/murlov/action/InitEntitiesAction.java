@@ -9,8 +9,8 @@ import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 
-public class InitEntitiesAction {
-    public static void execute(Map map) {
+public class InitEntitiesAction implements Action {
+    public boolean execute(Map map) {
         SimulationSettings settings = SimulationSettings.getInstance();
         Coordinates coordinates = Coordinates.getRandom(settings.getSizeOfMap());
         Entity entity;
@@ -37,5 +37,6 @@ public class InitEntitiesAction {
                 map.setEntity(coordinates, entity);
             }
         }
+        return true;
     }
 }
