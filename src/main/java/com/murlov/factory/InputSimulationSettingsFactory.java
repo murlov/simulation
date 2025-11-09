@@ -1,6 +1,7 @@
 package com.murlov.factory;
 
 import com.murlov.settings.SimulationSettings;
+import com.murlov.view.Renderer;
 
 import java.util.Scanner;
 
@@ -9,8 +10,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
     @Override
     public SimulationSettings get() {
         SimulationSettings settings = SimulationSettings.getInstance();
-
-        System.out.println("Введите данные");
+        Renderer.inputMessage();
         String failMessage = "Некорректный ввод";
         settings.setFillPercentage(input("Процент заполнения. При вводе 25 — 25% карты заполнится объектами.", failMessage, 5, 100));
         int x = input("Ширина карты", failMessage, 6, 15);
@@ -23,7 +23,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
         Scanner scanner = new Scanner(System.in);
 
         while(true) {
-            System.out.printf("%s (%d-%d): ", title, min, max);
+            Renderer.inputMessage(title, min, max);
             String input = scanner.nextLine();
             if (isInteger(input)) {
                 int value = Integer.parseInt(input);
@@ -31,7 +31,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
                     return value;
                 }
             }
-            System.out.println(failMessage);
+            Renderer.message(failMessage);
         }
     }
 

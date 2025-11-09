@@ -5,6 +5,7 @@ import com.murlov.factory.InputSimulationSettingsFactory;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.factory.SimulationSettingsFactory;
 import com.murlov.simulation.Simulation;
+import com.murlov.view.Renderer;
 
 import java.util.Scanner;
 
@@ -24,12 +25,9 @@ public class Main {
     private static int getSettingsMode() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Хотите использовать настройки по-умолчанию или хотите задать свои?");
+        Renderer.settingsChoiceMessage( );
         while (true) {
-            System.out.println("""
-                    1. Использовать настройки по-умолчанию (Размер карты — 10x10; Процент заполнения — 10)
-                    2. Задать свои настройки
-                    """);
+            Renderer.settingsMenuMessage();
             String input = scanner.nextLine();
             if (isInteger(input)) {
                 int value = Integer.parseInt(input);
@@ -38,10 +36,10 @@ public class Main {
                 } else if (value == INPUT_SETTINGS) {
                     return INPUT_SETTINGS;
                 } else {
-                    System.out.println("Такой пункт отсутствует");
+                    Renderer.optionNoFoundMessage();
                 }
             } else {
-                System.out.println("Некорректный ввод");
+                Renderer.invalidInputMessage();
             }
         }
     }

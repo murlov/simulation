@@ -10,39 +10,43 @@ import java.util.Scanner;
 public class Simulation {
 
     private final Map map;
-    private final Renderer renderer;
     private final SimulationSettings settings;
 
     public Simulation() {
         settings = SimulationSettings.getInstance();
         map = new Map();
-        renderer = new Renderer();
     }
 
     public void start() {
         InitEntitiesAction.execute(map);
-        renderer.viewMap(map);
-        while (input()) {
-            if (!EntitiesMoveAction.execute(map)) {
-                System.out.println("Ресурсы закончились, симуляция завершена");
-                break;
-            }
-            renderer.viewMap(map);
+        Renderer.viewMap(map);
+        boolean hasResources = true;
+        while (input() && hasResources) {
+            hasResources = nextTurn();
         }
+    }
+
+    private boolean nextTurn() {
+        if (!EntitiesMoveAction.execute(map)) {
+            Renderer.noResourcesMessage();
+            return false;
+        }
+        Renderer.viewMap(map);
+        return true;
     }
 
     private boolean input() {
         Scanner scanner = new Scanner(System.in);
 
         while(true) {
-            renderer.suggestContinue();
+            Renderer.suggestContinue();
             String input = scanner.nextLine();
             if (input.equals("")) {
                 return true;
             } else if (input.equals("0")) {
                 return false;
             }
-            System.out.println("Ошибка, попробуйте ещё раз.");
+            Renderer.tryAgainMessage();
         }
     }
 }
