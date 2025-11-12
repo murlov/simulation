@@ -9,7 +9,7 @@ import com.murlov.simulation.Map;
 import java.util.LinkedList;
 import java.util.Queue;
 
-class PathFindAction {
+public class PathFindAction {
 
     public static Coordinates execute(Map map, Entity entity){
         EntityGroup resourceGroup = getResourceGroup(entity.getGroup());

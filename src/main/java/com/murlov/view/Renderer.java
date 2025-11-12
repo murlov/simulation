@@ -6,6 +6,11 @@ import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 
 public class Renderer {
+
+    public void message(String message) {
+        System.out.println(message);
+    }
+
     public void viewMap(Map map) {
         SimulationSettings settings = SimulationSettings.getInstance();
         for (int y = 0; y < settings.getSizeOfMap().getLength(); y++) {
@@ -49,7 +54,7 @@ public class Renderer {
 
     public void settingsMenuMessage() {
         System.out.println("""
-                    1. Использовать настройки по-умолчанию (Размер карты — 10x10; Процент заполнения — 10)
+                    1. Использовать настройки по-умолчанию (Размер карты — 10x10; Процент заполнения — 40)
                     2. Задать свои настройки
                     """);
     }
@@ -62,7 +67,7 @@ public class Renderer {
         System.out.println("Некорректный ввод");
     }
 
-    public void message(String message) {
-        System.out.println(message);
+    public void entitiesCannotMoveMessage() {
+        System.out.println("Непредвиденная ошибка. Существа не могут двигаться.");
     }
 }

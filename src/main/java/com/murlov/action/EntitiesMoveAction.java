@@ -6,26 +6,29 @@ import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 import com.murlov.view.Renderer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EntitiesMoveAction implements Action {
     public boolean execute(Map map) {
-        Coordinates newCoordinates = new Coordinates();
-        Coordinates oldCoordinates = new Coordinates();
-        Entity entity = null;
-        for (java.util.Map.Entry<Coordinates, Entity> entry : map.getEntities().entrySet()) {
-            if (entry.getValue() instanceof Creature) {
-                oldCoordinates = entry.getKey();
-                newCoordinates = PathFindAction.execute(map, entry.getValue());
-                entity = entry.getValue();
-                break;
+        boolean hasMoved = false;
+
+        List<Coordinates> keys = new ArrayList<Coordinates>(map.getEntities().keySet());
+
+        for (Coordinates coordinates : keys) {
+            Entity entity = map.getEntities().get(coordinates);
+            if (entity instanceof Creature) {
+                Creature creature = (Creature) entity;
+                if (creature.makeMove(map, coordinates)) {
+                    hasMoved = true;
+                }
             }
         }
-        if (entity != null && newCoordinates != null) {
-            map.setEntity(newCoordinates, entity);
-            map.getEntities().remove(oldCoordinates);
-            return true;
+        if (!hasMoved) {
+            Renderer renderer = new Renderer();
+            renderer.entitiesCannotMoveMessage();
+            return false;
         }
-        Renderer renderer = new Renderer();
-        renderer.noResourcesMessage();
-        return false;
+        return true;
     }
 }

@@ -42,12 +42,6 @@ public class Simulation {
 
     private boolean nextTurn() {
         return executeTurnActions();
-//        if (!EntitiesMoveAction.execute(map)) {
-//            Renderer.noResourcesMessage();
-//            return false;
-//        }
-//        Renderer.viewMap(map);
-//        return true;
     }
 
     private boolean input() {

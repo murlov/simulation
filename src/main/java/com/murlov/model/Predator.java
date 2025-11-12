@@ -1,5 +1,8 @@
 package com.murlov.model;
 
+import com.murlov.simulation.Coordinates;
+import com.murlov.simulation.Map;
+
 public abstract class Predator extends Creature {
     Integer damage;
 

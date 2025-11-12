@@ -1,11 +1,23 @@
 package com.murlov.model;
 
+import com.murlov.action.PathFindAction;
+import com.murlov.simulation.Coordinates;
+import com.murlov.simulation.Map;
+
 public abstract class Creature extends Entity {
     private Integer speed;
     private Integer health;
 
-    void makeMove() {
-    }
+    public boolean makeMove(Map map, Coordinates oldCoordinates){
+        Coordinates newCoordinates = PathFindAction.execute(map, this);
+
+        if (this != null && newCoordinates != null){
+            map.setEntity(newCoordinates, this);
+            map.getEntities().remove(oldCoordinates);
+            return true;
+        }
+        return false;
+    };
 
     public Creature(String icon) {
         super(icon);
