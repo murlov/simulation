@@ -5,19 +5,10 @@ import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 
 public abstract class Creature extends Entity {
-    private Integer speed;
-    private Integer health;
+    private int speed;
+    private int health;
 
-    public boolean makeMove(Map map, Coordinates oldCoordinates){
-        Coordinates newCoordinates = PathFindAction.execute(map, this);
-
-        if (this != null && newCoordinates != null){
-            map.setEntity(newCoordinates, this);
-            map.getEntities().remove(oldCoordinates);
-            return true;
-        }
-        return false;
-    };
+    public abstract boolean makeMove(Map map, Coordinates oldCoordinates);
 
     public Creature(String icon) {
         super(icon);
@@ -45,5 +36,9 @@ public abstract class Creature extends Entity {
 
     public void setHealth(Integer health) {
         this.health = health;
+    }
+
+    public void takeDamage(int damage) {
+        health = Math.max(0, health - damage);
     }
 }
