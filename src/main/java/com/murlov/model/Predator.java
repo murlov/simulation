@@ -1,6 +1,6 @@
 package com.murlov.model;
 
-import com.murlov.action.PathFindAction;
+import com.murlov.action.PathFinder;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 
@@ -26,7 +26,7 @@ public abstract class Predator extends Creature {
     }
 
     public boolean makeMove(Map map, Coordinates oldCoordinates){
-        Coordinates newCoordinates = PathFindAction.execute(map, this);
+        Coordinates newCoordinates = PathFinder.execute(map, this);
 
         if (newCoordinates != null){
             Entity targetEntity = map.getEntities().get(newCoordinates);
@@ -36,7 +36,7 @@ public abstract class Predator extends Creature {
             } else {
                 map.setEntity(newCoordinates, this);
                 map.getEntities().remove(oldCoordinates);
-                newCoordinates = PathFindAction.execute(map, this);
+                newCoordinates = PathFinder.execute(map, this);
                 if (hasHerbivoreNearby(newCoordinates, map)) {
                     attack(newCoordinates, map);
                 }
@@ -60,6 +60,7 @@ public abstract class Predator extends Creature {
         herbivore.takeDamage(this.getDamage());
         if (herbivore.getHealth() == 0) {
             map.getEntities().remove(newCoordinates);
+            map.countInGroupDecrement(EntityGroup.HERBIVORE);
         }
     }
 }

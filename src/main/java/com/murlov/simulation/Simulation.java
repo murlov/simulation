@@ -2,7 +2,8 @@ package com.murlov.simulation;
 
 import com.murlov.action.Action;
 import com.murlov.action.EntitiesMoveAction;
-import com.murlov.action.InitEntitiesAction;
+import com.murlov.action.EntitiesInitAction;
+import com.murlov.action.EntitiesSpawnAction;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.view.Renderer;
 
@@ -23,9 +24,10 @@ public class Simulation {
         settings = SimulationSettings.getInstance();
         map = new Map();
         initActions = new ArrayList<>();
-        initActions.add(new InitEntitiesAction());
+        initActions.add(new EntitiesInitAction());
         turnActions = new ArrayList<>();
         turnActions.add(new EntitiesMoveAction());
+        turnActions.add(new EntitiesSpawnAction());
         renderer = new Renderer();
     }
 

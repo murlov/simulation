@@ -1,5 +1,6 @@
 package com.murlov.factory;
 
+import com.murlov.model.EntityGroup;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.view.Renderer;
 
@@ -13,10 +14,15 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
         SimulationSettings settings = SimulationSettings.getInstance();
         renderer.inputMessage();
         String failMessage = "Некорректный ввод";
-        settings.setFillPercentage(input(renderer, "Процент заполнения. При вводе 25 — 25% карты заполнится объектами.", failMessage, 5, 100));
-        int x = input(renderer, "Ширина карты", failMessage, 6, 15);
-        int y = input(renderer, "Длина карты", failMessage, 6, 15);
+        settings.setFillPercentage(input(renderer, "Процент заполнения (к примеру, при вводе 25 — 25% карты заполнится объектами):", failMessage, 5, 100));
+        int x = input(renderer, "Ширина карты:", failMessage, 6, 15);
+        int y = input(renderer, "Длина карты:", failMessage, 6, 15);
         settings.setSizeOfMap(x, y);
+        int[] counts = inputArray(renderer, "Минимальное количество хищников, травоядных и травы. Три числа, через пробел (если количество опустится ниже минимального, " +
+                "будет происходить респаун соответствующей группы):", failMessage, 1, settings.getPerGroup(), 3);
+        settings.setMinCountInGroup(EntityGroup.PREDATOR, counts[0]);
+        settings.setMinCountInGroup(EntityGroup.HERBIVORE, counts[1]);
+        settings.setMinCountInGroup(EntityGroup.GRASS, counts[2]);
         return settings;
     }
 
@@ -31,6 +37,43 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
                 if (value >= min && value <= max) {
                     return value;
                 }
+            }
+            renderer.message(failMessage);
+        }
+    }
+
+    private int[] inputArray(Renderer renderer, String title, String failMessage, int min, int max, int count) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            renderer.inputMessage(title, min, max);
+            String input = scanner.nextLine();
+
+            String[] parts = input.split("\\s+");
+            if (parts.length != count) {
+                renderer.message(failMessage);
+                continue;
+            }
+
+            int[] array = new int[parts.length];
+            boolean arrayIsCorrect = true;
+
+            for (int i = 0; i < parts.length; i++) {
+                if (isInteger(parts[i])) {
+                    int value = Integer.parseInt(parts[i]);
+                    if (value >= min && value <= max) {
+                        array[i] = value;
+                    } else {
+                        arrayIsCorrect = false;
+                        break;
+                    }
+                } else {
+                    arrayIsCorrect = false;
+                    break;
+                }
+            }
+            if (arrayIsCorrect) {
+                return array;
             }
             renderer.message(failMessage);
         }

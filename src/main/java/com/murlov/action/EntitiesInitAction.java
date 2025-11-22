@@ -9,34 +9,44 @@ import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 
-public class InitEntitiesAction implements Action {
+public class EntitiesInitAction implements Action {
+
+    @Override
     public boolean execute(Map map) {
         SimulationSettings settings = SimulationSettings.getInstance();
-        Coordinates coordinates = Coordinates.getRandom(settings.getSizeOfMap());
+//        Coordinates coordinates = Coordinates.getRandom(settings.getSizeOfMap());
+        Coordinates coordinates;
         Entity entity;
+
         for (EntityGroup entityGroup : EntityGroup.values()) {
             for (int i = 0; i < settings.getPerGroup(); i++) {
-                while (map.getEntities().containsKey(coordinates)) {
-                    coordinates = Coordinates.getRandom(settings.getSizeOfMap());
-                }
+//                while (map.getEntities().containsKey(coordinates)) {
+//                    coordinates = Coordinates.getRandom(settings.getSizeOfMap());
+//                }
+                coordinates = map.getFreeCellCoordinates(settings);
                 EntityType entityType = EntityType.getRandom(entityGroup);
                 EntityFactory entityFactory = EntityFactoryProvider.getFactory(entityType);
                 entity = entityFactory.create();
                 map.setEntity(coordinates, entity);
+                map.countInGroupIncrement(entityGroup);
             }
         }
 
         if (settings.getRemainingEntities() != 0) {
             for (int i = 0; i < settings.getRemainingEntities(); i++) {
-                while (map.getEntities().containsKey(coordinates)) {
-                    coordinates = Coordinates.getRandom(settings.getSizeOfMap());
-                }
-                EntityType entityType = EntityType.getRandom(EntityGroup.getRandom());
+//                while (map.getEntities().containsKey(coordinates)) {
+//                    coordinates = Coordinates.getRandom(settings.getSizeOfMap());
+//                }
+                coordinates = map.getFreeCellCoordinates(settings);
+                EntityGroup entityGroup = EntityGroup.getRandom();
+                EntityType entityType = EntityType.getRandom(entityGroup);
                 EntityFactory entityFactory = EntityFactoryProvider.getFactory(entityType);
                 entity = entityFactory.create();
                 map.setEntity(coordinates, entity);
+                map.countInGroupIncrement(entityGroup);
             }
         }
+
         return true;
     }
 }

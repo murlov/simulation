@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntitiesMoveAction implements Action {
+
+    @Override
     public boolean execute(Map map) {
         boolean hasMoved = false;
 

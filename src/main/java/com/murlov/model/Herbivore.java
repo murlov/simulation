@@ -1,10 +1,8 @@
 package com.murlov.model;
 
-import com.murlov.action.PathFindAction;
+import com.murlov.action.PathFinder;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
-
-import java.nio.file.Path;
 
 public abstract class Herbivore extends Creature {
 
@@ -20,7 +18,7 @@ public abstract class Herbivore extends Creature {
     }
 
     public boolean makeMove(Map map, Coordinates oldCoordinates){
-        Coordinates newCoordinates = PathFindAction.execute(map, this);
+        Coordinates newCoordinates = PathFinder.execute(map, this);
 
         if (newCoordinates != null){
             Entity targetEntity = map.getEntities().get(newCoordinates);
@@ -30,7 +28,7 @@ public abstract class Herbivore extends Creature {
             } else {
                 map.setEntity(newCoordinates, this);
                 map.getEntities().remove(oldCoordinates);
-                newCoordinates = PathFindAction.execute(map, this);
+                newCoordinates = PathFinder.execute(map, this);
                 if (hasGrassNearby(newCoordinates, map)) {
                     eatGrass(newCoordinates, map);
                 }
@@ -52,5 +50,6 @@ public abstract class Herbivore extends Creature {
 
     private void eatGrass(Coordinates newCoordinates, Map map){
         map.getEntities().remove(newCoordinates);
+        map.countInGroupDecrement(EntityGroup.GRASS);
     }
 }
