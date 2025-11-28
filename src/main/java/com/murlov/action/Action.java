@@ -3,5 +3,14 @@ package com.murlov.action;
 import com.murlov.simulation.Map;
 
 public interface Action {
-    public boolean execute(Map map);
+
+    boolean execute(Map map);
+
+    default boolean execute(Map map, Runnable onMoveCallback) {
+        boolean result = execute(map);
+        if (result && onMoveCallback != null) {
+            onMoveCallback.run();
+        }
+        return result;
+    };
 }

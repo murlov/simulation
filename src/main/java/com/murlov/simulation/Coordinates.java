@@ -1,5 +1,7 @@
 package com.murlov.simulation;
 
+import com.murlov.util.RandomProvider;
+
 import java.util.Random;
 
 public class Coordinates {
@@ -25,6 +27,11 @@ public class Coordinates {
     }
 
     @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -41,9 +48,9 @@ public class Coordinates {
     }
 
     public static Coordinates getRandom (Size size) {
-        Random rand = new Random();
-        int x = rand.nextInt(size.getWidth());
-        int y = rand.nextInt(size.getLength());
+        Random random = RandomProvider.getInstance();
+        int x = random.nextInt(size.getWidth());
+        int y = random.nextInt(size.getLength());
         return new Coordinates(x, y);
     }
 }

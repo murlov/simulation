@@ -11,7 +11,7 @@ public class Renderer {
         System.out.println(message);
     }
 
-    public void viewMap(Map map) {
+    public void Map(Map map) {
         SimulationSettings settings = SimulationSettings.getInstance();
         for (int y = 0; y < settings.getSizeOfMap().getLength(); y++) {
             for (int x = 0; x < settings.getSizeOfMap().getWidth(); x++) {
@@ -20,9 +20,8 @@ public class Renderer {
                     Entity entity = map.getEntities().get(coordinates);
                     System.out.print(entity.getIcon());
                 } else {
-                    System.out.print("..");
+                    System.out.print("\uD83D\uDFEB");
                 }
-                System.out.print(" ");
             }
             System.out.println();
         }
@@ -54,7 +53,7 @@ public class Renderer {
 
     public void settingsMenuMessage() {
         System.out.println("""
-                    1. Использовать настройки по-умолчанию (Размер карты — 10x10; Процент заполнения — 40)
+                    1. Использовать настройки по-умолчанию (Размер карты — 10x10; Процент заполнения — 40; Минимальное количество хищников, травоядных и травы — 10)
                     2. Задать свои настройки
                     """);
     }
@@ -69,5 +68,9 @@ public class Renderer {
 
     public void entitiesCannotMoveMessage() {
         System.out.println("Непредвиденная ошибка. Существа не могут двигаться.");
+    }
+
+    public void newLine() {
+        System.out.println();
     }
 }

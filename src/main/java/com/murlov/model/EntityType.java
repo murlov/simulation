@@ -1,5 +1,7 @@
 package com.murlov.model;
 
+import com.murlov.util.RandomProvider;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,7 +35,7 @@ public enum EntityType {
                 types.add(type);
             }
         }
-        Random rand = new Random();
-        return types.get(rand.nextInt(types.size()));
+        Random random = RandomProvider.getInstance();
+        return types.get(random.nextInt(types.size()));
     }
 }

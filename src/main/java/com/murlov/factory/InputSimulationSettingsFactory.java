@@ -15,8 +15,8 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
         renderer.inputMessage();
         String failMessage = "Некорректный ввод";
         settings.setFillPercentage(input(renderer, "Процент заполнения (к примеру, при вводе 25 — 25% карты заполнится объектами):", failMessage, 5, 100));
-        int x = input(renderer, "Ширина карты:", failMessage, 6, 15);
-        int y = input(renderer, "Длина карты:", failMessage, 6, 15);
+        int x = input(renderer, "Ширина карты:", failMessage, 6, 50);
+        int y = input(renderer, "Длина карты:", failMessage, 6, 50);
         settings.setSizeOfMap(x, y);
         int[] counts = inputArray(renderer, "Минимальное количество хищников, травоядных и травы. Три числа, через пробел (если количество опустится ниже минимального, " +
                 "будет происходить респаун соответствующей группы):", failMessage, 1, settings.getPerGroup(), 3);

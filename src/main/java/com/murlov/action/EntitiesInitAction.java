@@ -14,15 +14,11 @@ public class EntitiesInitAction implements Action {
     @Override
     public boolean execute(Map map) {
         SimulationSettings settings = SimulationSettings.getInstance();
-//        Coordinates coordinates = Coordinates.getRandom(settings.getSizeOfMap());
         Coordinates coordinates;
         Entity entity;
 
         for (EntityGroup entityGroup : EntityGroup.values()) {
             for (int i = 0; i < settings.getPerGroup(); i++) {
-//                while (map.getEntities().containsKey(coordinates)) {
-//                    coordinates = Coordinates.getRandom(settings.getSizeOfMap());
-//                }
                 coordinates = map.getFreeCellCoordinates(settings);
                 EntityType entityType = EntityType.getRandom(entityGroup);
                 EntityFactory entityFactory = EntityFactoryProvider.getFactory(entityType);
@@ -34,9 +30,6 @@ public class EntitiesInitAction implements Action {
 
         if (settings.getRemainingEntities() != 0) {
             for (int i = 0; i < settings.getRemainingEntities(); i++) {
-//                while (map.getEntities().containsKey(coordinates)) {
-//                    coordinates = Coordinates.getRandom(settings.getSizeOfMap());
-//                }
                 coordinates = map.getFreeCellCoordinates(settings);
                 EntityGroup entityGroup = EntityGroup.getRandom();
                 EntityType entityType = EntityType.getRandom(entityGroup);

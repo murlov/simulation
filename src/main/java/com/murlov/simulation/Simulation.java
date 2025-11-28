@@ -18,6 +18,7 @@ public class Simulation {
     private final Renderer renderer;
     private final List<Action> initActions;
     private final List<Action> turnActions;
+    private final Scanner scanner;
 
 
     public Simulation() {
@@ -29,16 +30,17 @@ public class Simulation {
         turnActions.add(new EntitiesMoveAction());
         turnActions.add(new EntitiesSpawnAction());
         renderer = new Renderer();
+        scanner = new Scanner(System.in);
     }
 
     public void start() {
         executeInitActions();
-        renderer.viewMap(map);
+        renderer.Map(map);
         while (input()) {
             if (!nextTurn()) {
                 break;
             }
-            renderer.viewMap(map);
+            renderer.Map(map);
         }
     }
 
@@ -47,7 +49,6 @@ public class Simulation {
     }
 
     private boolean input() {
-        Scanner scanner = new Scanner(System.in);
 
         while(true) {
             renderer.suggestContinue();
@@ -69,7 +70,16 @@ public class Simulation {
 
     private boolean executeTurnActions() {
         for (Action action : turnActions) {
-            if (action.execute(map) == false) {
+            Runnable callback = null;
+
+            if (action instanceof EntitiesMoveAction) {
+                callback = () -> {
+                    renderer.Map(map);
+                    renderer.newLine();
+                };
+            }
+
+            if (!action.execute(map, callback)) {
                 return false;
             };
         }

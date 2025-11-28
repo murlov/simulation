@@ -85,8 +85,9 @@ public class PathFinder {
             return EntityGroup.HERBIVORE;
         } else if (entityGroup == EntityGroup.HERBIVORE) {
             return EntityGroup.GRASS;
+        } else {
+            throw new IllegalArgumentException("Unknown entity group: " + entityGroup);
         }
-        throw new IllegalArgumentException("Unknown entity group: " + entityGroup);
     }
 
     private static Coordinates getFirstStep(int startId, int goalId, int[] parents, int length) {

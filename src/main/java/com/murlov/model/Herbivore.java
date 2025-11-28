@@ -21,8 +21,7 @@ public abstract class Herbivore extends Creature {
         Coordinates newCoordinates = PathFinder.execute(map, this);
 
         if (newCoordinates != null){
-            Entity targetEntity = map.getEntities().get(newCoordinates);
-            if (targetEntity != null && targetEntity.getGroup() == EntityGroup.GRASS) {
+            if (hasGrassNearby(newCoordinates, map)) {
                 eatGrass(newCoordinates, map);
                 return true;
             } else {
