@@ -1,18 +1,21 @@
 package com.murlov.action;
 
+import com.murlov.model.Creature;
 import com.murlov.model.Entity;
 import com.murlov.model.EntityGroup;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class PathFinder {
 
-    public static Coordinates execute(Map map, Entity entity){
-        EntityGroup resourceGroup = getResourceGroup(entity.getGroup());
+    public static Coordinates execute(Map map, Creature creature){
+        EntityGroup resourceGroup = getResourceGroup(creature.getGroup());
         Queue<Coordinates> queue = new LinkedList<>();
         SimulationSettings settings = SimulationSettings.getInstance();
 
@@ -30,18 +33,18 @@ public class PathFinder {
                 {-1, -1}
         };
 
-        final int startId = getId(entity.getCoordinates(), settings.getSizeOfMap().getLength());
-        queue.add(entity.getCoordinates());
+        final int startId = getId(creature.getCoordinates(), settings.getSizeOfMap().getLength());
+        queue.add(creature.getCoordinates());
         parents[startId] = startId;
 
         while(!queue.isEmpty()){
             Coordinates currentCoordinates = queue.poll();
             int currentCoordinatesId = getId(currentCoordinates, settings.getSizeOfMap().getLength());
-            
-            for (int i = 0; i < directions.length; i++) {
+
+            for (int[] direction : directions) {
                 int x, y;
-                x = currentCoordinates.getX() + directions[i][0];
-                y = currentCoordinates.getY() + directions[i][1];
+                x = currentCoordinates.getX() + direction[0];
+                y = currentCoordinates.getY() + direction[1];
                 Coordinates nextCoordinates = new Coordinates(x, y);
                 int nextCoordinatesId = getId(nextCoordinates, settings.getSizeOfMap().getLength());
 
@@ -54,7 +57,7 @@ public class PathFinder {
 
                         if (next.getGroup() == resourceGroup) {
                             parents[nextCoordinatesId] = currentCoordinatesId;
-                            return getFirstStep(startId, nextCoordinatesId, parents, settings.getSizeOfMap().getLength());
+                            return getFirstStep(startId, nextCoordinatesId, parents, settings.getSizeOfMap().getLength(), creature.getSpeed());
                         }
                     } else {
                         parents[nextCoordinatesId] = currentCoordinatesId;
@@ -90,11 +93,15 @@ public class PathFinder {
         }
     }
 
-    private static Coordinates getFirstStep(int startId, int goalId, int[] parents, int length) {
+    private static Coordinates getFirstStep(int startId, int goalId, int[] parents, int length, int speed) {
+        List<Integer> chain = new ArrayList<>();
         int id = goalId;
-        while (parents[id] != startId) {
+        while (id != startId) {
+            chain.add(id);
             id = parents[id];
         }
+
+        id = chain.get(chain.size() - speed);
         return getCoordinates(id, length);
     }
 }

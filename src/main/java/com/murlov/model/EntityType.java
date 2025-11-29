@@ -29,7 +29,7 @@ public enum EntityType {
     }
 
     public static EntityType getRandom(EntityGroup group) {
-        List<EntityType> types = new ArrayList<EntityType>();
+        List<EntityType> types = new ArrayList<>();
         for (EntityType type : EntityType.values()) {
             if (type.getGroup() == group) {
                 types.add(type);

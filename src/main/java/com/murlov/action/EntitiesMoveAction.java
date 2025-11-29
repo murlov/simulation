@@ -19,12 +19,11 @@ public class EntitiesMoveAction implements Action {
     @Override
     public boolean execute(Map map, Runnable onMoveCallback) {
         boolean hasMoved = false;
-        List<Coordinates> keys = new ArrayList<Coordinates>(map.getEntities().keySet());
+        List<Coordinates> keys = new ArrayList<>(map.getEntities().keySet());
 
         for (Coordinates coordinates : keys) {
             Entity entity = map.getEntities().get(coordinates);
-            if (entity instanceof Creature) {
-                Creature creature = (Creature) entity;
+            if (entity instanceof Creature creature) {
                 if (creature.makeMove(map, coordinates)) {
                     hasMoved = true;
                     if (onMoveCallback != null) {
