@@ -13,11 +13,6 @@ public class EntitiesMoveAction implements Action {
 
     @Override
     public boolean execute(Map map) {
-        return execute(map, null);
-    }
-
-    @Override
-    public boolean execute(Map map, Runnable onMoveCallback) {
         boolean hasMoved = false;
         List<Coordinates> keys = new ArrayList<>(map.getEntities().keySet());
 
@@ -26,9 +21,6 @@ public class EntitiesMoveAction implements Action {
             if (entity instanceof Creature creature) {
                 if (creature.makeMove(map, coordinates)) {
                     hasMoved = true;
-                    if (onMoveCallback != null) {
-                        onMoveCallback.run();
-                    }
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.murlov.action;
 
 import com.murlov.factory.EntityFactory;
 import com.murlov.factory.EntityFactoryProvider;
+import com.murlov.model.Creature;
 import com.murlov.model.Entity;
 import com.murlov.model.EntityGroup;
 import com.murlov.model.EntityType;
@@ -13,6 +14,11 @@ public class EntitiesInitAction implements Action {
 
     @Override
     public boolean execute(Map map) {
+        throw new IllegalArgumentException("EntitiesInitAction requires listenerRegistery. Use execute(Map, MoveListenerRegistry) instead.");
+    }
+
+    @Override
+    public boolean execute(Map map, MoveListenerRegistry listenerRegistry) {
         SimulationSettings settings = SimulationSettings.getInstance();
         Coordinates coordinates;
         Entity entity;
@@ -25,6 +31,9 @@ public class EntitiesInitAction implements Action {
                 entity = entityFactory.create();
                 map.setEntity(coordinates, entity);
                 map.countInGroupIncrement(entityGroup);
+                if (entity instanceof Creature creature) {
+                    listenerRegistry.attachListener(creature);
+                }
             }
         }
 
@@ -37,6 +46,9 @@ public class EntitiesInitAction implements Action {
                 entity = entityFactory.create();
                 map.setEntity(coordinates, entity);
                 map.countInGroupIncrement(entityGroup);
+                if (entity instanceof Creature creature) {
+                    listenerRegistry.attachListener(creature);
+                }
             }
         }
 

@@ -33,20 +33,20 @@ public class PathFinder {
                 {-1, -1}
         };
 
-        final int startId = getId(creature.getCoordinates(), settings.getSizeOfMap().getLength());
+        final int startId = getId(creature.getCoordinates(), settings.getSizeOfMap().length());
         queue.add(creature.getCoordinates());
         parents[startId] = startId;
 
         while(!queue.isEmpty()){
             Coordinates currentCoordinates = queue.poll();
-            int currentCoordinatesId = getId(currentCoordinates, settings.getSizeOfMap().getLength());
+            int currentCoordinatesId = getId(currentCoordinates, settings.getSizeOfMap().length());
 
             for (int[] direction : directions) {
                 int x, y;
-                x = currentCoordinates.getX() + direction[0];
-                y = currentCoordinates.getY() + direction[1];
+                x = currentCoordinates.X() + direction[0];
+                y = currentCoordinates.Y() + direction[1];
                 Coordinates nextCoordinates = new Coordinates(x, y);
-                int nextCoordinatesId = getId(nextCoordinates, settings.getSizeOfMap().getLength());
+                int nextCoordinatesId = getId(nextCoordinates, settings.getSizeOfMap().length());
 
                 if (isCoordinatesCorrect(nextCoordinates)) {
                     if (visited[nextCoordinatesId]) continue;
@@ -57,7 +57,7 @@ public class PathFinder {
 
                         if (next.getGroup() == resourceGroup) {
                             parents[nextCoordinatesId] = currentCoordinatesId;
-                            return getFirstStep(startId, nextCoordinatesId, parents, settings.getSizeOfMap().getLength(), creature.getSpeed());
+                            return getFirstStep(startId, nextCoordinatesId, parents, settings.getSizeOfMap().length(), creature.getSpeed());
                         }
                     } else {
                         parents[nextCoordinatesId] = currentCoordinatesId;
@@ -70,7 +70,7 @@ public class PathFinder {
     }
 
     private static int getId(Coordinates c, int length){
-        return c.getX()*length + c.getY();
+        return c.X()*length + c.Y();
     }
 
     private static Coordinates getCoordinates(int id, int length){
@@ -79,8 +79,8 @@ public class PathFinder {
 
     private static boolean isCoordinatesCorrect(Coordinates coordinates) {
         SimulationSettings settings = SimulationSettings.getInstance();
-        return coordinates.getX() >= 0 && coordinates.getX() < settings.getSizeOfMap().getWidth()
-        && coordinates.getY() >= 0 && coordinates.getY() < settings.getSizeOfMap().getLength();
+        return coordinates.X() >= 0 && coordinates.X() < settings.getSizeOfMap().width()
+        && coordinates.Y() >= 0 && coordinates.Y() < settings.getSizeOfMap().length();
     }
 
     private static EntityGroup getResourceGroup(EntityGroup entityGroup){

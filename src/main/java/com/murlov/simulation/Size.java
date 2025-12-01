@@ -1,28 +1,11 @@
 package com.murlov.simulation;
 
-public class Size {
-    public final int width;
-    public final int length;
-
+public record Size(int width, int length) {
     public Size() {
-        width = 0;
-        length = 0;
-    }
-
-    public Size(int width, int length) {
-        this.width = width;
-        this.length = length;
+        this(0, 0);
     }
 
     public int getArea() {
-        return this.width*this.length;
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getLength() {
-        return this.length;
+        return this.width * this.length;
     }
 }

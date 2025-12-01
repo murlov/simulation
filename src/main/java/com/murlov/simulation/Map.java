@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class Map {
 
-    private java.util.Map<Coordinates, Entity> entities;
+    private final java.util.Map<Coordinates, Entity> entities;
     private int predatorsCount;
     private int herbivoresCount;
     private int grassCount;
@@ -21,7 +21,7 @@ public class Map {
     }
 
     public Map(Map map) {
-        this.entities = map.entities;
+        this.entities = new HashMap<>(map.entities);
         this.predatorsCount = map.predatorsCount;
         this.herbivoresCount = map.herbivoresCount;
         this.grassCount = map.grassCount;

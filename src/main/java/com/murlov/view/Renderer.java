@@ -1,6 +1,7 @@
 package com.murlov.view;
 
 import com.murlov.model.Entity;
+import com.murlov.model.EntityType;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
@@ -13,8 +14,8 @@ public class Renderer {
 
     public void Map(Map map) {
         SimulationSettings settings = SimulationSettings.getInstance();
-        for (int y = 0; y < settings.getSizeOfMap().getLength(); y++) {
-            for (int x = 0; x < settings.getSizeOfMap().getWidth(); x++) {
+        for (int y = 0; y < settings.getSizeOfMap().length(); y++) {
+            for (int x = 0; x < settings.getSizeOfMap().width(); x++) {
                 Coordinates coordinates = new Coordinates(x, y);
                 if (map.getEntities().containsKey(coordinates)) {
                     Entity entity = map.getEntities().get(coordinates);
@@ -72,5 +73,17 @@ public class Renderer {
 
     public void newLine() {
         System.out.println();
+    }
+
+    public void logMove(EntityType creatureType, Coordinates from, Coordinates to) {
+        System.out.println(creatureType + " moved from " + from + " to " + to);
+    }
+
+    public void logAttack(EntityType attackerType, EntityType victimType, Coordinates position) {
+        System.out.println(attackerType + " attacked " + victimType + " on " + position);
+    }
+
+    public void logEat(EntityType creatureType, EntityType victimType, Coordinates position) {
+        System.out.println(creatureType + " ate " + victimType + " on " + position);
     }
 }
