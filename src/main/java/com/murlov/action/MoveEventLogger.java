@@ -14,14 +14,14 @@ public record MoveEventLogger(Renderer renderer) implements MoveEventListener {
     }
 
     @Override
-    public void onAttack(EntityType attackerType, EntityType victimType, Coordinates position) {
-        renderer.logAttack(attackerType, victimType, position);
+    public void onAttack(EntityType attackerType, Coordinates from, EntityType victimType, Coordinates to) {
+        renderer.logAttack(attackerType, from, victimType, to);
         renderer.newLine();
     }
 
     @Override
-    public void onEat(EntityType creatureType, EntityType victimType, Coordinates position) {
-        renderer.logEat(creatureType, victimType, position);
+    public void onEat(EntityType creatureType, Coordinates from, EntityType victimType, Coordinates to) {
+        renderer.logEat(creatureType, from, victimType, to);
         renderer.newLine();
     }
 

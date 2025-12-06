@@ -12,8 +12,10 @@ public class Map {
     private int predatorsCount;
     private int herbivoresCount;
     private int grassCount;
+    private Size size;
 
-    public Map() {
+    public Map(Size size) {
+        this.size = size;
         entities = new HashMap<>();
         predatorsCount = 0;
         herbivoresCount = 0;
@@ -25,6 +27,7 @@ public class Map {
         this.predatorsCount = map.predatorsCount;
         this.herbivoresCount = map.herbivoresCount;
         this.grassCount = map.grassCount;
+        this.size = map.size;
     }
 
     public java.util.Map<Coordinates, Entity> getEntities() {
@@ -36,6 +39,14 @@ public class Map {
         entities.put(coordinates, entity);
     }
 
+    public Size getSize() {
+        return size;
+    }
+
+    public int getNumberOfCells() {
+        return size.getArea();
+    }
+
     public int getCountInGroup(EntityGroup group) {
         return switch(group) {
             case EntityGroup.PREDATOR -> predatorsCount;
@@ -43,14 +54,6 @@ public class Map {
             case EntityGroup.GRASS -> grassCount;
             case EntityGroup.STATIC -> 0;
         };
-    }
-
-    public void setCountInGroup(EntityGroup group, int count) {
-        switch(group) {
-            case EntityGroup.PREDATOR -> predatorsCount = count;
-            case EntityGroup.HERBIVORE -> herbivoresCount = count;
-            case EntityGroup.GRASS -> grassCount = count;
-        }
     }
 
     public void countInGroupDecrement(EntityGroup group) {
@@ -69,11 +72,11 @@ public class Map {
         }
     }
 
-    public Coordinates getFreeCellCoordinates(SimulationSettings settings) {
-        Coordinates coordinates = Coordinates.getRandom(settings.getSizeOfMap());
+    public Coordinates getFreeCellCoordinates() {
+        Coordinates coordinates = Coordinates.getRandom(getSize());
 
         while (getEntities().containsKey(coordinates)) {
-            coordinates = Coordinates.getRandom(settings.getSizeOfMap());
+            coordinates = Coordinates.getRandom(getSize());
         }
 
         return coordinates;

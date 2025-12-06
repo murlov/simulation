@@ -25,24 +25,25 @@ public abstract class Predator extends Creature {
         return damage;
     }
 
-    public boolean makeMove(Map map, Coordinates oldCoordinates){
-        Coordinates newCoordinates = PathFinder.execute(map, this);
+    public boolean makeMove(Map map, Coordinates oldCoordinates, PathFinder pathFinder) {
+        Coordinates newCoordinates = pathFinder.execute(map, this);
         Creature creature = (Creature) map.getEntities().get(oldCoordinates);
 
         if (newCoordinates != null){
             Entity targetEntity = map.getEntities().get(newCoordinates);
             if (hasHerbivoreNearby(newCoordinates, map)) {
-                attack(creature, newCoordinates, map);
-                notifyAttack(creature.getType(), targetEntity.getType(), newCoordinates);
+                attack(creature, oldCoordinates, newCoordinates, map);
+                notifyAttack(creature.getType(), oldCoordinates, targetEntity.getType(), newCoordinates);
                 notifyMoveEnd(map);
                 return true;
             } else {
                 map.setEntity(newCoordinates, this);
                 map.getEntities().remove(oldCoordinates);
                 notifyMove(creature.getType(), oldCoordinates, newCoordinates);
-                newCoordinates = PathFinder.execute(map, this);
+                oldCoordinates = newCoordinates;
+                newCoordinates = pathFinder.execute(map, this);
                 if (hasHerbivoreNearby(newCoordinates, map)) {
-                    attack(creature, newCoordinates, map);
+                    attack(creature, oldCoordinates, newCoordinates, map);
                 }
                 notifyMoveEnd(map);
                 return true;
@@ -60,14 +61,14 @@ public abstract class Predator extends Creature {
         }
         return false;
     }
-    private void attack(Creature attacker, Coordinates newCoordinates, Map map){
-        Creature herbivore = (Creature) map.getEntities().get(newCoordinates);
+    private void attack(Creature attacker, Coordinates from, Coordinates to, Map map){
+        Creature herbivore = (Creature) map.getEntities().get(to);
         herbivore.takeDamage(this.getDamage());
         if (herbivore.getHealth() == 0) {
-            map.getEntities().remove(newCoordinates);
+            map.getEntities().remove(to);
             map.countInGroupDecrement(EntityGroup.HERBIVORE);
-            notifyAttack(attacker.getType(), herbivore.getType(), newCoordinates);
-            notifyEat(attacker.getType(), herbivore.getType(), newCoordinates);
+            notifyAttack(attacker.getType(), to, herbivore.getType(), to);
+            notifyEat(attacker.getType(), from, herbivore.getType(), to);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.murlov.model;
 
 import com.murlov.action.MoveEventListener;
+import com.murlov.action.PathFinder;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 
@@ -9,7 +10,7 @@ public abstract class Creature extends Entity {
     private int health;
     private MoveEventListener listener;
 
-    public abstract boolean makeMove(Map map, Coordinates oldCoordinates);
+    public abstract boolean makeMove(Map map, Coordinates oldCoordinates, PathFinder pathFinder);
 
     public Creature(String icon) {
         super(icon);
@@ -49,15 +50,15 @@ public abstract class Creature extends Entity {
         }
     }
 
-    public void notifyAttack(EntityType attackerType, EntityType victimType, Coordinates position) {
+    public void notifyAttack(EntityType attackerType, Coordinates from, EntityType victimType, Coordinates to) {
         if (listener != null) {
-            listener.onAttack(attackerType, victimType, position);
+            listener.onAttack(attackerType, from, victimType, to);
         }
     }
 
-    public void notifyEat(EntityType creatureType, EntityType victimType, Coordinates position) {
+    public void notifyEat(EntityType creatureType, Coordinates from, EntityType victimType, Coordinates to) {
         if (listener != null) {
-            listener.onEat(creatureType, victimType, position);
+            listener.onEat(creatureType, from, victimType, to);
         }
     }
 

@@ -10,6 +10,16 @@ public enum EntityGroup {
     STATIC,
     GRASS;
 
+    @Override
+    public String toString() {
+        return switch(this)  {
+            case HERBIVORE -> "Травоядные";
+            case PREDATOR -> "Хищники";
+            case STATIC -> "Неподвижные объекты";
+            case GRASS -> "Трава";
+        };
+    }
+
     public static EntityGroup getRandom() {
         Random random = RandomProvider.getInstance();
         int size = EntityGroup.values().length;

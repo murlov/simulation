@@ -1,6 +1,7 @@
 package com.murlov.simulation;
 
 import com.murlov.action.*;
+import com.murlov.settings.SimulationSettings;
 import com.murlov.view.Renderer;
 
 import java.util.ArrayList;
@@ -14,15 +15,17 @@ public class Simulation {
     private final List<Action> turnActions;
     private final Scanner scanner;
     private final MoveListenerRegistry listenerRegistry;
+    private final SimulationSettings settings;
 
 
-    public Simulation() {
-        map = new Map();
+    public Simulation(SimulationSettings settings) {
+        this.settings = settings;
+        map = new Map(settings.getSizeOfMap());
         initActions = new ArrayList<>();
-        initActions.add(new EntitiesInitAction());
+        initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerGroup(), settings.getNumberOfRemainingEntities()));
         turnActions = new ArrayList<>();
         turnActions.add(new EntitiesMoveAction());
-        turnActions.add(new EntitiesSpawnAction());
+        turnActions.add(new EntitiesSpawnAction(settings.getMinNumbersInGroups()));
         renderer = new Renderer();
         scanner = new Scanner(System.in);
         MoveEventListener logger = new MoveEventLogger(renderer);

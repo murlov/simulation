@@ -19,7 +19,7 @@ public class Main {
         SimulationSettingsFactory settingsFactory = getSettingsFactory(settingsMode);
         SimulationSettings settings = settingsFactory.get();
 
-        Simulation simulation = new Simulation();
+        Simulation simulation = new Simulation(settings);
         simulation.start();
     }
 

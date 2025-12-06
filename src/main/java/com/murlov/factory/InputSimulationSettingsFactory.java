@@ -12,17 +12,25 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
     public SimulationSettings get() {
         Renderer renderer = new Renderer();
         SimulationSettings settings = SimulationSettings.getInstance();
-        renderer.inputMessage();
         String failMessage = "Некорректный ввод";
+
+        renderer.inputMessage();
         settings.setFillPercentage(input(renderer, "Процент заполнения (к примеру, при вводе 25 — 25% карты заполнится объектами):", failMessage, 5, 100));
+
         int x = input(renderer, "Ширина карты:", failMessage, 6, 50);
         int y = input(renderer, "Длина карты:", failMessage, 6, 50);
         settings.setSizeOfMap(x, y);
-        int[] counts = inputArray(renderer, "Минимальное количество хищников, травоядных и травы. Три числа, через пробел (если количество опустится ниже минимального, " +
-                "будет происходить респаун соответствующей группы):", failMessage, 1, settings.getPerGroup(), 3);
-        settings.setMinCountInGroup(EntityGroup.PREDATOR, counts[0]);
-        settings.setMinCountInGroup(EntityGroup.HERBIVORE, counts[1]);
-        settings.setMinCountInGroup(EntityGroup.GRASS, counts[2]);
+
+        java.util.Map<EntityGroup, Integer> minNumbersInGroups = new java.util.HashMap<>(settings.getNumberOfGroups());
+        renderer.inputMinNumbersInGroups();
+        for (EntityGroup group: EntityGroup.values()) {
+            if (!group.equals(EntityGroup.STATIC)) {
+                int value = input(renderer, String.valueOf(group), failMessage, 1, settings.getNumberOfEntitiesPerGroup());
+                minNumbersInGroups.put(group, value);
+            }
+        }
+        settings.setMinNumbersInGroups(minNumbersInGroups);
+
         return settings;
     }
 
@@ -42,7 +50,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
         }
     }
 
-    private int[] inputArray(Renderer renderer, String title, String failMessage, int min, int max, int count) {
+    private int[] inputArray(Renderer renderer, String title, String failMessage, int min, int max, int number) {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -50,7 +58,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
             String input = scanner.nextLine();
 
             String[] parts = input.split("\\s+");
-            if (parts.length != count) {
+            if (parts.length != number) {
                 renderer.message(failMessage);
                 continue;
             }

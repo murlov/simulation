@@ -3,49 +3,37 @@ package com.murlov.settings;
 import com.murlov.model.EntityGroup;
 import com.murlov.simulation.Size;
 
+import java.util.HashMap;
+
 public class SimulationSettings {
-    private final  int COUNT_OF_GROUPS = 4;
+    private final int NUMBER_OF_GROUPS = 4;
 
     private static SimulationSettings instance;
     private double fillPercentage;
-    private int perGroup;
+    private int numberOfEntitiesPerGroup;
     private Size sizeOfMap;
-    private int remainingEntities;
-    private int predatorsMinCount;
-    private int herbivoresMinCount;
-    private int grassMinCount;
-
-    @Override
-    public String toString() {
-        return "SimulationSettings {fillPercentage=" + fillPercentage +
-                ", perGroup=" + perGroup +
-                ", sizeOfMap=" + sizeOfMap +
-                "}";
-    }
+    private java.util.Map<EntityGroup, Integer> minNumbersInGroups;
+    private int numberOfRemainingEntities;
 
     private SimulationSettings() {
         sizeOfMap = new Size();
         fillPercentage = 0;
-        perGroup = 0;
-        remainingEntities = 0;
-        predatorsMinCount = 0;
-        herbivoresMinCount = 0;
-        grassMinCount = 0;
+        numberOfEntitiesPerGroup = 0;
+        minNumbersInGroups = new HashMap<EntityGroup, Integer>(NUMBER_OF_GROUPS);
+        numberOfRemainingEntities = 0;
     }
 
-    private SimulationSettings(int width, int length, int fillPercentage, int predatorsMinCount, int herbivoresMinCount, int grassMinCount) {
+    private SimulationSettings(int width, int length, int fillPercentage, java.util.Map<EntityGroup, Integer> minNumbersInGroups) {
         sizeOfMap = new Size(width, length);
         this.fillPercentage = fillPercentage * 0.01;
-        perGroup = (int)(getCountOfCells()*this.fillPercentage)/ COUNT_OF_GROUPS;
-        remainingEntities = (int)(getCountOfCells()*this.fillPercentage) - perGroup* COUNT_OF_GROUPS;
-        this.predatorsMinCount = predatorsMinCount;
-        this.herbivoresMinCount = herbivoresMinCount;
-        this.grassMinCount = grassMinCount;
+        numberOfEntitiesPerGroup = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_GROUPS;
+        numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerGroup * NUMBER_OF_GROUPS;
+        this.minNumbersInGroups = new HashMap<>(minNumbersInGroups);
     }
 
-    public static SimulationSettings getInstance(int width, int length, int fillPercentage, int predatorsMinCount, int herbivoresMinCount, int grassMinCount) {
+    public static SimulationSettings getInstance(int width, int length, int fillPercentage, java.util.Map<EntityGroup, Integer> minNumbersInGroups) {
         if (instance == null) {
-            instance = new SimulationSettings(width, length, fillPercentage, predatorsMinCount, herbivoresMinCount, grassMinCount);
+            instance = new SimulationSettings(width, length, fillPercentage, minNumbersInGroups);
         }
         return instance;
     }
@@ -57,18 +45,14 @@ public class SimulationSettings {
         return instance;
     }
 
-    public double getFillPercentage() {
-        return fillPercentage;
-    }
-
     public void setFillPercentage(int fillPercentage) {
         this.fillPercentage = fillPercentage*0.01;
-        perGroup = (int)(getCountOfCells()*this.fillPercentage)/ COUNT_OF_GROUPS;
-        remainingEntities = (int)(getCountOfCells()*this.fillPercentage) - perGroup* COUNT_OF_GROUPS;
+        numberOfEntitiesPerGroup = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_GROUPS;
+        numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerGroup * NUMBER_OF_GROUPS;
     }
 
-    public int getPerGroup() {
-        return perGroup;
+    public int getNumberOfEntitiesPerGroup() {
+        return numberOfEntitiesPerGroup;
     }
 
     public Size getSizeOfMap() {
@@ -77,40 +61,34 @@ public class SimulationSettings {
 
     public void setSizeOfMap(int x, int y) {
         sizeOfMap = new Size(x, y);
-        perGroup = (int)(getCountOfCells()*this.fillPercentage)/ COUNT_OF_GROUPS;
-        remainingEntities = (int)(getCountOfCells()*this.fillPercentage) - perGroup* COUNT_OF_GROUPS;
+        numberOfEntitiesPerGroup = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_GROUPS;
+        numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerGroup * NUMBER_OF_GROUPS;
     }
 
-    public int getCountOfGroups() {
-        return COUNT_OF_GROUPS;
+    public int getNumberOfGroups() {
+        return NUMBER_OF_GROUPS;
     }
 
-    public int getCountOfEntities() {
-        return perGroup* COUNT_OF_GROUPS;
+    public int getNumberOfEntities() {
+        return numberOfEntitiesPerGroup * NUMBER_OF_GROUPS;
     }
 
-    public int getRemainingEntities() {
-        return remainingEntities;
+    public int getNumberOfRemainingEntities() {
+        return numberOfRemainingEntities;
     }
 
-    public int getCountOfCells() {
+    private int getNumberOfCells() {
         return sizeOfMap.getArea();
     }
 
-    public int getMinCountInGroup(EntityGroup group) {
-        return switch(group) {
-            case EntityGroup.PREDATOR -> predatorsMinCount;
-            case EntityGroup.HERBIVORE -> herbivoresMinCount;
-            case EntityGroup.GRASS -> grassMinCount;
-            case EntityGroup.STATIC -> 0;
-        };
+    public java.util.Map<EntityGroup, Integer> getMinNumbersInGroups() {
+        return minNumbersInGroups;
     }
 
-    public void setMinCountInGroup(EntityGroup group, int count) {
-        switch(group) {
-            case EntityGroup.PREDATOR -> predatorsMinCount = count;
-            case EntityGroup.HERBIVORE -> herbivoresMinCount = count;
-            case EntityGroup.GRASS -> grassMinCount = count;
-        }
+    public void setMinNumbersInGroups(java.util.Map<EntityGroup, Integer> minNumbersInGroups) {
+        this.minNumbersInGroups = new HashMap<>(minNumbersInGroups);
     }
+
+
+
 }

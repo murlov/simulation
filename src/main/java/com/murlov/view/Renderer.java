@@ -13,9 +13,8 @@ public class Renderer {
     }
 
     public void Map(Map map) {
-        SimulationSettings settings = SimulationSettings.getInstance();
-        for (int y = 0; y < settings.getSizeOfMap().length(); y++) {
-            for (int x = 0; x < settings.getSizeOfMap().width(); x++) {
+        for (int y = 0; y < map.getSize().length(); y++) {
+            for (int x = 0; x < map.getSize().width(); x++) {
                 Coordinates coordinates = new Coordinates(x, y);
                 if (map.getEntities().containsKey(coordinates)) {
                     Entity entity = map.getEntities().get(coordinates);
@@ -79,11 +78,16 @@ public class Renderer {
         System.out.println(creatureType + " moved from " + from + " to " + to);
     }
 
-    public void logAttack(EntityType attackerType, EntityType victimType, Coordinates position) {
-        System.out.println(attackerType + " attacked " + victimType + " on " + position);
+    public void logAttack(EntityType attackerType, Coordinates from, EntityType victimType, Coordinates to) {
+        System.out.println(attackerType + " " + from + " attacked " + victimType + " on " + to);
     }
 
-    public void logEat(EntityType creatureType, EntityType victimType, Coordinates position) {
-        System.out.println(creatureType + " ate " + victimType + " on " + position);
+    public void logEat(EntityType creatureType, Coordinates from, EntityType victimType, Coordinates to) {
+        System.out.println(creatureType + " " + from + " ate " + victimType + " on " + to);
+    }
+
+    public void inputMinNumbersInGroups() {
+        System.out.println("Минимальное количество для каждой группы (если количество существ в группе будет ниже указанного на момент окончания хода всех существ — " +
+                "произойдёт респаун):");
     }
 }
