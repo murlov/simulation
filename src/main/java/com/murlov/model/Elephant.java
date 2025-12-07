@@ -6,7 +6,7 @@ public class Elephant extends Herbivore {
         super("\uD83D\uDC18");
     }
 
-    public Elephant(Integer speed, Integer health) {
+    public Elephant(int speed, int health) {
         super(speed, health,"\uD83D\uDC18");
     }
 

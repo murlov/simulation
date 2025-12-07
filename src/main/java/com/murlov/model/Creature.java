@@ -18,25 +18,25 @@ public abstract class Creature extends Entity {
         this.health = 10;
     }
 
-    public Creature(Integer speed, Integer health, String icon) {
+    public Creature(int speed, int health, String icon) {
         super(icon);
         this.speed = speed;
         this.health = health;
     }
 
-    public Integer getSpeed() {
+    public int getSpeed() {
         return speed;
     }
 
-    public void setSpeed(Integer speed) {
+    public void setSpeed(int speed) {
         this.speed = speed;
     }
 
-    public Integer getHealth() {
+    public int getHealth() {
         return health;
     }
 
-    public void setHealth(Integer health) {
+    public void setHealth(int health) {
         this.health = health;
     }
 

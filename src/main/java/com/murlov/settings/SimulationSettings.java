@@ -19,7 +19,7 @@ public class SimulationSettings {
         sizeOfMap = new Size();
         fillPercentage = 0;
         numberOfEntitiesPerGroup = 0;
-        minNumbersInGroups = new HashMap<EntityGroup, Integer>(NUMBER_OF_GROUPS);
+        minNumbersInGroups = new HashMap<>(NUMBER_OF_GROUPS);
         numberOfRemainingEntities = 0;
     }
 

@@ -2,7 +2,6 @@ package com.murlov.view;
 
 import com.murlov.model.Entity;
 import com.murlov.model.EntityType;
-import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 

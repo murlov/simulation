@@ -6,7 +6,7 @@ public class Leopard extends Predator{
         super("\uD83D\uDC06");
     }
 
-    public Leopard(Integer speed, Integer health, Integer damage) {
+    public Leopard(int speed, int health, int damage) {
         super(speed, health, damage,"\uD83D\uDC06");
     }
 

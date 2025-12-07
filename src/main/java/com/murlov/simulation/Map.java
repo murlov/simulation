@@ -2,7 +2,6 @@ package com.murlov.simulation;
 
 import com.murlov.model.Entity;
 import com.murlov.model.EntityGroup;
-import com.murlov.settings.SimulationSettings;
 
 import java.util.HashMap;
 
@@ -12,7 +11,7 @@ public class Map {
     private int predatorsCount;
     private int herbivoresCount;
     private int grassCount;
-    private Size size;
+    private final Size size;
 
     public Map(Size size) {
         this.size = size;

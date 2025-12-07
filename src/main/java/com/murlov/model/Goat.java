@@ -6,7 +6,7 @@ public class Goat extends Herbivore {
         super("\uD83D\uDC10");
     }
 
-    public Goat(Integer speed, Integer health) {
+    public Goat(int speed, int health) {
         super(speed, health,"\uD83D\uDC10");
     }
 

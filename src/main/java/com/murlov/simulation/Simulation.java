@@ -15,11 +15,9 @@ public class Simulation {
     private final List<Action> turnActions;
     private final Scanner scanner;
     private final MoveListenerRegistry listenerRegistry;
-    private final SimulationSettings settings;
 
 
     public Simulation(SimulationSettings settings) {
-        this.settings = settings;
         map = new Map(settings.getSizeOfMap());
         initActions = new ArrayList<>();
         initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerGroup(), settings.getNumberOfRemainingEntities()));

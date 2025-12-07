@@ -14,8 +14,8 @@ import java.util.Queue;
 
 public class BfsPathFinder implements PathFinder {
 
-    private int numberOfCells;
-    private Size sizeOfMap;
+    private final int numberOfCells;
+    private final Size sizeOfMap;
 
     public BfsPathFinder(Size sizeOfMap, int numberOfCells) {
         this.sizeOfMap = sizeOfMap;

@@ -6,7 +6,6 @@ import com.murlov.model.Creature;
 import com.murlov.model.Entity;
 import com.murlov.model.EntityGroup;
 import com.murlov.model.EntityType;
-import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 

@@ -6,7 +6,7 @@ public class Zebra extends Herbivore {
         super( "\uD83E\uDD93");
     }
 
-    public Zebra(Integer speed, Integer health) {
+    public Zebra(int speed, int health) {
         super(speed, health,"\uD83E\uDD93");
     }
 

@@ -12,7 +12,7 @@ public abstract class Predator extends Creature {
         this.damage = 1;
     }
 
-    public Predator(Integer speed, Integer health, Integer damage, String icon) {
+    public Predator(int speed, int health, int damage, String icon) {
         super(speed, health, icon);
         this.damage = damage;
     }

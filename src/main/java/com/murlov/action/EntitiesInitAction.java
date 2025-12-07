@@ -21,7 +21,7 @@ public class EntitiesInitAction implements Action {
 
     @Override
     public boolean execute(Map map) {
-        throw new IllegalArgumentException("EntitiesInitAction requires listenerRegistery. Use execute(Map, MoveListenerRegistry) instead.");
+        throw new IllegalArgumentException("EntitiesInitAction requires listenerRegistry. Use execute(Map, MoveListenerRegistry) instead.");
     }
 
     @Override

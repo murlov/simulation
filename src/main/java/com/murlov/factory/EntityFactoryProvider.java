@@ -14,7 +14,6 @@ public class EntityFactoryProvider {
             case ROCK -> new RockFactory();
             case TREE -> new TreeFactory();
             case GRASS -> new GrassFactory();
-            default -> throw new IllegalArgumentException("Invalid entity type: " + entityType);
         };
     }
 }

@@ -50,43 +50,6 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
         }
     }
 
-    private int[] inputArray(Renderer renderer, String title, String failMessage, int min, int max, int number) {
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            renderer.inputMessage(title, min, max);
-            String input = scanner.nextLine();
-
-            String[] parts = input.split("\\s+");
-            if (parts.length != number) {
-                renderer.message(failMessage);
-                continue;
-            }
-
-            int[] array = new int[parts.length];
-            boolean arrayIsCorrect = true;
-
-            for (int i = 0; i < parts.length; i++) {
-                if (isInteger(parts[i])) {
-                    int value = Integer.parseInt(parts[i]);
-                    if (value >= min && value <= max) {
-                        array[i] = value;
-                    } else {
-                        arrayIsCorrect = false;
-                        break;
-                    }
-                } else {
-                    arrayIsCorrect = false;
-                    break;
-                }
-            }
-            if (arrayIsCorrect) {
-                return array;
-            }
-            renderer.message(failMessage);
-        }
-    }
-
     private boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
