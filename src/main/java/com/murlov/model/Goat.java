@@ -6,8 +6,8 @@ public class Goat extends Herbivore {
         super("\uD83D\uDC10");
     }
 
-    public Goat(int speed, int health) {
-        super(speed, health,"\uD83D\uDC10");
+    public Goat(int health) {
+        super(health,"\uD83D\uDC10");
     }
 
     public EntityType getType() {

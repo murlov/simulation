@@ -7,6 +7,6 @@ public class TigerFactory implements EntityFactory {
 
     @Override
     public Entity create() {
-        return new Tiger(1, 10, 1);
+        return new Tiger(10, 1);
     }
 }

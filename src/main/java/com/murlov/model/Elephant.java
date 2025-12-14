@@ -6,8 +6,8 @@ public class Elephant extends Herbivore {
         super("\uD83D\uDC18");
     }
 
-    public Elephant(int speed, int health) {
-        super(speed, health,"\uD83D\uDC18");
+    public Elephant(int health) {
+        super(health,"\uD83D\uDC18");
     }
 
     public EntityType getType() {

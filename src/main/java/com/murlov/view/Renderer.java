@@ -25,6 +25,10 @@ public class Renderer {
             System.out.println();
         }
 
+        newLine();
+        newLine();
+        newLine();
+
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {

@@ -12,8 +12,8 @@ public abstract class Predator extends Creature {
         this.damage = 1;
     }
 
-    public Predator(int speed, int health, int damage, String icon) {
-        super(speed, health, icon);
+    public Predator(int health, int damage, String icon) {
+        super(health, icon);
         this.damage = damage;
     }
 
@@ -62,7 +62,7 @@ public abstract class Predator extends Creature {
     private void attack(Creature attacker, Coordinates from, Coordinates to, Map map){
         Creature herbivore = (Creature) map.getEntities().get(to);
         herbivore.takeDamage(this.getDamage());
-        notifyAttack(attacker.getType(), to, herbivore.getType(), to);
+        notifyAttack(attacker.getType(), from, herbivore.getType(), to);
         if (herbivore.getHealth() == 0) {
             notifyEat(attacker.getType(), from, herbivore.getType(), to);
             map.getEntities().remove(to);

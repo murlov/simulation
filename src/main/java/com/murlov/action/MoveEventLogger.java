@@ -34,9 +34,6 @@ public record MoveEventLogger(Renderer renderer) implements MoveEventListener {
     @Override
     public void onMoveEnd(Map map) {
         renderer.Map(map);
-        renderer.newLine();
-        renderer.newLine();
-        renderer.newLine();
     }
 
     @Override

@@ -7,6 +7,6 @@ public class GoatFactory implements EntityFactory {
 
     @Override
     public Entity create() {
-        return new Goat(1, 10);
+        return new Goat(10);
     }
 }

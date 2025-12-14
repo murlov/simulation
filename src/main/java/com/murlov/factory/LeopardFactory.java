@@ -7,6 +7,6 @@ public class LeopardFactory implements EntityFactory {
 
     @Override
     public Entity create() {
-        return new Leopard(1, 10, 1);
+        return new Leopard(10, 1);
     }
 }

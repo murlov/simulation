@@ -6,8 +6,8 @@ public class Zebra extends Herbivore {
         super( "\uD83E\uDD93");
     }
 
-    public Zebra(int speed, int health) {
-        super(speed, health,"\uD83E\uDD93");
+    public Zebra(int health) {
+        super(health,"\uD83E\uDD93");
     }
 
     public EntityType getType() {

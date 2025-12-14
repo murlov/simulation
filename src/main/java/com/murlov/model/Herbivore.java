@@ -9,8 +9,8 @@ public abstract class Herbivore extends Creature {
     public Herbivore(String icon) {
         super(icon);
     }
-    public Herbivore(int speed, int health, String icon) {
-        super(speed, health, icon);
+    public Herbivore(int health, String icon) {
+        super(health, icon);
     }
 
     public EntityGroup getGroup() {

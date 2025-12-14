@@ -64,7 +64,7 @@ public class BfsPathFinder implements PathFinder {
 
                         if (next.getGroup() == resourceGroup) {
                             parents[nextCoordinatesId] = currentCoordinatesId;
-                            return getFirstStep(startId, nextCoordinatesId, parents, sizeOfMap.length(), creature.getSpeed());
+                            return getFirstStep(startId, nextCoordinatesId, parents, sizeOfMap.length());
                         }
                     } else {
                         parents[nextCoordinatesId] = currentCoordinatesId;
@@ -99,15 +99,11 @@ public class BfsPathFinder implements PathFinder {
         }
     }
 
-    private Coordinates getFirstStep(int startId, int goalId, int[] parents, int length, int speed) {
-        List<Integer> chain = new ArrayList<>();
+    private Coordinates getFirstStep(int startId, int goalId, int[] parents, int length) {
         int id = goalId;
-        while (id != startId) {
-            chain.add(id);
+        while (parents[id] != startId) {
             id = parents[id];
         }
-
-        id = chain.get(chain.size() - speed);
         return getCoordinates(id, length);
     }
 }

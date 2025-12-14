@@ -8,6 +8,6 @@ public class ElephantFactory implements EntityFactory {
     @Override
     public Entity create() {
 
-        return new Elephant(1, 10);
+        return new Elephant(10);
     }
 }

@@ -6,12 +6,10 @@ import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.Map;
 
 public abstract class Creature extends Entity {
-    private int speed;
     private int health;
     private int satiety;
     private MoveEventListener listener;
     public boolean isDead;
-    private final static int DEAFAULT_SPEED = 1;
     private final static int DEAFAULT_HEALTH = 10;
     private final static int DEFAULT_SATIETY = 10;
     private final static int DAMAGE_FROM_HUNGER = 1;
@@ -20,24 +18,14 @@ public abstract class Creature extends Entity {
 
     public Creature(String icon) {
         super(icon);
-        this.speed = DEAFAULT_SPEED;
         this.health = DEAFAULT_HEALTH;
         this.satiety = DEFAULT_SATIETY;
     }
 
-    public Creature(int speed, int health, String icon) {
+    public Creature(int health, String icon) {
         super(icon);
-        this.speed = speed;
         this.health = health;
         satiety = DEFAULT_SATIETY;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
     }
 
     public int getHealth() {

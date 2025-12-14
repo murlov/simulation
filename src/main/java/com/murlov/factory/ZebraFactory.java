@@ -7,6 +7,6 @@ public class ZebraFactory implements EntityFactory{
 
     @Override
     public Entity create() {
-        return new Zebra(1, 10);
+        return new Zebra(10);
     }
 }
