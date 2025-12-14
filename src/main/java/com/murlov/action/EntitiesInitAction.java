@@ -20,12 +20,12 @@ public class EntitiesInitAction implements Action {
     }
 
     @Override
-    public boolean execute(Map map) {
+    public void execute(Map map) {
         throw new IllegalArgumentException("EntitiesInitAction requires listenerRegistry. Use execute(Map, MoveListenerRegistry) instead.");
     }
 
     @Override
-    public boolean execute(Map map, MoveListenerRegistry listenerRegistry) {
+    public void execute(Map map, MoveListenerRegistry listenerRegistry) {
         Coordinates coordinates;
         Entity entity;
 
@@ -57,7 +57,5 @@ public class EntitiesInitAction implements Action {
                 }
             }
         }
-
-        return true;
     }
 }

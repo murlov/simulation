@@ -57,17 +57,17 @@ public class Map {
 
     public void countInGroupDecrement(EntityGroup group) {
         switch(group) {
-            case EntityGroup.PREDATOR -> predatorsCount -= 1;
-            case EntityGroup.HERBIVORE -> herbivoresCount -= 1;
-            case EntityGroup.GRASS -> grassCount -= 1;
+            case EntityGroup.PREDATOR -> predatorsCount--;
+            case EntityGroup.HERBIVORE -> herbivoresCount--;
+            case EntityGroup.GRASS -> grassCount--;
         }
     }
 
     public void countInGroupIncrement(EntityGroup group) {
         switch(group) {
-            case EntityGroup.PREDATOR -> predatorsCount += 1;
-            case EntityGroup.HERBIVORE -> herbivoresCount += 1;
-            case EntityGroup.GRASS -> grassCount += 1;
+            case EntityGroup.PREDATOR -> predatorsCount++;
+            case EntityGroup.HERBIVORE -> herbivoresCount++;
+            case EntityGroup.GRASS -> grassCount++;
         }
     }
 

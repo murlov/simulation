@@ -4,9 +4,8 @@ import com.murlov.simulation.Map;
 
 public interface Action {
 
-    boolean execute(Map map);
+    void execute(Map map);
 
-    default boolean execute(Map map, MoveListenerRegistry listenerRegistry) {
-        return execute(map);
+    default void execute(Map map, MoveListenerRegistry listenerRegistry) {
     }
 }

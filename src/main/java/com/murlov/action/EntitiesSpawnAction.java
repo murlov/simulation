@@ -18,12 +18,12 @@ public class EntitiesSpawnAction implements Action {
     }
 
     @Override
-    public boolean execute(Map map) {
+    public void execute(Map map) {
         throw new IllegalArgumentException("EntitiesMoveAction requires listenerRegistry. Use execute(Map, MoveListenerRegistry) instead.");
     }
 
     @Override
-    public boolean execute(Map map, MoveListenerRegistry listenerRegistry) {
+    public void execute(Map map, MoveListenerRegistry listenerRegistry) {
 
         for (EntityGroup entityGroup : EntityGroup.values()) {
             if (!entityGroup.equals(EntityGroup.STATIC))
@@ -41,7 +41,6 @@ public class EntitiesSpawnAction implements Action {
                 }
             }
         }
-        return true;
     }
 
     private int getMinNumberInGroup(EntityGroup entityGroup) {

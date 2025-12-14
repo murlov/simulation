@@ -15,6 +15,9 @@ public class Simulation {
     private final List<Action> turnActions;
     private final Scanner scanner;
     private final MoveListenerRegistry listenerRegistry;
+    private volatile boolean paused = false;
+    private volatile boolean running = true;
+    private final Object pauseLock = new Object();
 
 
     public Simulation(SimulationSettings settings) {
@@ -22,7 +25,10 @@ public class Simulation {
         initActions = new ArrayList<>();
         initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerGroup(), settings.getNumberOfRemainingEntities()));
         turnActions = new ArrayList<>();
-        turnActions.add(new EntitiesMoveAction());
+        EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction();
+        entitiesMoveAction.setPauseCallback(this::pause);
+        entitiesMoveAction.setExitCallback(this::exite);
+        turnActions.add(entitiesMoveAction);
         turnActions.add(new EntitiesSpawnAction(settings.getMinNumbersInGroups()));
         renderer = new Renderer();
         scanner = new Scanner(System.in);
@@ -31,31 +37,56 @@ public class Simulation {
     }
 
     public void start() {
+        Thread thread = new Thread(() -> {
+            String input;
+            while (true) {
+                input = scanner.nextLine();
+                if (input.equals("") && paused) {
+                    paused = false;
+                    synchronized (pauseLock) {
+                        pauseLock.notify();
+                    }
+                } else if (input.equals("") && !paused) {
+                    paused = true;
+                } else if (input.equals("q")) {
+                    running = false;
+                    paused = false;
+                    synchronized (pauseLock) {
+                        pauseLock.notify();
+                    }
+                    break;
+                }
+            }
+        });
+
+        thread.start();
         executeInitActions();
+        renderer.clearScreen();
         renderer.Map(map);
-        while (input()) {
-            if (!nextTurn()) {
-                break;
+
+        while (running) {
+            nextTurn();
+        }
+    }
+
+     private void pause() {
+        if (paused) {
+            synchronized (pauseLock) {
+                try {
+                    pauseLock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
 
-    private boolean nextTurn() {
-        return executeTurnActions();
+    private boolean exite() {
+        return !running;
     }
 
-    private boolean input() {
-
-        while(true) {
-            renderer.suggestContinue();
-            String input = scanner.nextLine();
-            if (input.equals("")) {
-                return true;
-            } else if (input.equals("0")) {
-                return false;
-            }
-            renderer.tryAgainMessage();
-        }
+    private void nextTurn() {
+        executeTurnActions();
     }
 
     private void executeInitActions() {
@@ -66,19 +97,14 @@ public class Simulation {
         }
     }
 
-    private boolean executeTurnActions() {
+    private void executeTurnActions() {
         for (Action action : turnActions) {
 
             if (action instanceof EntitiesMoveAction) {
-                if (!action.execute(map)) {
-                    return false;
-                }
+                action.execute(map);
             } else if (action instanceof EntitiesSpawnAction) {
-                if (!action.execute(map, listenerRegistry)) {
-                    return false;
-                }
+                action.execute(map, listenerRegistry);
             }
         }
-        return true;
     }
 }

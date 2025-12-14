@@ -22,11 +22,8 @@ public abstract class Herbivore extends Creature {
         Creature creature = (Creature) map.getEntities().get(oldCoordinates);
 
         if (newCoordinates != null){
-            Entity targetEntity = map.getEntities().get(newCoordinates);
             if (hasGrassNearby(newCoordinates, map)) {
-                eatGrass(newCoordinates, map);
-                notifyEat(creature.getType(), oldCoordinates, targetEntity.getType(), newCoordinates);
-                notifyMoveEnd(map);
+                eatGrass(creature, oldCoordinates, newCoordinates, map);
                 return true;
             } else {
                 map.setEntity(newCoordinates, this);
@@ -35,11 +32,10 @@ public abstract class Herbivore extends Creature {
                 oldCoordinates = newCoordinates;
                 newCoordinates = pathFinder.execute(map, this);
                 if (hasGrassNearby(newCoordinates, map)) {
-                    targetEntity = map.getEntities().get(newCoordinates);
-                    eatGrass(newCoordinates, map);
-                    notifyEat(creature.getType(), oldCoordinates, targetEntity.getType(), newCoordinates);
+                    eatGrass(creature, oldCoordinates, newCoordinates, map);
+                } else {
+                    satietyDecrement();
                 }
-                notifyMoveEnd(map);
                 return true;
             }
         }
@@ -56,8 +52,11 @@ public abstract class Herbivore extends Creature {
         return false;
     }
 
-    private void eatGrass(Coordinates newCoordinates, Map map){
+    private void eatGrass(Creature herbivore, Coordinates oldCoordinates, Coordinates newCoordinates, Map map){
+        Entity targetEntity = map.getEntities().get(newCoordinates);
         map.getEntities().remove(newCoordinates);
         map.countInGroupDecrement(EntityGroup.GRASS);
+        notifyEat(herbivore.getType(), oldCoordinates, targetEntity.getType(), newCoordinates);
+        satietyIncrement();
     }
 }

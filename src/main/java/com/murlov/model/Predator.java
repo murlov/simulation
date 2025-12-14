@@ -30,11 +30,8 @@ public abstract class Predator extends Creature {
         Creature creature = (Creature) map.getEntities().get(oldCoordinates);
 
         if (newCoordinates != null){
-            Entity targetEntity = map.getEntities().get(newCoordinates);
             if (hasHerbivoreNearby(newCoordinates, map)) {
                 attack(creature, oldCoordinates, newCoordinates, map);
-                notifyAttack(creature.getType(), oldCoordinates, targetEntity.getType(), newCoordinates);
-                notifyMoveEnd(map);
                 return true;
             } else {
                 map.setEntity(newCoordinates, this);
@@ -44,8 +41,9 @@ public abstract class Predator extends Creature {
                 newCoordinates = pathFinder.execute(map, this);
                 if (hasHerbivoreNearby(newCoordinates, map)) {
                     attack(creature, oldCoordinates, newCoordinates, map);
+                } else {
+                    satietyDecrement();
                 }
-                notifyMoveEnd(map);
                 return true;
             }
         }
@@ -64,11 +62,12 @@ public abstract class Predator extends Creature {
     private void attack(Creature attacker, Coordinates from, Coordinates to, Map map){
         Creature herbivore = (Creature) map.getEntities().get(to);
         herbivore.takeDamage(this.getDamage());
+        notifyAttack(attacker.getType(), to, herbivore.getType(), to);
         if (herbivore.getHealth() == 0) {
+            notifyEat(attacker.getType(), from, herbivore.getType(), to);
             map.getEntities().remove(to);
             map.countInGroupDecrement(EntityGroup.HERBIVORE);
-            notifyAttack(attacker.getType(), to, herbivore.getType(), to);
-            notifyEat(attacker.getType(), from, herbivore.getType(), to);
         }
+        satietyIncrement();
     }
 }

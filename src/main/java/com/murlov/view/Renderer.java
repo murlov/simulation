@@ -24,6 +24,12 @@ public class Renderer {
             }
             System.out.println();
         }
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void suggestContinue() {
@@ -85,8 +91,16 @@ public class Renderer {
         System.out.println(creatureType + " " + from + " ate " + victimType + " on " + to);
     }
 
+    public void logDeath(EntityType creatureType, Coordinates coordinates) {
+        System.out.println(creatureType + " death on " + coordinates);
+    }
     public void inputMinNumbersInGroups() {
         System.out.println("Минимальное количество для каждой группы (если количество существ в группе будет ниже указанного на момент окончания хода всех существ — " +
                 "произойдёт респаун):");
+    }
+
+    public void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
