@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Simulation {
-    private final Map map;
+    private final SimulationMap simulationMap;
     private final Renderer renderer;
     private final List<Action> initActions;
     private final List<Action> turnActions;
@@ -21,7 +21,7 @@ public class Simulation {
 
 
     public Simulation(SimulationSettings settings) {
-        map = new Map(settings.getSizeOfMap());
+        simulationMap = new SimulationMap(settings.getSizeOfMap());
         initActions = new ArrayList<>();
         initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerGroup(), settings.getNumberOfRemainingEntities()));
         turnActions = new ArrayList<>();
@@ -62,7 +62,7 @@ public class Simulation {
         thread.start();
         executeInitActions();
         renderer.clearScreen();
-        renderer.Map(map);
+        renderer.Map(simulationMap);
 
         while (running) {
             nextTurn();
@@ -92,7 +92,7 @@ public class Simulation {
     private void executeInitActions() {
         for (Action action : initActions) {
             if (action instanceof EntitiesInitAction) {
-                action.execute(map, listenerRegistry);
+                action.execute(simulationMap, listenerRegistry);
             }
         }
     }
@@ -101,9 +101,9 @@ public class Simulation {
         for (Action action : turnActions) {
 
             if (action instanceof EntitiesMoveAction) {
-                action.execute(map);
+                action.execute(simulationMap);
             } else if (action instanceof EntitiesSpawnAction) {
-                action.execute(map, listenerRegistry);
+                action.execute(simulationMap, listenerRegistry);
             }
         }
     }

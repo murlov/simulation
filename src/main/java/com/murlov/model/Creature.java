@@ -3,7 +3,7 @@ package com.murlov.model;
 import com.murlov.action.MoveEventListener;
 import com.murlov.action.PathFinder;
 import com.murlov.simulation.Coordinates;
-import com.murlov.simulation.Map;
+import com.murlov.simulation.SimulationMap;
 
 public abstract class Creature extends Entity {
     private int health;
@@ -14,7 +14,7 @@ public abstract class Creature extends Entity {
     private final static int DEFAULT_SATIETY = 10;
     private final static int DAMAGE_FROM_HUNGER = 1;
 
-    public abstract boolean makeMove(Map map, Coordinates oldCoordinates, PathFinder pathFinder);
+    public abstract boolean makeMove(SimulationMap simulationMap, Coordinates oldCoordinates, PathFinder pathFinder);
 
     public Creature(String icon) {
         super(icon);
@@ -72,9 +72,9 @@ public abstract class Creature extends Entity {
         }
     }
 
-    public void notifyMoveEnd(Map map) {
+    public void notifyMoveEnd(SimulationMap simulationMap) {
         if (listener != null) {
-            listener.onMoveEnd(map);
+            listener.onMoveEnd(simulationMap);
         }
     }
 

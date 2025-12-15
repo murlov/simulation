@@ -3,7 +3,7 @@ package com.murlov.view;
 import com.murlov.model.Entity;
 import com.murlov.model.EntityType;
 import com.murlov.simulation.Coordinates;
-import com.murlov.simulation.Map;
+import com.murlov.simulation.SimulationMap;
 
 public class Renderer {
 
@@ -11,12 +11,12 @@ public class Renderer {
         System.out.println(message);
     }
 
-    public void Map(Map map) {
-        for (int y = 0; y < map.getSize().length(); y++) {
-            for (int x = 0; x < map.getSize().width(); x++) {
+    public void Map(SimulationMap simulationMap) {
+        for (int y = 0; y < simulationMap.getSize().length(); y++) {
+            for (int x = 0; x < simulationMap.getSize().width(); x++) {
                 Coordinates coordinates = new Coordinates(x, y);
-                if (map.getEntities().containsKey(coordinates)) {
-                    Entity entity = map.getEntities().get(coordinates);
+                if (simulationMap.getEntities().containsKey(coordinates)) {
+                    Entity entity = simulationMap.getEntities().get(coordinates);
                     System.out.print(entity.getIcon());
                 } else {
                     System.out.print("\uD83D\uDFEB");
@@ -73,6 +73,8 @@ public class Renderer {
 
     public void invalidInputMessage() {
         System.out.println("Некорректный ввод");
+        newLine();
+        newLine();
     }
 
     public void entitiesCannotMoveMessage() {

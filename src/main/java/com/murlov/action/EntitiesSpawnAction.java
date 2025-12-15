@@ -1,13 +1,8 @@
 package com.murlov.action;
 
-import com.murlov.factory.EntityFactory;
-import com.murlov.factory.EntityFactoryProvider;
-import com.murlov.model.Creature;
-import com.murlov.model.Entity;
 import com.murlov.model.EntityGroup;
-import com.murlov.model.EntityType;
 import com.murlov.simulation.Coordinates;
-import com.murlov.simulation.Map;
+import com.murlov.simulation.SimulationMap;
 
 public class EntitiesSpawnAction implements Action {
 
@@ -18,19 +13,19 @@ public class EntitiesSpawnAction implements Action {
     }
 
     @Override
-    public void execute(Map map) {
+    public void execute(SimulationMap simulationMap) {
         throw new IllegalArgumentException("EntitiesMoveAction requires listenerRegistry. Use execute(Map, MoveListenerRegistry) instead.");
     }
 
     @Override
-    public void execute(Map map, MoveListenerRegistry listenerRegistry) {
+    public void execute(SimulationMap simulationMap, MoveListenerRegistry listenerRegistry) {
 
         for (EntityGroup entityGroup : EntityGroup.values()) {
             if (!entityGroup.equals(EntityGroup.STATIC))
             {
-                while (map.getCountInGroup(entityGroup) < getMinNumberInGroup(entityGroup)) {
-                    Coordinates coordinates = map.getFreeCellCoordinates();
-                    Spawner.execute(map, entityGroup, coordinates, listenerRegistry);
+                while (simulationMap.getCountInGroup(entityGroup) < getMinNumberInGroup(entityGroup)) {
+                    Coordinates coordinates = simulationMap.getFreeCellCoordinates();
+                    Spawner.execute(simulationMap, entityGroup, coordinates, listenerRegistry);
                 }
             }
         }

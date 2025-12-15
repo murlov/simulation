@@ -2,7 +2,7 @@ package com.murlov.model;
 
 import com.murlov.action.PathFinder;
 import com.murlov.simulation.Coordinates;
-import com.murlov.simulation.Map;
+import com.murlov.simulation.SimulationMap;
 
 public abstract class Herbivore extends Creature {
 
@@ -17,22 +17,22 @@ public abstract class Herbivore extends Creature {
         return EntityGroup.HERBIVORE;
     }
 
-    public boolean makeMove(Map map, Coordinates oldCoordinates, PathFinder pathFinder) {
-        Coordinates newCoordinates = pathFinder.execute(map, this);
-        Creature creature = (Creature) map.getEntities().get(oldCoordinates);
+    public boolean makeMove(SimulationMap simulationMap, Coordinates oldCoordinates, PathFinder pathFinder) {
+        Coordinates newCoordinates = pathFinder.execute(simulationMap, this);
+        Creature creature = (Creature) simulationMap.getEntities().get(oldCoordinates);
 
         if (newCoordinates != null){
-            if (hasGrassNearby(newCoordinates, map)) {
-                eatGrass(creature, oldCoordinates, newCoordinates, map);
+            if (hasGrassNearby(newCoordinates, simulationMap)) {
+                eatGrass(creature, oldCoordinates, newCoordinates, simulationMap);
                 return true;
             } else {
-                map.setEntity(newCoordinates, this);
-                map.getEntities().remove(oldCoordinates);
+                simulationMap.setEntity(newCoordinates, this);
+                simulationMap.getEntities().remove(oldCoordinates);
                 notifyMove(creature.getType(), oldCoordinates, newCoordinates);
                 oldCoordinates = newCoordinates;
-                newCoordinates = pathFinder.execute(map, this);
-                if (hasGrassNearby(newCoordinates, map)) {
-                    eatGrass(creature, oldCoordinates, newCoordinates, map);
+                newCoordinates = pathFinder.execute(simulationMap, this);
+                if (hasGrassNearby(newCoordinates, simulationMap)) {
+                    eatGrass(creature, oldCoordinates, newCoordinates, simulationMap);
                 } else {
                     satietyDecrement();
                 }
@@ -42,9 +42,9 @@ public abstract class Herbivore extends Creature {
         return false;
     }
 
-    private boolean hasGrassNearby(Coordinates newCoordinates, Map map) {
+    private boolean hasGrassNearby(Coordinates newCoordinates, SimulationMap simulationMap) {
         if (newCoordinates != null){
-            Entity targetEntity = map.getEntities().get(newCoordinates);
+            Entity targetEntity = simulationMap.getEntities().get(newCoordinates);
             if (targetEntity != null && targetEntity.getGroup() == EntityGroup.GRASS) {
                 return true;
             }
@@ -52,10 +52,10 @@ public abstract class Herbivore extends Creature {
         return false;
     }
 
-    private void eatGrass(Creature herbivore, Coordinates oldCoordinates, Coordinates newCoordinates, Map map){
-        Entity targetEntity = map.getEntities().get(newCoordinates);
-        map.getEntities().remove(newCoordinates);
-        map.countInGroupDecrement(EntityGroup.GRASS);
+    private void eatGrass(Creature herbivore, Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap){
+        Entity targetEntity = simulationMap.getEntities().get(newCoordinates);
+        simulationMap.getEntities().remove(newCoordinates);
+        simulationMap.countInGroupDecrement(EntityGroup.GRASS);
         notifyEat(herbivore.getType(), oldCoordinates, targetEntity.getType(), newCoordinates);
         satietyIncrement();
     }

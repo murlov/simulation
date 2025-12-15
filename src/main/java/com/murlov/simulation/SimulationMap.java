@@ -5,7 +5,7 @@ import com.murlov.model.EntityGroup;
 
 import java.util.HashMap;
 
-public class Map {
+public class SimulationMap {
 
     private final java.util.Map<Coordinates, Entity> entities;
     private int predatorsCount;
@@ -13,7 +13,7 @@ public class Map {
     private int grassCount;
     private final Size size;
 
-    public Map(Size size) {
+    public SimulationMap(Size size) {
         this.size = size;
         entities = new HashMap<>();
         predatorsCount = 0;
@@ -21,12 +21,12 @@ public class Map {
         grassCount = 0;
     }
 
-    public Map(Map map) {
-        this.entities = new HashMap<>(map.entities);
-        this.predatorsCount = map.predatorsCount;
-        this.herbivoresCount = map.herbivoresCount;
-        this.grassCount = map.grassCount;
-        this.size = map.size;
+    public SimulationMap(SimulationMap simulationMap) {
+        this.entities = new HashMap<>(simulationMap.entities);
+        this.predatorsCount = simulationMap.predatorsCount;
+        this.herbivoresCount = simulationMap.herbivoresCount;
+        this.grassCount = simulationMap.grassCount;
+        this.size = simulationMap.size;
     }
 
     public java.util.Map<Coordinates, Entity> getEntities() {

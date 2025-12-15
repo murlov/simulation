@@ -4,12 +4,10 @@ import com.murlov.model.Creature;
 import com.murlov.model.Entity;
 import com.murlov.model.EntityGroup;
 import com.murlov.simulation.Coordinates;
-import com.murlov.simulation.Map;
+import com.murlov.simulation.SimulationMap;
 import com.murlov.simulation.Size;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 public class BfsPathFinder implements PathFinder {
@@ -22,7 +20,7 @@ public class BfsPathFinder implements PathFinder {
         this.numberOfCells = numberOfCells;
     }
 
-    public Coordinates execute(Map map, Creature creature){
+    public Coordinates execute(SimulationMap simulationMap, Creature creature){
         EntityGroup resourceGroup = getResourceGroup(creature.getGroup());
         Queue<Coordinates> queue = new LinkedList<>();
 
@@ -55,12 +53,12 @@ public class BfsPathFinder implements PathFinder {
                 Coordinates nextCoordinates = new Coordinates(x, y);
                 int nextCoordinatesId = getId(nextCoordinates, sizeOfMap.length());
 
-                if (isCoordinatesCorrect(nextCoordinates, map)) {
+                if (isCoordinatesCorrect(nextCoordinates, simulationMap)) {
                     if (visited[nextCoordinatesId]) continue;
                     visited[nextCoordinatesId] = true;
 
-                    if (map.getEntities().containsKey(nextCoordinates)) {
-                        Entity next = map.getEntities().get(nextCoordinates);
+                    if (simulationMap.getEntities().containsKey(nextCoordinates)) {
+                        Entity next = simulationMap.getEntities().get(nextCoordinates);
 
                         if (next.getGroup() == resourceGroup) {
                             parents[nextCoordinatesId] = currentCoordinatesId;
@@ -84,9 +82,9 @@ public class BfsPathFinder implements PathFinder {
         return new Coordinates(id/length, id%length);
     }
 
-    private boolean isCoordinatesCorrect(Coordinates coordinates, Map map) {
-        return coordinates.X() >= 0 && coordinates.X() < map.getSize().width()
-        && coordinates.Y() >= 0 && coordinates.Y() < map.getSize().length();
+    private boolean isCoordinatesCorrect(Coordinates coordinates, SimulationMap simulationMap) {
+        return coordinates.X() >= 0 && coordinates.X() < simulationMap.getSize().width()
+        && coordinates.Y() >= 0 && coordinates.Y() < simulationMap.getSize().length();
     }
 
     private EntityGroup getResourceGroup(EntityGroup entityGroup){

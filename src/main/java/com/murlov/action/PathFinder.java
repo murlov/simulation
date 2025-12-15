@@ -2,8 +2,8 @@ package com.murlov.action;
 
 import com.murlov.model.Creature;
 import com.murlov.simulation.Coordinates;
-import com.murlov.simulation.Map;
+import com.murlov.simulation.SimulationMap;
 
 public interface PathFinder {
-    Coordinates execute(Map map, Creature creature);
+    Coordinates execute(SimulationMap simulationMap, Creature creature);
 }

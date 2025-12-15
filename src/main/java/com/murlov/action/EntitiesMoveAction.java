@@ -3,7 +3,7 @@ package com.murlov.action;
 import com.murlov.model.Creature;
 import com.murlov.model.Entity;
 import com.murlov.simulation.Coordinates;
-import com.murlov.simulation.Map;
+import com.murlov.simulation.SimulationMap;
 import com.murlov.view.Renderer;
 
 import java.util.ArrayList;
@@ -31,27 +31,27 @@ public class EntitiesMoveAction implements Action {
     }
 
     @Override
-    public void execute(Map map) {
+    public void execute(SimulationMap simulationMap) {
         boolean hasMoved = false;
-        List<Coordinates> keys = new ArrayList<>(map.getEntities().keySet());
-        PathFinder pathFinder = new BfsPathFinder(map.getSize(), map.getNumberOfCells());
+        List<Coordinates> keys = new ArrayList<>(simulationMap.getEntities().keySet());
+        PathFinder pathFinder = new BfsPathFinder(simulationMap.getSize(), simulationMap.getNumberOfCells());
         for (Coordinates coordinates : keys) {
             pauseCallback.waitIfPaused();
             if (exitCallback.shouldExit()) {
                 return;
             }
-            Entity entity = map.getEntities().get(coordinates);
+            Entity entity = simulationMap.getEntities().get(coordinates);
             if (entity instanceof Creature creature) {
                 creature.notifyMoveStart();
-                if (creature.makeMove(map, coordinates, pathFinder)) {
+                if (creature.makeMove(simulationMap, coordinates, pathFinder)) {
                     hasMoved = true;
 
                     if (creature.isDead) {
                         creature.notifyDeath(creature.getType(), creature.getCoordinates());
-                        map.getEntities().remove(creature.getCoordinates());
-                        map.countInGroupDecrement(creature.getGroup());
+                        simulationMap.getEntities().remove(creature.getCoordinates());
+                        simulationMap.countInGroupDecrement(creature.getGroup());
                     }
-                    creature.notifyMoveEnd(map);
+                    creature.notifyMoveEnd(simulationMap);
                 }
             }
         }

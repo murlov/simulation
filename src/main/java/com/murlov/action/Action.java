@@ -1,11 +1,11 @@
 package com.murlov.action;
 
-import com.murlov.simulation.Map;
+import com.murlov.simulation.SimulationMap;
 
 public interface Action {
 
-    void execute(Map map);
+    void execute(SimulationMap simulationMap);
 
-    default void execute(Map map, MoveListenerRegistry listenerRegistry) {
+    default void execute(SimulationMap simulationMap, MoveListenerRegistry listenerRegistry) {
     }
 }

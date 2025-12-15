@@ -2,7 +2,7 @@ package com.murlov.action;
 
 import com.murlov.model.EntityType;
 import com.murlov.simulation.Coordinates;
-import com.murlov.simulation.Map;
+import com.murlov.simulation.SimulationMap;
 import com.murlov.view.Renderer;
 
 public record MoveEventLogger(Renderer renderer) implements MoveEventListener {
@@ -32,8 +32,8 @@ public record MoveEventLogger(Renderer renderer) implements MoveEventListener {
     }
 
     @Override
-    public void onMoveEnd(Map map) {
-        renderer.Map(map);
+    public void onMoveEnd(SimulationMap simulationMap) {
+        renderer.Map(simulationMap);
     }
 
     @Override

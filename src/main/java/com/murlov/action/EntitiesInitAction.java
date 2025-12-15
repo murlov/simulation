@@ -1,13 +1,8 @@
 package com.murlov.action;
 
-import com.murlov.factory.EntityFactory;
-import com.murlov.factory.EntityFactoryProvider;
-import com.murlov.model.Creature;
-import com.murlov.model.Entity;
 import com.murlov.model.EntityGroup;
-import com.murlov.model.EntityType;
 import com.murlov.simulation.Coordinates;
-import com.murlov.simulation.Map;
+import com.murlov.simulation.SimulationMap;
 
 public class EntitiesInitAction implements Action {
 
@@ -20,26 +15,26 @@ public class EntitiesInitAction implements Action {
     }
 
     @Override
-    public void execute(Map map) {
+    public void execute(SimulationMap simulationMap) {
         throw new IllegalArgumentException("EntitiesInitAction requires listenerRegistry. Use execute(Map, MoveListenerRegistry) instead.");
     }
 
     @Override
-    public void execute(Map map, MoveListenerRegistry listenerRegistry) {
+    public void execute(SimulationMap simulationMap, MoveListenerRegistry listenerRegistry) {
         Coordinates coordinates;
 
         for (EntityGroup entityGroup : EntityGroup.values()) {
             for (int i = 0; i < numberOfEntitiesPerGroup; i++) {
-                coordinates = map.getFreeCellCoordinates();
-                Spawner.execute(map, entityGroup, coordinates, listenerRegistry);
+                coordinates = simulationMap.getFreeCellCoordinates();
+                Spawner.execute(simulationMap, entityGroup, coordinates, listenerRegistry);
             }
         }
 
         if (numberOfRemainingEntities != 0) {
             for (int i = 0; i < numberOfRemainingEntities; i++) {
-                coordinates = map.getFreeCellCoordinates();
+                coordinates = simulationMap.getFreeCellCoordinates();
                 EntityGroup entityGroup = EntityGroup.getRandom();
-                Spawner.execute(map, entityGroup, coordinates, listenerRegistry);
+                Spawner.execute(simulationMap, entityGroup, coordinates, listenerRegistry);
             }
         }
     }

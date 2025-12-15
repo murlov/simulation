@@ -15,10 +15,13 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
         String failMessage = "Некорректный ввод";
 
         renderer.inputMessage();
-        settings.setFillPercentage(input(renderer, "Процент заполнения (к примеру, при вводе 25 — 25% карты заполнится объектами):", failMessage, 5, 100));
+        int percent = input(renderer, "Процент заполнения (к примеру, при вводе 25 — 25% карты заполнится объектами):", failMessage, 5, 100);
+        settings.setFillPercentage(percent);
 
-        int x = input(renderer, "Ширина карты:", failMessage, 6, 50);
-        int y = input(renderer, "Длина карты:", failMessage, 6, 50);
+        double minArea = settings.getNumberOfGroups()/(percent / 100.0);
+        int minSide = (int) Math.ceil(Math.sqrt(minArea));
+        int x = input(renderer, "Ширина карты:", failMessage, minSide, 50);
+        int y = input(renderer, "Длина карты:", failMessage, minSide, 50);
         settings.setSizeOfMap(x, y);
 
         java.util.Map<EntityGroup, Integer> minNumbersInGroups = new java.util.HashMap<>(settings.getNumberOfGroups());
@@ -47,6 +50,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
                 }
             }
             renderer.message(failMessage);
+            renderer.newLine();
         }
     }
 
