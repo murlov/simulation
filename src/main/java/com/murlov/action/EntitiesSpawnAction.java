@@ -30,14 +30,7 @@ public class EntitiesSpawnAction implements Action {
             {
                 while (map.getCountInGroup(entityGroup) < getMinNumberInGroup(entityGroup)) {
                     Coordinates coordinates = map.getFreeCellCoordinates();
-                    EntityType entityType = EntityType.getRandom(entityGroup);
-                    EntityFactory factory = EntityFactoryProvider.getFactory(entityType);
-                    Entity entity = factory.create();
-                    map.setEntity(coordinates, entity);
-                    map.countInGroupIncrement(entityGroup);
-                    if (entity instanceof Creature creature) {
-                        listenerRegistry.attachListener(creature);
-                    }
+                    Spawner.execute(map, entityGroup, coordinates, listenerRegistry);
                 }
             }
         }

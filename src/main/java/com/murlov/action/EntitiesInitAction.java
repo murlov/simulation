@@ -27,19 +27,11 @@ public class EntitiesInitAction implements Action {
     @Override
     public void execute(Map map, MoveListenerRegistry listenerRegistry) {
         Coordinates coordinates;
-        Entity entity;
 
         for (EntityGroup entityGroup : EntityGroup.values()) {
             for (int i = 0; i < numberOfEntitiesPerGroup; i++) {
                 coordinates = map.getFreeCellCoordinates();
-                EntityType entityType = EntityType.getRandom(entityGroup);
-                EntityFactory entityFactory = EntityFactoryProvider.getFactory(entityType);
-                entity = entityFactory.create();
-                map.setEntity(coordinates, entity);
-                map.countInGroupIncrement(entityGroup);
-                if (entity instanceof Creature creature) {
-                    listenerRegistry.attachListener(creature);
-                }
+                Spawner.execute(map, entityGroup, coordinates, listenerRegistry);
             }
         }
 
@@ -47,14 +39,7 @@ public class EntitiesInitAction implements Action {
             for (int i = 0; i < numberOfRemainingEntities; i++) {
                 coordinates = map.getFreeCellCoordinates();
                 EntityGroup entityGroup = EntityGroup.getRandom();
-                EntityType entityType = EntityType.getRandom(entityGroup);
-                EntityFactory entityFactory = EntityFactoryProvider.getFactory(entityType);
-                entity = entityFactory.create();
-                map.setEntity(coordinates, entity);
-                map.countInGroupIncrement(entityGroup);
-                if (entity instanceof Creature creature) {
-                    listenerRegistry.attachListener(creature);
-                }
+                Spawner.execute(map, entityGroup, coordinates, listenerRegistry);
             }
         }
     }
