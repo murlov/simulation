@@ -1,47 +1,52 @@
 package com.murlov.factory;
 
-import com.murlov.model.EntityGroup;
+import com.murlov.model.Entity;
+import com.murlov.model.Grass;
+import com.murlov.model.Rabbit;
+import com.murlov.model.Wolf;
 import com.murlov.settings.SimulationSettings;
-import com.murlov.view.Renderer;
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class InputSimulationSettingsFactory implements SimulationSettingsFactory {
 
     @Override
     public SimulationSettings get() {
-        Renderer renderer = new Renderer();
         SimulationSettings settings = SimulationSettings.getInstance();
         String failMessage = "Некорректный ввод";
 
-        renderer.inputMessage();
-        int percent = input(renderer, "Процент заполнения (к примеру, при вводе 25 — 25% карты заполнится объектами):", failMessage, 5, 100);
+        System.out.println("Введите данные");
+        int percent = input("Процент заполнения (к примеру, при вводе 25 — 25% карты заполнится объектами):",
+                failMessage, 5, 100);
         settings.setFillPercentage(percent);
 
-        double minArea = settings.getNumberOfGroups()/(percent / 100.0);
+        double minArea = settings.getNumberOfEntityTypes()/(percent / 100.0);
         int minSide = (int) Math.ceil(Math.sqrt(minArea));
-        int x = input(renderer, "Ширина карты:", failMessage, minSide, 50);
-        int y = input(renderer, "Длина карты:", failMessage, minSide, 50);
+        int x = input("Ширина карты:", failMessage, minSide, 50);
+        int y = input("Длина карты:", failMessage, minSide, 50);
         settings.setSizeOfMap(x, y);
 
-        java.util.Map<EntityGroup, Integer> minNumbersInGroups = new java.util.HashMap<>(settings.getNumberOfGroups());
-        renderer.inputMinNumbersInGroups();
-        for (EntityGroup group: EntityGroup.values()) {
-            if (!group.equals(EntityGroup.STATIC)) {
-                int value = input(renderer, String.valueOf(group), failMessage, 1, settings.getNumberOfEntitiesPerGroup());
-                minNumbersInGroups.put(group, value);
-            }
+        Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes = new HashMap<>(settings.getNumberOfEntityTypes());
+        List<Class<? extends Entity>> entityTypes = List.of(Wolf.class, Rabbit.class, Grass.class);
+
+        System.out.println("Минимальное количество для каждой группы (если количество существ в группе будет ниже указанного на момент окончания " +
+                "хода всех существ — произойдёт респаун):");
+        for (Class<? extends Entity> type: entityTypes) {
+            int value = input(type.getSimpleName(), failMessage, 1, settings.getNumberOfEntitiesPerEntityType());
+            minNumbersForEntityTypes.put(type, value);
         }
-        settings.setMinNumbersInGroups(minNumbersInGroups);
+        settings.setMinNumbersForEntityTypes(minNumbersForEntityTypes);
 
         return settings;
     }
 
-    private int input(Renderer renderer, String title, String failMessage, int min, int max) {
+    private int input(String title, String failMessage, int min, int max) {
         Scanner scanner = new Scanner(System.in);
 
         while(true) {
-            renderer.inputMessage(title, min, max);
+            System.out.printf("%s (%d-%d): ", title, min, max);
             String input = scanner.nextLine();
             if (isInteger(input)) {
                 int value = Integer.parseInt(input);
@@ -49,8 +54,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
                     return value;
                 }
             }
-            renderer.message(failMessage);
-            renderer.newLine();
+            System.out.println(failMessage + "\n");
         }
     }
 

@@ -1,6 +1,7 @@
 package com.murlov.action;
 
-import com.murlov.model.EntityType;
+import com.murlov.model.Creature;
+import com.murlov.model.Entity;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
 import com.murlov.view.Renderer;
@@ -8,32 +9,28 @@ import com.murlov.view.Renderer;
 public record MoveEventLogger(Renderer renderer) implements MoveEventListener {
 
     @Override
-    public void onMove(EntityType creatureType, Coordinates from, Coordinates to) {
+    public void onMove(Class<? extends Creature> creatureType, Coordinates from, Coordinates to) {
         renderer.logMove(creatureType, from, to);
-        renderer.newLine();
     }
 
     @Override
-    public void onAttack(EntityType attackerType, Coordinates from, EntityType victimType, Coordinates to) {
+    public void onAttack(Class<? extends Creature> attackerType, Coordinates from, Class<? extends Creature> victimType, Coordinates to) {
         renderer.logAttack(attackerType, from, victimType, to);
-        renderer.newLine();
     }
 
     @Override
-    public void onEat(EntityType creatureType, Coordinates from, EntityType victimType, Coordinates to) {
+    public void onEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to) {
         renderer.logEat(creatureType, from, victimType, to);
-        renderer.newLine();
     }
 
     @Override
-    public void onDeath(EntityType creatureType, Coordinates coordinates) {
+    public void onDeath(Class<? extends Creature> creatureType, Coordinates coordinates) {
         renderer.logDeath(creatureType, coordinates);
-        renderer.newLine();
     }
 
     @Override
     public void onMoveEnd(SimulationMap simulationMap) {
-        renderer.Map(simulationMap);
+        renderer.viewMap(simulationMap);
     }
 
     @Override

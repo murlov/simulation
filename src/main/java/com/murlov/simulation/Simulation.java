@@ -20,17 +20,17 @@ public class Simulation {
     private final Object pauseLock = new Object();
 
 
-    public Simulation(SimulationSettings settings) {
+    public Simulation(SimulationSettings settings, Renderer renderer) {
         simulationMap = new SimulationMap(settings.getSizeOfMap());
         initActions = new ArrayList<>();
-        initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerGroup(), settings.getNumberOfRemainingEntities()));
+        initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerEntityType(), settings.getNumberOfRemainingEntities()));
         turnActions = new ArrayList<>();
         EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction();
         entitiesMoveAction.setPauseCallback(this::pause);
         entitiesMoveAction.setExitCallback(this::exite);
         turnActions.add(entitiesMoveAction);
-        turnActions.add(new EntitiesSpawnAction(settings.getMinNumbersInGroups()));
-        renderer = new Renderer();
+        turnActions.add(new EntitiesSpawnAction(settings.getMinNumbersForEntityTypes()));
+        this.renderer = renderer;
         scanner = new Scanner(System.in);
         MoveEventListener logger = new MoveEventLogger(renderer);
         listenerRegistry = new MoveListenerRegistry(logger);
@@ -62,7 +62,7 @@ public class Simulation {
         thread.start();
         executeInitActions();
         renderer.clearScreen();
-        renderer.Map(simulationMap);
+        renderer.viewMap(simulationMap);
 
         while (running) {
             nextTurn();
@@ -75,7 +75,7 @@ public class Simulation {
                 try {
                     pauseLock.wait();
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    Thread.currentThread().interrupt();
                 }
             }
         }

@@ -1,16 +1,19 @@
 package com.murlov.action;
 
-import com.murlov.model.EntityGroup;
-import com.murlov.simulation.Coordinates;
+import com.murlov.model.*;
 import com.murlov.simulation.SimulationMap;
+import com.murlov.util.RandomProvider;
+
+import java.util.List;
+import java.util.Random;
 
 public class EntitiesInitAction implements Action {
 
-    private final int numberOfEntitiesPerGroup;
+    private final int numberOfEntitiesPerEntityType;
     private final int numberOfRemainingEntities;
 
-    public EntitiesInitAction(int numberOfEntitiesPerGroup, int numberOfRemainingEntities) {
-        this.numberOfEntitiesPerGroup = numberOfEntitiesPerGroup;
+    public EntitiesInitAction(int numberOfEntitiesPerEntityType, int numberOfRemainingEntities) {
+        this.numberOfEntitiesPerEntityType = numberOfEntitiesPerEntityType;
         this.numberOfRemainingEntities = numberOfRemainingEntities;
     }
 
@@ -21,21 +24,16 @@ public class EntitiesInitAction implements Action {
 
     @Override
     public void execute(SimulationMap simulationMap, MoveListenerRegistry listenerRegistry) {
-        Coordinates coordinates;
 
-        for (EntityGroup entityGroup : EntityGroup.values()) {
-            for (int i = 0; i < numberOfEntitiesPerGroup; i++) {
-                coordinates = simulationMap.getFreeCellCoordinates();
-                Spawner.execute(simulationMap, entityGroup, coordinates, listenerRegistry);
-            }
+        List<Class<? extends Entity>> types = List.of(Wolf.class, Rabbit.class, Grass.class, Tree.class, Rock.class);
+        for (Class<? extends Entity> type : types) {
+            Spawner.execute(simulationMap, type.getSimpleName(), listenerRegistry, numberOfEntitiesPerEntityType);
         }
 
-        if (numberOfRemainingEntities != 0) {
-            for (int i = 0; i < numberOfRemainingEntities; i++) {
-                coordinates = simulationMap.getFreeCellCoordinates();
-                EntityGroup entityGroup = EntityGroup.getRandom();
-                Spawner.execute(simulationMap, entityGroup, coordinates, listenerRegistry);
-            }
+        for (int i = 0; i < numberOfRemainingEntities; i++) {
+            Random random = RandomProvider.getInstance();
+            Class<? extends Entity> type = types.get(random.nextInt(types.size()));
+            Spawner.execute(simulationMap, type.getSimpleName(), listenerRegistry, 1);
         }
     }
 }

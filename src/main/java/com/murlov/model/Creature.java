@@ -14,16 +14,11 @@ public abstract class Creature extends Entity {
     private final static int DEFAULT_SATIETY = 10;
     private final static int DAMAGE_FROM_HUNGER = 1;
 
-    public abstract boolean makeMove(SimulationMap simulationMap, Coordinates oldCoordinates, PathFinder pathFinder);
-
-    public Creature(String icon) {
-        super(icon);
+    public Creature() {
         this.health = DEAFAULT_HEALTH;
-        this.satiety = DEFAULT_SATIETY;
     }
 
-    public Creature(int health, String icon) {
-        super(icon);
+    public Creature(int health) {
         this.health = health;
         satiety = DEFAULT_SATIETY;
     }
@@ -32,41 +27,33 @@ public abstract class Creature extends Entity {
         return health;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public int getSatiety() {
-        return satiety;
-    }
-
-    public void setSatiety(int satiety) {
-        this.satiety = satiety;
+    public int getDamage() {
+        return 0;
     }
 
     public void setMoveEventListener(MoveEventListener listener) {
         this.listener = listener;
     }
 
-    public void notifyMove(EntityType creatureType, Coordinates from, Coordinates to) {
+    public void notifyMove(Class<? extends Creature> creatureType, Coordinates from, Coordinates to) {
         if (listener != null) {
             listener.onMove(creatureType, from, to);
         }
     }
 
-    public void notifyAttack(EntityType attackerType, Coordinates from, EntityType victimType, Coordinates to) {
+    public void notifyAttack(Class<? extends Creature> attackerType, Coordinates from, Class<? extends Creature> victimType, Coordinates to) {
         if (listener != null) {
             listener.onAttack(attackerType, from, victimType, to);
         }
     }
 
-    public void notifyEat(EntityType creatureType, Coordinates from, EntityType victimType, Coordinates to) {
+    public void notifyEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to) {
         if (listener != null) {
             listener.onEat(creatureType, from, victimType, to);
         }
     }
 
-    public void notifyDeath(EntityType creatureType, Coordinates coordinates) {
+    public void notifyDeath(Class<? extends Creature> creatureType, Coordinates coordinates) {
         if (listener != null) {
             listener.onDeath(creatureType, coordinates);
         }
@@ -108,5 +95,63 @@ public abstract class Creature extends Entity {
             takeDamage();
         }
         satiety--;
+    }
+
+    public boolean makeMove(SimulationMap simulationMap, Coordinates oldCoordinates, PathFinder pathFinder) {
+        Coordinates newCoordinates = pathFinder.execute(simulationMap, this);
+        Creature creature = (Creature) simulationMap.getEntities().get(oldCoordinates);
+
+        if (newCoordinates != null){
+            if (hasResourceNearby(newCoordinates, simulationMap)) {
+                consumeResource(creature, oldCoordinates, newCoordinates, simulationMap);
+                return true;
+            } else {
+                simulationMap.setEntity(newCoordinates, this);
+                simulationMap.getEntities().remove(oldCoordinates);
+                notifyMove(creature.getClass(), oldCoordinates, newCoordinates);
+                oldCoordinates = newCoordinates;
+                newCoordinates = pathFinder.execute(simulationMap, this);
+                if (hasResourceNearby(newCoordinates, simulationMap)) {
+                    consumeResource(creature, oldCoordinates, newCoordinates, simulationMap);
+                } else {
+                    satietyDecrement();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasResourceNearby(Coordinates newCoordinates, SimulationMap simulationMap) {
+        if (newCoordinates != null){
+            Entity targetEntity = simulationMap.getEntities().get(newCoordinates);
+            Class <? extends Entity> targetEntityType = switch (this.getClass().getSimpleName()) {
+                case "Wolf" -> Rabbit.class;
+                case "Rabbit" -> Grass.class;
+                default -> throw new IllegalStateException("Unexpected entityType: " + this.getClass().getSimpleName());
+            };
+            return targetEntity != null && targetEntity.getClass() == targetEntityType;
+        }
+        return false;
+    }
+
+    private void consumeResource(Creature creature, Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap) {
+        if (creature.getClass() == Rabbit.class) {
+            Entity targetEntity = simulationMap.getEntities().get(newCoordinates);
+            simulationMap.getEntities().remove(newCoordinates);
+            simulationMap.countForEntityTypeDecrement(Grass.class);
+            notifyEat(creature.getClass(), oldCoordinates, targetEntity.getClass(), newCoordinates);
+            satietyIncrement();
+        } else if (creature.getClass() == Wolf.class) {
+            Creature herbivore = (Creature) simulationMap.getEntities().get(newCoordinates);
+            herbivore.takeDamage(getDamage());
+            notifyAttack(creature.getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
+            if (herbivore.getHealth() == 0) {
+                notifyEat(creature.getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
+                simulationMap.getEntities().remove(newCoordinates);
+                simulationMap.countForEntityTypeDecrement(Rabbit.class);
+            }
+            satietyIncrement();
+        }
     }
 }

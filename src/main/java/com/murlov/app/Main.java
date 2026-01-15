@@ -5,6 +5,7 @@ import com.murlov.factory.InputSimulationSettingsFactory;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.factory.SimulationSettingsFactory;
 import com.murlov.simulation.Simulation;
+import com.murlov.view.ConsoleRenderer;
 import com.murlov.view.Renderer;
 
 import java.util.Scanner;
@@ -14,21 +15,25 @@ public class Main {
     private final static int INPUT_SETTINGS = 2;
 
     public static void main(String[] args) {
-        Renderer renderer = new Renderer();
-        int settingsMode = getSettingsMode(renderer);
+        Renderer renderer = new ConsoleRenderer();
+        int settingsMode = getSettingsMode();
         SimulationSettingsFactory settingsFactory = getSettingsFactory(settingsMode);
         SimulationSettings settings = settingsFactory.get();
 
-        Simulation simulation = new Simulation(settings);
+        Simulation simulation = new Simulation(settings, renderer);
         simulation.start();
     }
 
-    private static int getSettingsMode(Renderer renderer) {
+    private static int getSettingsMode() {
         Scanner scanner = new Scanner(System.in);
 
-        renderer.settingsChoiceMessage();
+        System.out.println("Хотите использовать настройки по-умолчанию или хотите задать свои?");
         while (true) {
-            renderer.settingsMenuMessage();
+            System.out.println("""
+                    1. Использовать настройки по-умолчанию (Размер карты — 10x10; Процент заполнения — 40; Минимальное количество хищников, травоядных и травы — 10)
+                    2. Задать свои настройки
+                    """);
+
             String input = scanner.nextLine();
             if (isInteger(input)) {
                 int value = Integer.parseInt(input);
@@ -37,10 +42,10 @@ public class Main {
                 } else if (value == INPUT_SETTINGS) {
                     return INPUT_SETTINGS;
                 } else {
-                    renderer.optionNoFoundMessage();
+                    System.out.println("Такой пункт отсутствует");
                 }
             } else {
-                renderer.invalidInputMessage();
+                System.out.println("Некорректный ввод\n\n");
             }
         }
     }

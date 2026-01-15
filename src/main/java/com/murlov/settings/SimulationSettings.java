@@ -1,39 +1,40 @@
 package com.murlov.settings;
 
-import com.murlov.model.EntityGroup;
+import com.murlov.model.Entity;
 import com.murlov.simulation.Size;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SimulationSettings {
-    private final int NUMBER_OF_GROUPS = 4;
+    private final int NUMBER_OF_ENTITY_TYPES = 5;
 
     private static SimulationSettings instance;
     private double fillPercentage;
-    private int numberOfEntitiesPerGroup;
+    private int numberOfEntitiesPerEntityType;
     private Size sizeOfMap;
-    private java.util.Map<EntityGroup, Integer> minNumbersInGroups;
+    private Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes;
     private int numberOfRemainingEntities;
 
     private SimulationSettings() {
         sizeOfMap = new Size();
         fillPercentage = 0;
-        numberOfEntitiesPerGroup = 0;
-        minNumbersInGroups = new HashMap<>(NUMBER_OF_GROUPS);
+        numberOfEntitiesPerEntityType = 0;
+        minNumbersForEntityTypes = new HashMap<>(NUMBER_OF_ENTITY_TYPES);
         numberOfRemainingEntities = 0;
     }
 
-    private SimulationSettings(int width, int length, int fillPercentage, java.util.Map<EntityGroup, Integer> minNumbersInGroups) {
+    private SimulationSettings(int width, int length, int fillPercentage, Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes) {
         sizeOfMap = new Size(width, length);
         this.fillPercentage = fillPercentage * 0.01;
-        numberOfEntitiesPerGroup = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_GROUPS;
-        numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerGroup * NUMBER_OF_GROUPS;
-        this.minNumbersInGroups = new HashMap<>(minNumbersInGroups);
+        numberOfEntitiesPerEntityType = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_ENTITY_TYPES;
+        numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerEntityType * NUMBER_OF_ENTITY_TYPES;
+        this.minNumbersForEntityTypes = new HashMap<>(minNumbersForEntityTypes);
     }
 
-    public static SimulationSettings getInstance(int width, int length, int fillPercentage, java.util.Map<EntityGroup, Integer> minNumbersInGroups) {
+    public static SimulationSettings getInstance(int width, int length, int fillPercentage, Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes) {
         if (instance == null) {
-            instance = new SimulationSettings(width, length, fillPercentage, minNumbersInGroups);
+            instance = new SimulationSettings(width, length, fillPercentage, minNumbersForEntityTypes);
         }
         return instance;
     }
@@ -47,12 +48,12 @@ public class SimulationSettings {
 
     public void setFillPercentage(int fillPercentage) {
         this.fillPercentage = fillPercentage*0.01;
-        numberOfEntitiesPerGroup = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_GROUPS;
-        numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerGroup * NUMBER_OF_GROUPS;
+        numberOfEntitiesPerEntityType = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_ENTITY_TYPES;
+        numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerEntityType * NUMBER_OF_ENTITY_TYPES;
     }
 
-    public int getNumberOfEntitiesPerGroup() {
-        return numberOfEntitiesPerGroup;
+    public int getNumberOfEntitiesPerEntityType() {
+        return numberOfEntitiesPerEntityType;
     }
 
     public Size getSizeOfMap() {
@@ -61,16 +62,12 @@ public class SimulationSettings {
 
     public void setSizeOfMap(int x, int y) {
         sizeOfMap = new Size(x, y);
-        numberOfEntitiesPerGroup = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_GROUPS;
-        numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerGroup * NUMBER_OF_GROUPS;
+        numberOfEntitiesPerEntityType = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_ENTITY_TYPES;
+        numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerEntityType * NUMBER_OF_ENTITY_TYPES;
     }
 
-    public int getNumberOfGroups() {
-        return NUMBER_OF_GROUPS;
-    }
-
-    public int getNumberOfEntities() {
-        return numberOfEntitiesPerGroup * NUMBER_OF_GROUPS;
+    public int getNumberOfEntityTypes() {
+        return NUMBER_OF_ENTITY_TYPES;
     }
 
     public int getNumberOfRemainingEntities() {
@@ -81,12 +78,12 @@ public class SimulationSettings {
         return sizeOfMap.getArea();
     }
 
-    public java.util.Map<EntityGroup, Integer> getMinNumbersInGroups() {
-        return minNumbersInGroups;
+    public Map<Class<? extends Entity>, Integer> getMinNumbersForEntityTypes() {
+        return minNumbersForEntityTypes;
     }
 
-    public void setMinNumbersInGroups(java.util.Map<EntityGroup, Integer> minNumbersInGroups) {
-        this.minNumbersInGroups = new HashMap<>(minNumbersInGroups);
+    public void setMinNumbersForEntityTypes(Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes) {
+        this.minNumbersForEntityTypes = new HashMap<>(minNumbersForEntityTypes);
     }
 
 

@@ -4,23 +4,23 @@ import com.murlov.model.Creature;
 import com.murlov.model.Entity;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
-import com.murlov.view.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EntitiesMoveAction implements Action {
 
-    public interface PauseCallback {
-        void waitIfPaused();
-    }
-
-    public interface  ExitCallback {
-        boolean shouldExit();
-    }
-
     private PauseCallback pauseCallback;
     private ExitCallback exitCallback;
+
+    public interface PauseCallback {
+        void waitIfPaused();
+
+    }
+    public interface  ExitCallback {
+        boolean shouldExit();
+
+    }
 
     public void setPauseCallback(PauseCallback pauseCallback) {
         this.pauseCallback = pauseCallback;
@@ -47,17 +47,16 @@ public class EntitiesMoveAction implements Action {
                     hasMoved = true;
 
                     if (creature.isDead) {
-                        creature.notifyDeath(creature.getType(), creature.getCoordinates());
+                        creature.notifyDeath(creature.getClass(), creature.getCoordinates());
                         simulationMap.getEntities().remove(creature.getCoordinates());
-                        simulationMap.countInGroupDecrement(creature.getGroup());
+                        simulationMap.countForEntityTypeDecrement(creature.getClass());
                     }
                     creature.notifyMoveEnd(simulationMap);
                 }
             }
         }
         if (!hasMoved) {
-            Renderer renderer = new Renderer();
-            renderer.entitiesCannotMoveMessage();
+            throw new RuntimeException("Creatures cannot move");
         }
     }
 }

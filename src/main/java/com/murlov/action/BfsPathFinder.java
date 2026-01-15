@@ -1,8 +1,6 @@
 package com.murlov.action;
 
-import com.murlov.model.Creature;
-import com.murlov.model.Entity;
-import com.murlov.model.EntityGroup;
+import com.murlov.model.*;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
 import com.murlov.simulation.Size;
@@ -21,7 +19,9 @@ public class BfsPathFinder implements PathFinder {
     }
 
     public Coordinates execute(SimulationMap simulationMap, Creature creature){
-        EntityGroup resourceGroup = getResourceGroup(creature.getGroup());
+
+        Class<? extends Entity> resourceType = getResourceType(creature.getClass());
+
         Queue<Coordinates> queue = new LinkedList<>();
 
         int[] parents = new int[numberOfCells];
@@ -60,7 +60,7 @@ public class BfsPathFinder implements PathFinder {
                     if (simulationMap.getEntities().containsKey(nextCoordinates)) {
                         Entity next = simulationMap.getEntities().get(nextCoordinates);
 
-                        if (next.getGroup() == resourceGroup) {
+                        if (next.getClass() == resourceType) {
                             parents[nextCoordinatesId] = currentCoordinatesId;
                             return getFirstStep(startId, nextCoordinatesId, parents, sizeOfMap.length());
                         }
@@ -87,13 +87,13 @@ public class BfsPathFinder implements PathFinder {
         && coordinates.Y() >= 0 && coordinates.Y() < simulationMap.getSize().length();
     }
 
-    private EntityGroup getResourceGroup(EntityGroup entityGroup){
-        if (entityGroup == EntityGroup.PREDATOR) {
-            return EntityGroup.HERBIVORE;
-        } else if (entityGroup == EntityGroup.HERBIVORE) {
-            return EntityGroup.GRASS;
+    private Class<? extends Entity> getResourceType(Class<? extends Creature> type){
+        if (type == Wolf.class) {
+            return Rabbit.class;
+        } else if (type == Rabbit.class) {
+            return Grass.class;
         } else {
-            throw new IllegalArgumentException("Unknown entity group: " + entityGroup);
+            throw new IllegalArgumentException("Unknown entity type: " + type);
         }
     }
 

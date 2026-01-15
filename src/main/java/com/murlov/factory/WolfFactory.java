@@ -7,6 +7,6 @@ public class WolfFactory implements EntityFactory {
 
     @Override
     public Entity create() {
-        return new Wolf(10, 1);
+        return new Wolf();
     }
 }

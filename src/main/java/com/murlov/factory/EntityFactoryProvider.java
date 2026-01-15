@@ -1,19 +1,14 @@
 package com.murlov.factory;
 
-import com.murlov.model.EntityType;
-
 public class EntityFactoryProvider {
-    public static EntityFactory getFactory(EntityType entityType) {
-        return switch (entityType) {
-            case GOAT -> new GoatFactory();
-            case ELEPHANT -> new ElephantFactory();
-            case ZEBRA -> new ZebraFactory();
-            case WOLF -> new WolfFactory();
-            case TIGER -> new TigerFactory();
-            case LEOPARD -> new LeopardFactory();
-            case ROCK -> new RockFactory();
-            case TREE -> new TreeFactory();
-            case GRASS -> new GrassFactory();
+    public static EntityFactory getFactory(String name) {
+        return switch (name) {
+            case "Wolf" -> new WolfFactory();
+            case "Rock" -> new RockFactory();
+            case "Tree" -> new TreeFactory();
+            case "Grass" -> new GrassFactory();
+            case "Rabbit" -> new RabbitFactory();
+            default -> throw new IllegalStateException("Unexpected entity: " + name);
         };
     }
 }
