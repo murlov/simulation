@@ -42,19 +42,24 @@ public class ConsoleRenderer implements Renderer {
     }
 
     public void logMove(Class<? extends Creature> creatureType, Coordinates from, Coordinates to) {
-        System.out.println(creatureType.getSimpleName() + " moved from " + from + " to " + to + "\n");
+        System.out.println(creatureType.getSimpleName() + " has moved from " + from + " to " + to + "\n");
     }
 
     public void logAttack(Class<? extends Creature> attackerType, Coordinates from, Class<? extends Creature> victimType, Coordinates to) {
-        System.out.println(attackerType.getSimpleName() + " " + from + " attacked " + victimType.getSimpleName() + " on " + to + "\n");
+        System.out.println(attackerType.getSimpleName() + " " + from + " has attacked " + victimType.getSimpleName() + " on " + to + "\n");
     }
 
     public void logEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to) {
-        System.out.println(creatureType.getSimpleName() + " " + from + " ate " + victimType.getSimpleName() + " on " + to + "\n");
+        System.out.println(creatureType.getSimpleName() + " " + from + " has eaten " + victimType.getSimpleName() + " on " + to + "\n");
+    }
+
+    @Override
+    public void logSpawn(Class<? extends Entity> entityType, Coordinates coordinates) {
+        System.out.println(entityType.getSimpleName() + " has spawned on " + coordinates + "\n");
     }
 
     public void logDeath(Class<? extends Creature> creatureType, Coordinates coordinates) {
-        System.out.println(creatureType.getSimpleName() + " death on " + coordinates + "\n");
+        System.out.println(creatureType.getSimpleName() + " has died on " + coordinates + "\n");
     }
 
     public void clearScreen() {

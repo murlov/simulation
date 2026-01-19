@@ -1,12 +1,11 @@
 package com.murlov.model;
 
 public abstract class Predator extends Creature {
-    private final static int DEFAULT_DAMAGE = 1;
     private final int damage;
 
-    public Predator() {
-        super();
-        this.damage = DEFAULT_DAMAGE;
+    public Predator(int health, int speed, int satiety, int damage) {
+        super(health, speed, satiety);
+        this.damage = damage;
     }
 
     @Override

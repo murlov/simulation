@@ -24,6 +24,11 @@ public record MoveEventLogger(Renderer renderer) implements MoveEventListener {
     }
 
     @Override
+    public void onSpawn(Class<? extends Entity> entityType, Coordinates coordinates) {
+        renderer.logSpawn(entityType, coordinates);
+    }
+
+    @Override
     public void onDeath(Class<? extends Creature> creatureType, Coordinates coordinates) {
         renderer.logDeath(creatureType, coordinates);
     }

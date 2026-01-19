@@ -3,10 +3,11 @@ package com.murlov.simulation;
 import com.murlov.model.Entity;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SimulationMap {
 
-    private final java.util.Map<Coordinates, Entity> entities;
+    private final Map<Coordinates, Entity> entities;
     private int wolfsCount;
     private int rabbitsCount;
     private int grassCount;
@@ -28,7 +29,7 @@ public class SimulationMap {
         this.size = simulationMap.size;
     }
 
-    public java.util.Map<Coordinates, Entity> getEntities() {
+    public Map<Coordinates, Entity> getEntities() {
         return entities;
     }
 

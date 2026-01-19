@@ -15,6 +15,8 @@ public interface Renderer {
 
     void logEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to);
 
+    void logSpawn(Class<? extends Entity> entityType, Coordinates coordinates);
+
     void logDeath(Class<? extends Creature> creatureType, Coordinates coordinates);
 
     void clearScreen();

@@ -5,22 +5,23 @@ import com.murlov.action.PathFinder;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
 
+import java.util.List;
+
+import static java.lang.Math.min;
+
 public abstract class Creature extends Entity {
     private int health;
     private int satiety;
-    private MoveEventListener listener;
+    private final int speed;
     public boolean isDead;
-    private final static int DEAFAULT_HEALTH = 10;
-    private final static int DEFAULT_SATIETY = 10;
-    private final static int DAMAGE_FROM_HUNGER = 1;
+    private static final int DAMAGE_FROM_HUNGER = 1;
+    private static final int NEIGHBOR_PATH_LENGTH = 2;
+    private MoveEventListener listener;
 
-    public Creature() {
-        this.health = DEAFAULT_HEALTH;
-    }
-
-    public Creature(int health) {
+    public Creature(int health, int satiety, int speed) {
         this.health = health;
-        satiety = DEFAULT_SATIETY;
+        this.satiety = satiety;
+        this.speed = speed;
     }
 
     public int getHealth() {
@@ -59,12 +60,6 @@ public abstract class Creature extends Entity {
         }
     }
 
-    public void notifyMoveEnd(SimulationMap simulationMap) {
-        if (listener != null) {
-            listener.onMoveEnd(simulationMap);
-        }
-    }
-
     public void notifyMoveStart() {
         if (listener != null) {
             listener.onMoveStart();
@@ -80,6 +75,9 @@ public abstract class Creature extends Entity {
 
     public void takeDamage(int damage) {
         health = Math.max(0, health - damage);
+        if (health == 0) {
+            die();
+        }
     }
 
     private void die() {
@@ -87,7 +85,7 @@ public abstract class Creature extends Entity {
     }
 
     public void satietyIncrement() {
-        satiety = Math.min(10, ++satiety);
+        satiety = min(10, ++satiety);
     }
 
     public void satietyDecrement() {
@@ -98,39 +96,53 @@ public abstract class Creature extends Entity {
     }
 
     public boolean makeMove(SimulationMap simulationMap, Coordinates oldCoordinates, PathFinder pathFinder) {
-        Coordinates newCoordinates = pathFinder.execute(simulationMap, this);
+        List<Coordinates> path = pathFinder.execute(simulationMap, this);
+        if (path == null) {
+            return false;
+        }
+        Coordinates newCoordinates;
         Creature creature = (Creature) simulationMap.getEntities().get(oldCoordinates);
 
-        if (newCoordinates != null){
-            if (hasResourceNearby(newCoordinates, simulationMap)) {
-                consumeResource(creature, oldCoordinates, newCoordinates, simulationMap);
-                return true;
-            } else {
-                simulationMap.setEntity(newCoordinates, this);
-                simulationMap.getEntities().remove(oldCoordinates);
-                notifyMove(creature.getClass(), oldCoordinates, newCoordinates);
-                oldCoordinates = newCoordinates;
-                newCoordinates = pathFinder.execute(simulationMap, this);
-                if (hasResourceNearby(newCoordinates, simulationMap)) {
-                    consumeResource(creature, oldCoordinates, newCoordinates, simulationMap);
-                } else {
-                    satietyDecrement();
+
+        if (path.size() == NEIGHBOR_PATH_LENGTH && hasResourceNearby(oldCoordinates, simulationMap)) {
+            newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - 1);
+            consumeResource(creature, oldCoordinates, newCoordinates, simulationMap);
+            return true;
+        } else {
+            newCoordinates = path.get(min(speed, path.size() - 2));
+            simulationMap.setEntity(newCoordinates, this);
+            simulationMap.getEntities().remove(oldCoordinates);
+            satietyDecrement();
+
+            notifyMove(creature.getClass(), oldCoordinates, newCoordinates);
+            oldCoordinates = newCoordinates;
+            if (hasResourceNearby(oldCoordinates, simulationMap)) {
+                path = pathFinder.execute(simulationMap, this);
+                if (path == null) {
+                    return false;
                 }
-                return true;
+                if (path.size() == NEIGHBOR_PATH_LENGTH) {
+                    newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - 1);
+                    consumeResource(creature, oldCoordinates, newCoordinates, simulationMap);
+                }
             }
+            return true;
         }
-        return false;
     }
 
-    private boolean hasResourceNearby(Coordinates newCoordinates, SimulationMap simulationMap) {
-        if (newCoordinates != null){
-            Entity targetEntity = simulationMap.getEntities().get(newCoordinates);
-            Class <? extends Entity> targetEntityType = switch (this.getClass().getSimpleName()) {
-                case "Wolf" -> Rabbit.class;
-                case "Rabbit" -> Grass.class;
-                default -> throw new IllegalStateException("Unexpected entityType: " + this.getClass().getSimpleName());
-            };
-            return targetEntity != null && targetEntity.getClass() == targetEntityType;
+    private boolean hasResourceNearby(Coordinates coordinates, SimulationMap simulationMap) {
+        Class<? extends Entity> targetEntityType = switch (this.getClass().getSimpleName()) {
+            case "Wolf" -> Rabbit.class;
+            case "Rabbit" -> Grass.class;
+            default -> throw new IllegalStateException("Unexpected entityType: " + this.getClass().getSimpleName());
+        };
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                Coordinates targetCoordinates = new Coordinates(coordinates.X() + x,  coordinates.Y() + y);
+                if (simulationMap.getEntities().containsKey(targetCoordinates) && simulationMap.getEntities().get(targetCoordinates).getClass() == targetEntityType) {
+                    return true;
+                }
+            }
         }
         return false;
     }

@@ -14,7 +14,6 @@ public class Simulation {
     private final List<Action> initActions;
     private final List<Action> turnActions;
     private final Scanner scanner;
-    private final MoveListenerRegistry listenerRegistry;
     private volatile boolean paused = false;
     private volatile boolean running = true;
     private final Object pauseLock = new Object();
@@ -23,17 +22,19 @@ public class Simulation {
     public Simulation(SimulationSettings settings, Renderer renderer) {
         simulationMap = new SimulationMap(settings.getSizeOfMap());
         initActions = new ArrayList<>();
-        initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerEntityType(), settings.getNumberOfRemainingEntities()));
+        MoveEventListener listener = new MoveEventLogger(renderer);
+        MoveListenerRegistry listenerRegistry = new MoveListenerRegistry(listener);
+        initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerEntityType(), settings.getNumberOfRemainingEntities(), listenerRegistry));
         turnActions = new ArrayList<>();
-        EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction();
+        EntitiesSpawnAction entitiesSpawnAction = new EntitiesSpawnAction(settings.getMinNumbersForEntityTypes(), listenerRegistry, listener);
+        turnActions.add(entitiesSpawnAction);
+        EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction(listener);
         entitiesMoveAction.setPauseCallback(this::pause);
         entitiesMoveAction.setExitCallback(this::exite);
+        entitiesMoveAction.setSpawnCallback(entitiesSpawnAction::execute);
         turnActions.add(entitiesMoveAction);
-        turnActions.add(new EntitiesSpawnAction(settings.getMinNumbersForEntityTypes()));
         this.renderer = renderer;
         scanner = new Scanner(System.in);
-        MoveEventListener logger = new MoveEventLogger(renderer);
-        listenerRegistry = new MoveListenerRegistry(logger);
     }
 
     public void start() {
@@ -91,20 +92,13 @@ public class Simulation {
 
     private void executeInitActions() {
         for (Action action : initActions) {
-            if (action instanceof EntitiesInitAction) {
-                action.execute(simulationMap, listenerRegistry);
-            }
+            action.execute(simulationMap);
         }
     }
 
     private void executeTurnActions() {
         for (Action action : turnActions) {
-
-            if (action instanceof EntitiesMoveAction) {
-                action.execute(simulationMap);
-            } else if (action instanceof EntitiesSpawnAction) {
-                action.execute(simulationMap, listenerRegistry);
-            }
+            action.execute(simulationMap);
         }
     }
 }

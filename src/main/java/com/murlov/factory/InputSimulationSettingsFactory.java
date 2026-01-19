@@ -18,26 +18,43 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
         String failMessage = "Некорректный ввод";
 
         System.out.println("Введите данные");
-        int percent = input("Процент заполнения (к примеру, при вводе 25 — 25% карты заполнится объектами):",
+        int percent = input("Процент заполнения (При значении 25 — 25% карты заполнится объектами)",
                 failMessage, 5, 100);
         settings.setFillPercentage(percent);
 
         double minArea = settings.getNumberOfEntityTypes()/(percent / 100.0);
         int minSide = (int) Math.ceil(Math.sqrt(minArea));
-        int x = input("Ширина карты:", failMessage, minSide, 50);
-        int y = input("Длина карты:", failMessage, minSide, 50);
+        int x = input("Ширина карты", failMessage, minSide, 50);
+        int y = input("Длина карты", failMessage, minSide, 50);
         settings.setSizeOfMap(x, y);
 
         Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes = new HashMap<>(settings.getNumberOfEntityTypes());
         List<Class<? extends Entity>> entityTypes = List.of(Wolf.class, Rabbit.class, Grass.class);
 
-        System.out.println("Минимальное количество для каждой группы (если количество существ в группе будет ниже указанного на момент окончания " +
-                "хода всех существ — произойдёт респаун):");
+        System.out.println("Минимальное количество для каждой группы (Произойдет респаун, если указаных сущностей будет меньше заданного значения):");
         for (Class<? extends Entity> type: entityTypes) {
             int value = input(type.getSimpleName(), failMessage, 1, settings.getNumberOfEntitiesPerEntityType());
             minNumbersForEntityTypes.put(type, value);
         }
         settings.setMinNumbersForEntityTypes(minNumbersForEntityTypes);
+
+        System.out.println("Показатели для травоядных:");
+        int health = input("Здоровье:", failMessage, 1, 10);
+        settings.setHerbivoreHealth(health);
+        int speed = input("Скорость передвижения", failMessage, 1, 5);
+        settings.setHerbivoreSpeed(speed);
+        int satiety = input("Сытость", failMessage, 1, 10);
+        settings.setHerbivoreSatiety(satiety);
+
+        System.out.println("Показатели для хищников:");
+        health = input("Здоровье:", failMessage, 1, 10);
+        settings.setPredatorHealth(health);
+        speed = input("Скорость передвижения", failMessage, 1, 5);
+        settings.setPredatorSpeed(speed);
+        satiety = input("Сытость", failMessage, 1, 10);
+        settings.setPredatorSatiety(satiety);
+        int damage = input("Сила атаки", failMessage, 1, 10);
+        settings.setPredatorDamage(damage);
 
         return settings;
     }

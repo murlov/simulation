@@ -5,7 +5,9 @@ import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
 import com.murlov.simulation.Size;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class BfsPathFinder implements PathFinder {
@@ -18,10 +20,11 @@ public class BfsPathFinder implements PathFinder {
         this.numberOfCells = numberOfCells;
     }
 
-    public Coordinates execute(SimulationMap simulationMap, Creature creature){
+    public List<Coordinates> execute(SimulationMap simulationMap, Creature creature){
 
         Class<? extends Entity> resourceType = getResourceType(creature.getClass());
 
+        List<Coordinates> result = new LinkedList<>();
         Queue<Coordinates> queue = new LinkedList<>();
 
         int[] parents = new int[numberOfCells];
@@ -62,7 +65,7 @@ public class BfsPathFinder implements PathFinder {
 
                         if (next.getClass() == resourceType) {
                             parents[nextCoordinatesId] = currentCoordinatesId;
-                            return getFirstStep(startId, nextCoordinatesId, parents, sizeOfMap.length());
+                            return getPath(startId, nextCoordinatesId, parents, sizeOfMap.length(), result);
                         }
                     } else {
                         parents[nextCoordinatesId] = currentCoordinatesId;
@@ -97,11 +100,15 @@ public class BfsPathFinder implements PathFinder {
         }
     }
 
-    private Coordinates getFirstStep(int startId, int goalId, int[] parents, int length) {
+    private List<Coordinates> getPath(int startId, int goalId, int[] parents, int length, List<Coordinates> path) {
         int id = goalId;
         while (parents[id] != startId) {
+            path.add(getCoordinates(id, length));
             id = parents[id];
         }
-        return getCoordinates(id, length);
+        path.add(getCoordinates(id, length));
+        path.add(getCoordinates(startId, length));
+        Collections.reverse(path);
+        return path;
     }
 }

@@ -12,14 +12,23 @@ public class EntitiesMoveAction implements Action {
 
     private PauseCallback pauseCallback;
     private ExitCallback exitCallback;
+    private SpawnCallback spawnCallback;
+    private final MoveEventListener listener;
+
+    public EntitiesMoveAction(MoveEventListener listener) {
+        this.listener = listener;
+    }
 
     public interface PauseCallback {
         void waitIfPaused();
-
     }
-    public interface  ExitCallback {
-        boolean shouldExit();
 
+    public interface ExitCallback {
+        boolean shouldExit();
+    }
+
+    public interface SpawnCallback {
+        void spawn(SimulationMap simulationMap);
     }
 
     public void setPauseCallback(PauseCallback pauseCallback) {
@@ -28,6 +37,10 @@ public class EntitiesMoveAction implements Action {
 
     public void setExitCallback(ExitCallback exitCallback) {
         this.exitCallback = exitCallback;
+    }
+
+    public void setSpawnCallback(SpawnCallback spawnCallback) {
+        this.spawnCallback = spawnCallback;
     }
 
     @Override
@@ -51,9 +64,10 @@ public class EntitiesMoveAction implements Action {
                         simulationMap.getEntities().remove(creature.getCoordinates());
                         simulationMap.countForEntityTypeDecrement(creature.getClass());
                     }
-                    creature.notifyMoveEnd(simulationMap);
+                    listener.onMoveEnd(simulationMap);
                 }
             }
+            spawnCallback.spawn(simulationMap);
         }
         if (!hasMoved) {
             throw new RuntimeException("Creatures cannot move");
