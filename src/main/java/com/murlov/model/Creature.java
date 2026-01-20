@@ -1,6 +1,6 @@
 package com.murlov.model;
 
-import com.murlov.action.MoveEventListener;
+import com.murlov.action.listener.MoveEventListener;
 import com.murlov.action.PathFinder;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
@@ -16,9 +16,11 @@ public abstract class Creature extends Entity {
     public boolean isDead;
     private static final int DAMAGE_FROM_HUNGER = 1;
     private static final int NEIGHBOR_PATH_LENGTH = 2;
+    private static final int LAST_INDEX_OFFSET = 1;
+    private static final int STOP_BEFORE_TARGET_OFFSET = 2;
     private MoveEventListener listener;
 
-    public Creature(int health, int satiety, int speed) {
+    public Creature(int health, int speed, int satiety) {
         this.health = health;
         this.satiety = satiety;
         this.speed = speed;
@@ -97,7 +99,7 @@ public abstract class Creature extends Entity {
 
     public boolean makeMove(SimulationMap simulationMap, Coordinates oldCoordinates, PathFinder pathFinder) {
         List<Coordinates> path = pathFinder.execute(simulationMap, this);
-        if (path == null) {
+        if (path.isEmpty()) {
             return false;
         }
         Coordinates newCoordinates;
@@ -105,11 +107,11 @@ public abstract class Creature extends Entity {
 
 
         if (path.size() == NEIGHBOR_PATH_LENGTH && hasResourceNearby(oldCoordinates, simulationMap)) {
-            newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - 1);
+            newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
             consumeResource(creature, oldCoordinates, newCoordinates, simulationMap);
             return true;
         } else {
-            newCoordinates = path.get(min(speed, path.size() - 2));
+            newCoordinates = path.get(min(speed, path.size() - STOP_BEFORE_TARGET_OFFSET));
             simulationMap.setEntity(newCoordinates, this);
             simulationMap.getEntities().remove(oldCoordinates);
             satietyDecrement();
@@ -118,11 +120,11 @@ public abstract class Creature extends Entity {
             oldCoordinates = newCoordinates;
             if (hasResourceNearby(oldCoordinates, simulationMap)) {
                 path = pathFinder.execute(simulationMap, this);
-                if (path == null) {
+                if (path.isEmpty()) {
                     return false;
                 }
                 if (path.size() == NEIGHBOR_PATH_LENGTH) {
-                    newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - 1);
+                    newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
                     consumeResource(creature, oldCoordinates, newCoordinates, simulationMap);
                 }
             }

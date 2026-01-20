@@ -1,5 +1,7 @@
 package com.murlov.action;
 
+import com.murlov.action.listener.MoveEventListener;
+import com.murlov.action.listener.MoveListenerRegistry;
 import com.murlov.model.Entity;
 import com.murlov.model.Grass;
 import com.murlov.model.Rabbit;

@@ -1,5 +1,6 @@
 package com.murlov.action;
 
+import com.murlov.action.listener.MoveEventListener;
 import com.murlov.model.Creature;
 import com.murlov.model.Entity;
 import com.murlov.simulation.Coordinates;

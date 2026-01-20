@@ -1,6 +1,9 @@
 package com.murlov.simulation;
 
 import com.murlov.action.*;
+import com.murlov.action.listener.MoveEventListener;
+import com.murlov.action.listener.MoveEventLogger;
+import com.murlov.action.listener.MoveListenerRegistry;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.view.Renderer;
 
@@ -14,7 +17,7 @@ public class Simulation {
     private final List<Action> initActions;
     private final List<Action> turnActions;
     private final Scanner scanner;
-    private volatile boolean paused = false;
+    private volatile boolean paused = true;
     private volatile boolean running = true;
     private final Object pauseLock = new Object();
 
@@ -61,9 +64,15 @@ public class Simulation {
         });
 
         thread.start();
+
+        System.out.println("Для начала/паузы симуляции используйте Enter. Для выхода введите q и прожмите Enter.");
+        pause();
+        renderer.clearScreen();
+
         executeInitActions();
         renderer.clearScreen();
         renderer.viewMap(simulationMap);
+
 
         while (running) {
             nextTurn();

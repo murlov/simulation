@@ -1,4 +1,4 @@
-package com.murlov.action;
+package com.murlov.action.listener;
 
 import com.murlov.model.Creature;
 import com.murlov.model.Entity;

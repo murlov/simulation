@@ -1,4 +1,4 @@
-package com.murlov.factory;
+package com.murlov.model.factory;
 
 import com.murlov.model.Entity;
 import com.murlov.model.Rabbit;

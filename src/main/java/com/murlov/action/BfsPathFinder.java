@@ -65,7 +65,8 @@ public class BfsPathFinder implements PathFinder {
 
                         if (next.getClass() == resourceType) {
                             parents[nextCoordinatesId] = currentCoordinatesId;
-                            return getPath(startId, nextCoordinatesId, parents, sizeOfMap.length(), result);
+                            createPath(startId, nextCoordinatesId, parents, sizeOfMap.length(), result);
+                            return result;
                         }
                     } else {
                         parents[nextCoordinatesId] = currentCoordinatesId;
@@ -74,7 +75,8 @@ public class BfsPathFinder implements PathFinder {
                 }
             }
         }
-        return null;
+
+        return result;
     }
 
     private int getId(Coordinates c, int length){
@@ -100,7 +102,7 @@ public class BfsPathFinder implements PathFinder {
         }
     }
 
-    private List<Coordinates> getPath(int startId, int goalId, int[] parents, int length, List<Coordinates> path) {
+    private void createPath(int startId, int goalId, int[] parents, int length, List<Coordinates> path) {
         int id = goalId;
         while (parents[id] != startId) {
             path.add(getCoordinates(id, length));
@@ -109,6 +111,5 @@ public class BfsPathFinder implements PathFinder {
         path.add(getCoordinates(id, length));
         path.add(getCoordinates(startId, length));
         Collections.reverse(path);
-        return path;
     }
 }

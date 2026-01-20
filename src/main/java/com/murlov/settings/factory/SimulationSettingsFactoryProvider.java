@@ -1,4 +1,4 @@
-package com.murlov.factory;
+package com.murlov.settings.factory;
 
 import java.util.Scanner;
 
@@ -15,7 +15,7 @@ public class SimulationSettingsFactoryProvider {
     private static int getSettingsMode() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Хотите использовать настройки по-умолчанию или хотите задать свои?");
+        System.out.println("Как поступить с настройками?");
         while (true) {
             System.out.println("""
                     1. Использовать настройки по-умолчанию:

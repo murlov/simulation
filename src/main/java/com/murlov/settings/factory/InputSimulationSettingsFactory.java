@@ -1,4 +1,4 @@
-package com.murlov.factory;
+package com.murlov.settings.factory;
 
 import com.murlov.model.Entity;
 import com.murlov.model.Grass;
@@ -12,6 +12,27 @@ import java.util.Scanner;
 
 public class InputSimulationSettingsFactory implements SimulationSettingsFactory {
 
+    private static final int MIN_VALUE_FOR_FILL_PERCENTAGE = 5;
+    private static final int MAX_VALUE_FOR_FILL_PERCENTAGE = 100;
+    private static final int MAX_VALUE_FOR_MAP_WIDTH = 50;
+    private static final int MAX_VALUE_FOR_MAP_HEIGHT = 50;
+    private static final int MIN_VALUE_FOR_MIN_NUMBERS_FOR_ENTITY_TYPES = 1;
+    private static final int MIN_VALUE_FOR_HERBIVORE_HEALTH = 1;
+    private static final int MAX_VALUE_FOR_HERBIVORE_HEALTH = 10;
+    private static final int MIN_VALUE_FOR_HERBIVORE_SPEED = 1;
+    private static final int MAX_VALUE_FOR_HERBIVORE_SPEED = 5;
+    private static final int MIN_VALUE_FOR_HERBIVORE_SATIETY = 1;
+    private static final int MAX_VALUE_FOR_HERBIVORE_SATIETY = 10;
+    private static final int MIN_VALUE_FOR_PREDATOR_HEALTH = 1;
+    private static final int MAX_VALUE_FOR_PREDATOR_HEALTH = 10;
+    private static final int MIN_VALUE_FOR_PREDATOR_SPEED = 1;
+    private static final int MAX_VALUE_FOR_PREDATOR_SPEED = 5;
+    private static final int MIN_VALUE_FOR_PREDATOR_SATIETY = 1;
+    private static final int MAX_VALUE_FOR_PREDATOR_SATIETY = 10;
+    private static final int MIN_VALUE_FOR_PREDATOR_DAMAGE = 1;
+    private static final int MAX_VALUE_FOR_PREDATOR_DAMAGE = 10;
+
+
     @Override
     public SimulationSettings get() {
         SimulationSettings settings = SimulationSettings.getInstance();
@@ -19,13 +40,13 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
 
         System.out.println("Введите данные");
         int percent = input("Процент заполнения (При значении 25 — 25% карты заполнится объектами)",
-                failMessage, 5, 100);
+                failMessage, MIN_VALUE_FOR_FILL_PERCENTAGE, MAX_VALUE_FOR_FILL_PERCENTAGE);
         settings.setFillPercentage(percent);
 
         double minArea = settings.getNumberOfEntityTypes()/(percent / 100.0);
         int minSide = (int) Math.ceil(Math.sqrt(minArea));
-        int x = input("Ширина карты", failMessage, minSide, 50);
-        int y = input("Длина карты", failMessage, minSide, 50);
+        int x = input("Ширина карты", failMessage, minSide, MAX_VALUE_FOR_MAP_WIDTH);
+        int y = input("Длина карты", failMessage, minSide, MAX_VALUE_FOR_MAP_HEIGHT);
         settings.setSizeOfMap(x, y);
 
         Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes = new HashMap<>(settings.getNumberOfEntityTypes());
@@ -33,27 +54,27 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
 
         System.out.println("Минимальное количество для каждой группы (Произойдет респаун, если указаных сущностей будет меньше заданного значения):");
         for (Class<? extends Entity> type: entityTypes) {
-            int value = input(type.getSimpleName(), failMessage, 1, settings.getNumberOfEntitiesPerEntityType());
+            int value = input(type.getSimpleName(), failMessage, MIN_VALUE_FOR_MIN_NUMBERS_FOR_ENTITY_TYPES, settings.getNumberOfEntitiesPerEntityType());
             minNumbersForEntityTypes.put(type, value);
         }
         settings.setMinNumbersForEntityTypes(minNumbersForEntityTypes);
 
         System.out.println("Показатели для травоядных:");
-        int health = input("Здоровье:", failMessage, 1, 10);
+        int health = input("Здоровье:", failMessage, MIN_VALUE_FOR_HERBIVORE_HEALTH, MAX_VALUE_FOR_HERBIVORE_HEALTH);
         settings.setHerbivoreHealth(health);
-        int speed = input("Скорость передвижения", failMessage, 1, 5);
+        int speed = input("Скорость передвижения", failMessage, MIN_VALUE_FOR_HERBIVORE_SPEED, MAX_VALUE_FOR_HERBIVORE_SPEED);
         settings.setHerbivoreSpeed(speed);
-        int satiety = input("Сытость", failMessage, 1, 10);
+        int satiety = input("Сытость", failMessage, MIN_VALUE_FOR_HERBIVORE_SATIETY, MAX_VALUE_FOR_HERBIVORE_SATIETY);
         settings.setHerbivoreSatiety(satiety);
 
         System.out.println("Показатели для хищников:");
-        health = input("Здоровье:", failMessage, 1, 10);
+        health = input("Здоровье:", failMessage, MIN_VALUE_FOR_PREDATOR_HEALTH, MAX_VALUE_FOR_PREDATOR_HEALTH);
         settings.setPredatorHealth(health);
-        speed = input("Скорость передвижения", failMessage, 1, 5);
+        speed = input("Скорость передвижения", failMessage, MIN_VALUE_FOR_PREDATOR_SPEED, MAX_VALUE_FOR_PREDATOR_SPEED);
         settings.setPredatorSpeed(speed);
-        satiety = input("Сытость", failMessage, 1, 10);
+        satiety = input("Сытость", failMessage, MIN_VALUE_FOR_PREDATOR_SATIETY, MAX_VALUE_FOR_PREDATOR_SATIETY);
         settings.setPredatorSatiety(satiety);
-        int damage = input("Сила атаки", failMessage, 1, 10);
+        int damage = input("Сила атаки", failMessage, MIN_VALUE_FOR_PREDATOR_DAMAGE, MAX_VALUE_FOR_PREDATOR_DAMAGE);
         settings.setPredatorDamage(damage);
 
         return settings;

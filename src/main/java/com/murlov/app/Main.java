@@ -1,6 +1,6 @@
 package com.murlov.app;
 
-import com.murlov.factory.SimulationSettingsFactoryProvider;
+import com.murlov.settings.factory.SimulationSettingsFactoryProvider;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Simulation;
 import com.murlov.view.ConsoleRenderer;
