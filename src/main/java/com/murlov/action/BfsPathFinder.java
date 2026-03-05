@@ -97,6 +97,8 @@ public class BfsPathFinder implements PathFinder {
             return Rabbit.class;
         } else if (type == Rabbit.class) {
             return Grass.class;
+        }
+        throw new IllegalArgumentException("Unknown entity type: " + type);
     }
 
     private void createPath(int startId, int goalId, int[] parents, int height, List<Coordinates> path) {
