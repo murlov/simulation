@@ -7,8 +7,8 @@ import com.murlov.simulation.SimulationMap;
 public class ConsoleRenderer implements Renderer {
 
     @Override
-    public void viewMap(SimulationMap simulationMap) {
-        for (int y = 0; y < simulationMap.getSize().length(); y++) {
+    public void printMap(SimulationMap simulationMap) {
+        for (int y = 0; y < simulationMap.getSize().height(); y++) {
             for (int x = 0; x < simulationMap.getSize().width(); x++) {
                 Coordinates coordinates = new Coordinates(x, y);
                 if (simulationMap.getEntities().containsKey(coordinates)) {
@@ -41,24 +41,24 @@ public class ConsoleRenderer implements Renderer {
         };
     }
 
-    public void logMove(Class<? extends Creature> creatureType, Coordinates from, Coordinates to) {
+    public void printMove(Class<? extends Creature> creatureType, Coordinates from, Coordinates to) {
         System.out.println(creatureType.getSimpleName() + " has moved from " + from + " to " + to + "\n");
     }
 
-    public void logAttack(Class<? extends Creature> attackerType, Coordinates from, Class<? extends Creature> victimType, Coordinates to) {
+    public void printAttack(Class<? extends Creature> attackerType, Coordinates from, Class<? extends Creature> victimType, Coordinates to) {
         System.out.println(attackerType.getSimpleName() + " " + from + " has attacked " + victimType.getSimpleName() + " on " + to + "\n");
     }
 
-    public void logEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to) {
+    public void printEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to) {
         System.out.println(creatureType.getSimpleName() + " " + from + " has eaten " + victimType.getSimpleName() + " on " + to + "\n");
     }
 
     @Override
-    public void logSpawn(Class<? extends Entity> entityType, Coordinates coordinates) {
+    public void printSpawn(Class<? extends Entity> entityType, Coordinates coordinates) {
         System.out.println(entityType.getSimpleName() + " has spawned on " + coordinates + "\n");
     }
 
-    public void logDeath(Class<? extends Creature> creatureType, Coordinates coordinates) {
+    public void printDeath(Class<? extends Creature> creatureType, Coordinates coordinates) {
         System.out.println(creatureType.getSimpleName() + " has died on " + coordinates + "\n");
     }
 

@@ -7,17 +7,17 @@ import com.murlov.simulation.SimulationMap;
 
 public interface Renderer {
 
-    void viewMap(SimulationMap map);
+    void printMap(SimulationMap map);
 
-    void logMove(Class<? extends Creature> creatureType, Coordinates from, Coordinates to);
+    void printMove(Class<? extends Creature> creatureType, Coordinates from, Coordinates to);
 
-    void logAttack(Class<? extends Creature> attackerType, Coordinates from, Class<? extends Creature> victimType, Coordinates to);
+    void printAttack(Class<? extends Creature> attackerType, Coordinates from, Class<? extends Creature> victimType, Coordinates to);
 
-    void logEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to);
+    void printEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to);
 
-    void logSpawn(Class<? extends Entity> entityType, Coordinates coordinates);
+    void printSpawn(Class<? extends Entity> entityType, Coordinates coordinates);
 
-    void logDeath(Class<? extends Creature> creatureType, Coordinates coordinates);
+    void printDeath(Class<? extends Creature> creatureType, Coordinates coordinates);
 
     void clearScreen();
 }

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SimulationSettings {
-    private final int NUMBER_OF_ENTITY_TYPES = 5;
+    private final static int NUMBER_OF_ENTITY_TYPES = 5;
 
     private static SimulationSettings instance;
     private double fillPercentage;
@@ -38,9 +38,9 @@ public class SimulationSettings {
         predatorDamage = 0;
     }
 
-    private SimulationSettings(int width, int length, int fillPercentage, Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes, int herbivoreHealth,
+    private SimulationSettings(int width, int height, int fillPercentage, Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes, int herbivoreHealth,
                                int herbivoreSpeed, int herbivoreSatiety, int predatorHealth, int predatorSpeed, int predatorSatiety, int predatorDamage) {
-        sizeOfMap = new Size(width, length);
+        sizeOfMap = new Size(width, height);
         this.fillPercentage = fillPercentage * 0.01;
         numberOfEntitiesPerEntityType = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_ENTITY_TYPES;
         numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerEntityType * NUMBER_OF_ENTITY_TYPES;
@@ -54,11 +54,11 @@ public class SimulationSettings {
         this.predatorDamage = predatorDamage;
     }
 
-    public static SimulationSettings getInstance(int width, int length, int fillPercentage, Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes,
+    public static SimulationSettings getInstance(int width, int height, int fillPercentage, Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes,
                                                  int herbivoreHealth, int herbivoreSpeed, int herbivoreSatiety, int predatorHealth, int predatorSpeed,
                                                  int predatorSatiety, int predatorDamage) {
         if (instance == null) {
-            instance = new SimulationSettings(width, length, fillPercentage, minNumbersForEntityTypes, herbivoreHealth, herbivoreSpeed, herbivoreSatiety,
+            instance = new SimulationSettings(width, height, fillPercentage, minNumbersForEntityTypes, herbivoreHealth, herbivoreSpeed, herbivoreSatiety,
                     predatorHealth, predatorSpeed, predatorSatiety, predatorDamage);
         }
         return instance;

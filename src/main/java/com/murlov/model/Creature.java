@@ -86,11 +86,11 @@ public abstract class Creature extends Entity {
         isDead = true;
     }
 
-    public void satietyIncrement() {
+    public void incrementSatiety() {
         satiety = min(10, ++satiety);
     }
 
-    public void satietyDecrement() {
+    public void decrementSatiety() {
         if (satiety <= 0) {
             takeDamage();
         }
@@ -114,7 +114,7 @@ public abstract class Creature extends Entity {
             newCoordinates = path.get(min(speed, path.size() - STOP_BEFORE_TARGET_OFFSET));
             simulationMap.setEntity(newCoordinates, this);
             simulationMap.getEntities().remove(oldCoordinates);
-            satietyDecrement();
+            decrementSatiety();
 
             notifyMove(creature.getClass(), oldCoordinates, newCoordinates);
             oldCoordinates = newCoordinates;
@@ -140,7 +140,7 @@ public abstract class Creature extends Entity {
         };
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
-                Coordinates targetCoordinates = new Coordinates(coordinates.X() + x,  coordinates.Y() + y);
+                Coordinates targetCoordinates = new Coordinates(coordinates.x() + x,  coordinates.y() + y);
                 if (simulationMap.getEntities().containsKey(targetCoordinates) && simulationMap.getEntities().get(targetCoordinates).getClass() == targetEntityType) {
                     return true;
                 }
@@ -155,7 +155,7 @@ public abstract class Creature extends Entity {
             simulationMap.getEntities().remove(newCoordinates);
             simulationMap.countForEntityTypeDecrement(Grass.class);
             notifyEat(creature.getClass(), oldCoordinates, targetEntity.getClass(), newCoordinates);
-            satietyIncrement();
+            incrementSatiety();
         } else if (creature.getClass() == Wolf.class) {
             Creature herbivore = (Creature) simulationMap.getEntities().get(newCoordinates);
             herbivore.takeDamage(getDamage());
@@ -165,7 +165,7 @@ public abstract class Creature extends Entity {
                 simulationMap.getEntities().remove(newCoordinates);
                 simulationMap.countForEntityTypeDecrement(Rabbit.class);
             }
-            satietyIncrement();
+            incrementSatiety();
         }
     }
 }

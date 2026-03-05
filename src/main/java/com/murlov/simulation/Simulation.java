@@ -65,13 +65,13 @@ public class Simulation {
 
         thread.start();
 
-        System.out.println("Для начала/паузы симуляции используйте Enter. Для выхода введите q и прожмите Enter.");
+        System.out.println("Для начала/паузы симуляции используйте Enter. Для выхода введите q.");
         pause();
         renderer.clearScreen();
 
         executeInitActions();
         renderer.clearScreen();
-        renderer.viewMap(simulationMap);
+        renderer.printMap(simulationMap);
 
 
         while (running) {

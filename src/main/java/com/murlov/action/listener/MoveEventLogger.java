@@ -10,32 +10,32 @@ public record MoveEventLogger(Renderer renderer) implements MoveEventListener {
 
     @Override
     public void onMove(Class<? extends Creature> creatureType, Coordinates from, Coordinates to) {
-        renderer.logMove(creatureType, from, to);
+        renderer.printMove(creatureType, from, to);
     }
 
     @Override
     public void onAttack(Class<? extends Creature> attackerType, Coordinates from, Class<? extends Creature> victimType, Coordinates to) {
-        renderer.logAttack(attackerType, from, victimType, to);
+        renderer.printAttack(attackerType, from, victimType, to);
     }
 
     @Override
     public void onEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to) {
-        renderer.logEat(creatureType, from, victimType, to);
+        renderer.printEat(creatureType, from, victimType, to);
     }
 
     @Override
     public void onSpawn(Class<? extends Entity> entityType, Coordinates coordinates) {
-        renderer.logSpawn(entityType, coordinates);
+        renderer.printSpawn(entityType, coordinates);
     }
 
     @Override
     public void onDeath(Class<? extends Creature> creatureType, Coordinates coordinates) {
-        renderer.logDeath(creatureType, coordinates);
+        renderer.printDeath(creatureType, coordinates);
     }
 
     @Override
     public void onMoveEnd(SimulationMap simulationMap) {
-        renderer.viewMap(simulationMap);
+        renderer.printMap(simulationMap);
     }
 
     @Override

@@ -4,20 +4,20 @@ import com.murlov.util.RandomProvider;
 
 import java.util.Random;
 
-public record Coordinates(int X, int Y) {
+public record Coordinates(int x, int y) {
     public Coordinates() {
         this(0, 0);
     }
 
     @Override
     public String toString() {
-        return "(" + X + "," + Y + ")";
+        return "(" + x + "," + y + ")";
     }
 
     public static Coordinates getRandom(Size size) {
         Random random = RandomProvider.getInstance();
-        int X = random.nextInt(size.width());
-        int Y = random.nextInt(size.length());
-        return new Coordinates(X, Y);
+        int x = random.nextInt(size.width());
+        int y = random.nextInt(size.height());
+        return new Coordinates(x, y);
     }
 }
