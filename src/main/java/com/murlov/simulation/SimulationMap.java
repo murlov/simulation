@@ -1,9 +1,11 @@
 package com.murlov.simulation;
 
 import com.murlov.model.Entity;
+import com.murlov.util.RandomProvider;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class SimulationMap {
 
@@ -77,11 +79,19 @@ public class SimulationMap {
         }
     }
 
+    private Coordinates getRandomCoordinates(Size size) {
+        Random random = RandomProvider.getInstance();
+        int x = random.nextInt(size.width());
+        int y = random.nextInt(size.height());
+        return new Coordinates(x, y);
+    }
+
     public Coordinates getFreeCellCoordinates() {
-        Coordinates coordinates = Coordinates.getRandom(getSize());
+
+        Coordinates coordinates = getRandomCoordinates(getSize());
 
         while (getEntities().containsKey(coordinates)) {
-            coordinates = Coordinates.getRandom(getSize());
+            coordinates = getRandomCoordinates(getSize());
         }
 
         return coordinates;
