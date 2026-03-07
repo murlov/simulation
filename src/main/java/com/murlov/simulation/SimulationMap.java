@@ -16,19 +16,19 @@ public class SimulationMap {
     private final Size size;
 
     public SimulationMap(Size size) {
-        this.size = size;
-        entities = new HashMap<>();
-        wolfsCount = 0;
-        rabbitsCount = 0;
-        grassCount = 0;
+        this(new HashMap<>(), 0, 0, 0, size);
     }
 
     public SimulationMap(SimulationMap simulationMap) {
-        this.entities = new HashMap<>(simulationMap.entities);
-        this.wolfsCount = simulationMap.wolfsCount;
-        this.rabbitsCount = simulationMap.rabbitsCount;
-        this.grassCount = simulationMap.grassCount;
-        this.size = simulationMap.size;
+        this(new HashMap<>(simulationMap.entities), simulationMap.wolfsCount, simulationMap.rabbitsCount, simulationMap.grassCount, simulationMap.size);
+    }
+
+    private SimulationMap(Map<Coordinates, Entity> entities, int wolfsCount, int rabbitsCount, int grassCount, Size size) {
+        this.entities = entities;
+        this.wolfsCount = wolfsCount;
+        this.rabbitsCount = rabbitsCount;
+        this.grassCount = grassCount;
+        this.size = size;
     }
 
     public Map<Coordinates, Entity> getEntities() {
