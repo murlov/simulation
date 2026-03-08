@@ -44,7 +44,7 @@ public class Spawner {
         return new Coordinates(x, y);
     }
 
-    public static Coordinates getFreeCellCoordinates(SimulationMap simulationMap) {
+    private static Coordinates getFreeCellCoordinates(SimulationMap simulationMap) {
 
         Coordinates coordinates = getRandomCoordinates(simulationMap.getSize());
 

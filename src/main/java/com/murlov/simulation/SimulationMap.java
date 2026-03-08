@@ -1,18 +1,17 @@
 package com.murlov.simulation;
 
 import com.murlov.model.Entity;
-import com.murlov.util.RandomProvider;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class SimulationMap {
 
     private final Map<Coordinates, Entity> entities;
-    private final Map<Class<? extends Entity>, Integer> entityCounts;
-    private final Size size;
 
+    private final Map<Class<? extends Entity>, Integer> entityCounts;
+
+    private final Size size;
     public SimulationMap(Size size) {
         this(new HashMap<>(), new HashMap<>(), size);
     }
@@ -29,6 +28,10 @@ public class SimulationMap {
 
     public Map<Coordinates, Entity> getEntities() {
         return entities;
+    }
+
+    public Map<Class<? extends Entity>, Integer> getEntityCounts() {
+        return entityCounts;
     }
 
     public void setEntity(Entity entity, Coordinates coordinates) {
@@ -57,9 +60,5 @@ public class SimulationMap {
 
     public int getNumberOfCells() {
         return size.getArea();
-    }
-
-    public int getCountByType(Class<? extends Entity> entityType) {
-        return entityCounts.getOrDefault(entityType, 0);
     }
 }
