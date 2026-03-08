@@ -62,23 +62,4 @@ public class SimulationMap {
     public int getCountByType(Class<? extends Entity> entityType) {
         return entityCounts.getOrDefault(entityType, 0);
     }
-
-    private Coordinates getRandomCoordinates(Size size) {
-        Random random = RandomProvider.getInstance();
-        int x = random.nextInt(size.width());
-        int y = random.nextInt(size.height());
-        return new Coordinates(x, y);
-    }
-
-    public Coordinates getFreeCellCoordinates() {
-
-        Coordinates coordinates = getRandomCoordinates(getSize());
-
-        while (getEntities().containsKey(coordinates)) {
-            coordinates = getRandomCoordinates(getSize());
-        }
-
-        return coordinates;
-    }
-
 }
