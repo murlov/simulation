@@ -10,24 +10,20 @@ import java.util.Random;
 public class SimulationMap {
 
     private final Map<Coordinates, Entity> entities;
-    private int wolfsCount;
-    private int rabbitsCount;
-    private int grassCount;
+    private final Map<Class<? extends Entity>, Integer> entityCounts;
     private final Size size;
 
     public SimulationMap(Size size) {
-        this(new HashMap<>(), 0, 0, 0, size);
+        this(new HashMap<>(), new HashMap<>(), size);
     }
 
     public SimulationMap(SimulationMap simulationMap) {
-        this(new HashMap<>(simulationMap.entities), simulationMap.wolfsCount, simulationMap.rabbitsCount, simulationMap.grassCount, simulationMap.size);
+        this(simulationMap.entities, simulationMap.entityCounts, simulationMap.size);
     }
 
-    private SimulationMap(Map<Coordinates, Entity> entities, int wolfsCount, int rabbitsCount, int grassCount, Size size) {
-        this.entities = entities;
-        this.wolfsCount = wolfsCount;
-        this.rabbitsCount = rabbitsCount;
-        this.grassCount = grassCount;
+    private SimulationMap(Map<Coordinates, Entity> entities, Map<Class<? extends Entity>, Integer> entityCounts, Size size) {
+        this.entities = new HashMap<>(entities);
+        this.entityCounts = new HashMap<>(entityCounts);
         this.size = size;
     }
 
@@ -35,7 +31,22 @@ public class SimulationMap {
         return entities;
     }
 
-    public void setEntity(Coordinates coordinates, Entity entity) {
+    public void setEntity(Entity entity, Coordinates coordinates) {
+        entity.setCoordinates(coordinates);
+        entities.put(coordinates, entity);
+
+        entityCounts.merge(entity.getClass(), 1, Integer::sum);
+    }
+
+    public void removeEntity(Entity entity) {
+        entities.remove(entity.getCoordinates());
+
+        entityCounts.merge(entity.getClass(), -1, Integer::sum);
+    }
+
+    public void moveEntity(Entity entity, Coordinates coordinates) {
+        entities.remove(entity.getCoordinates());
+
         entity.setCoordinates(coordinates);
         entities.put(coordinates, entity);
     }
@@ -49,34 +60,7 @@ public class SimulationMap {
     }
 
     public int getCountByType(Class<? extends Entity> entityType) {
-        String name = entityType.getSimpleName();
-
-        return switch(name) {
-            case "Wolf" -> wolfsCount;
-            case "Rabbit" -> rabbitsCount;
-            case "Grass" -> grassCount;
-            default -> throw new IllegalStateException("Not count for this entity: " + name);
-        };
-    }
-
-    public void countForEntityTypeDecrement(Class<? extends Entity> entityType) {
-        String name = entityType.getSimpleName();
-
-        switch(name) {
-            case "Wolf" -> wolfsCount--;
-            case "Rabbit" -> rabbitsCount--;
-            case "Grass" -> grassCount--;
-        }
-    }
-
-    public void countForEntityTypeIncrement(Class<? extends Entity> entityType) {
-        String name = entityType.getSimpleName();
-
-        switch(name) {
-            case "Wolf" -> wolfsCount++;
-            case "Rabbit" -> rabbitsCount++;
-            case "Grass" -> grassCount++;
-        }
+        return entityCounts.getOrDefault(entityType, 0);
     }
 
     private Coordinates getRandomCoordinates(Size size) {

@@ -18,8 +18,7 @@ public class Spawner {
         for (int i = 0; i < count; i++) {
             Entity entity = entityFactory.create();
             Coordinates coordinates = simulationMap.getFreeCellCoordinates();
-            simulationMap.setEntity(coordinates, entity);
-            simulationMap.countForEntityTypeIncrement(entity.getClass());
+            simulationMap.setEntity(entity, coordinates);
             if (entity instanceof Creature creature) {
                 listenerRegistry.attachListener(creature);
             }

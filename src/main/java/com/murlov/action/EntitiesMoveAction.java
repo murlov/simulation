@@ -62,8 +62,7 @@ public class EntitiesMoveAction implements Action {
 
                     if (creature.isDead) {
                         creature.notifyDeath(creature.getClass(), creature.getCoordinates());
-                        simulationMap.getEntities().remove(creature.getCoordinates());
-                        simulationMap.countForEntityTypeDecrement(creature.getClass());
+                        simulationMap.removeEntity(creature);
                     }
                     listener.onMoveEnd(simulationMap);
                 }

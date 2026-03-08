@@ -112,8 +112,7 @@ public abstract class Creature extends Entity {
             return true;
         } else {
             newCoordinates = path.get(min(speed, path.size() - STOP_BEFORE_TARGET_OFFSET));
-            simulationMap.setEntity(newCoordinates, this);
-            simulationMap.getEntities().remove(oldCoordinates);
+            simulationMap.moveEntity(this, newCoordinates);
             decrementSatiety();
 
             notifyMove(creature.getClass(), oldCoordinates, newCoordinates);
@@ -152,8 +151,7 @@ public abstract class Creature extends Entity {
     private void consumeResource(Creature creature, Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap) {
         if (creature.getClass() == Rabbit.class) {
             Entity targetEntity = simulationMap.getEntities().get(newCoordinates);
-            simulationMap.getEntities().remove(newCoordinates);
-            simulationMap.countForEntityTypeDecrement(Grass.class);
+            simulationMap.removeEntity(targetEntity);
             notifyEat(creature.getClass(), oldCoordinates, targetEntity.getClass(), newCoordinates);
             incrementSatiety();
         } else if (creature.getClass() == Wolf.class) {
@@ -162,8 +160,7 @@ public abstract class Creature extends Entity {
             notifyAttack(creature.getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
             if (herbivore.getHealth() == 0) {
                 notifyEat(creature.getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
-                simulationMap.getEntities().remove(newCoordinates);
-                simulationMap.countForEntityTypeDecrement(Rabbit.class);
+                simulationMap.removeEntity(herbivore);
             }
             incrementSatiety();
         }
