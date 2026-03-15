@@ -36,15 +36,19 @@ public class SimulationMap {
 
     public void setEntity(Entity entity, Coordinates coordinates) {
         entity.setCoordinates(coordinates);
-        entities.put(coordinates, entity);
 
+
+        Entity oldEntity = entities.put(coordinates, entity);
+        if (oldEntity != null) {
+            entityCounts.merge(entity.getClass(), -1, Integer::sum);
+        }
         entityCounts.merge(entity.getClass(), 1, Integer::sum);
     }
 
     public void removeEntity(Entity entity) {
-        entities.remove(entity.getCoordinates());
-
-        entityCounts.merge(entity.getClass(), -1, Integer::sum);
+        if (entities.remove(entity.getCoordinates()) != null) {
+            entityCounts.merge(entity.getClass(), -1, Integer::sum);
+        }
     }
 
     public void moveEntity(Entity entity, Coordinates coordinates) {
