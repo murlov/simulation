@@ -16,7 +16,8 @@ import java.util.Random;
 
 public class Spawner {
 
-    public static void execute(SimulationMap simulationMap, String entityName, MoveListenerRegistry listenerRegistry, int count, boolean isLoggingRequired, MoveEventListener listener) {
+    public static void execute(SimulationMap simulationMap, String entityName, MoveListenerRegistry listenerRegistry,
+                               int count, boolean isLoggingRequired, MoveEventListener listener) {
         SimulationSettings settings = SimulationSettings.getInstance();
         EntityFactory entityFactory = EntityFactoryProvider.getFactory(entityName, settings);
         for (int i = 0; i < count; i++) {
@@ -33,7 +34,8 @@ public class Spawner {
         }
     }
 
-    public static void execute(SimulationMap simulationMap, String entityName, MoveListenerRegistry listenerRegistry, int count, boolean isLoggingRequired) {
+    public static void execute(SimulationMap simulationMap, String entityName, MoveListenerRegistry listenerRegistry,
+                               int count, boolean isLoggingRequired) {
         execute(simulationMap, entityName, listenerRegistry, count, isLoggingRequired, null);
     }
 
