@@ -61,7 +61,7 @@ public class BfsPathFinder implements PathFinder {
                     visited[nextCoordinatesId] = true;
 
                     if (simulationMap.getEntities().containsKey(nextCoordinates)) {
-                        Entity next = simulationMap.getEntities().get(nextCoordinates);
+                        Entity next = simulationMap.getEntity(nextCoordinates);
 
                         if (next.getClass() == resourceType) {
                             parents[nextCoordinatesId] = currentCoordinatesId;

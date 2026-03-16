@@ -103,7 +103,7 @@ public abstract class Creature extends Entity {
             return false;
         }
         Coordinates newCoordinates;
-        Creature creature = (Creature) simulationMap.getEntities().get(oldCoordinates);
+        Creature creature = (Creature) simulationMap.getEntity(oldCoordinates);
 
 
         if (path.size() == NEIGHBOR_PATH_LENGTH && hasResourceNearby(oldCoordinates, simulationMap)) {
@@ -140,7 +140,7 @@ public abstract class Creature extends Entity {
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 Coordinates targetCoordinates = new Coordinates(coordinates.x() + x,  coordinates.y() + y);
-                if (simulationMap.getEntities().containsKey(targetCoordinates) && simulationMap.getEntities().get(targetCoordinates).getClass() == targetEntityType) {
+                if (simulationMap.getEntities().containsKey(targetCoordinates) && simulationMap.getEntity(targetCoordinates).getClass() == targetEntityType) {
                     return true;
                 }
             }
@@ -150,12 +150,12 @@ public abstract class Creature extends Entity {
 
     private void consumeResource(Creature creature, Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap) {
         if (creature.getClass() == Rabbit.class) {
-            Entity targetEntity = simulationMap.getEntities().get(newCoordinates);
+            Entity targetEntity = simulationMap.getEntity(newCoordinates);
             simulationMap.removeEntity(targetEntity);
             notifyEat(creature.getClass(), oldCoordinates, targetEntity.getClass(), newCoordinates);
             incrementSatiety();
         } else if (creature.getClass() == Wolf.class) {
-            Creature herbivore = (Creature) simulationMap.getEntities().get(newCoordinates);
+            Creature herbivore = (Creature) simulationMap.getEntity(newCoordinates);
             herbivore.takeDamage(getDamage());
             notifyAttack(creature.getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
             if (herbivore.getHealth() == 0) {

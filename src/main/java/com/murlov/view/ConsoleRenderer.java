@@ -12,7 +12,7 @@ public class ConsoleRenderer implements Renderer {
             for (int x = 0; x < simulationMap.getSize().width(); x++) {
                 Coordinates coordinates = new Coordinates(x, y);
                 if (simulationMap.getEntities().containsKey(coordinates)) {
-                    Entity entity = simulationMap.getEntities().get(coordinates);
+                    Entity entity = simulationMap.getEntity(coordinates);
                     System.out.print(getIcon(entity.getClass()));
                 } else {
                     System.out.print("\uD83D\uDFE9");

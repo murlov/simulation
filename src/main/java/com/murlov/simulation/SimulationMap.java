@@ -27,6 +27,10 @@ public class SimulationMap {
         return new HashMap<>(entities);
     }
 
+    public Entity getEntity(Coordinates coordinates) {
+        return entities.get(coordinates);
+    }
+
     public void setEntity(Entity entity, Coordinates coordinates) {
         entity.setCoordinates(coordinates);
         entities.put(coordinates, entity);
