@@ -32,17 +32,23 @@ public class SimulationMap {
     }
 
     public void setEntity(Entity entity, Coordinates coordinates) {
+        validateCoordinate(coordinates);
+
         entity.setCoordinates(coordinates);
         entities.put(coordinates, entity);
     }
 
     public void removeEntity(Entity entity) {
+        validateCoordinate(entity.getCoordinates());
+
         entities.remove(entity.getCoordinates());
     }
 
     public void moveEntity(Entity entity, Coordinates coordinates) {
-        entities.remove(entity.getCoordinates());
+        validateCoordinate(entity.getCoordinates());
+        validateCoordinate(coordinates);
 
+        entities.remove(entity.getCoordinates());
         entity.setCoordinates(coordinates);
         entities.put(coordinates, entity);
     }
@@ -53,5 +59,16 @@ public class SimulationMap {
 
     public int getNumberOfCells() {
         return size.getArea();
+    }
+
+    public boolean isInside(Coordinates coordinates) {
+        return coordinates.x() >= 0 && coordinates.x() < size.width()
+                && coordinates.y() >= 0 && coordinates.y() < size.height();
+    }
+
+    private void validateCoordinate(Coordinates coordinates) {
+        if (!isInside(coordinates)) {
+            throw new IllegalArgumentException("Coordinates out of bounds:" + coordinates);
+        }
     }
 }

@@ -56,7 +56,7 @@ public class BfsPathFinder implements PathFinder {
                 Coordinates nextCoordinates = new Coordinates(x, y);
                 int nextCoordinatesId = getId(nextCoordinates, sizeOfMap.height());
 
-                if (isCoordinatesCorrect(nextCoordinates, simulationMap)) {
+                if (simulationMap.isInside(nextCoordinates)) {
                     if (visited[nextCoordinatesId]) continue;
                     visited[nextCoordinatesId] = true;
 
@@ -85,11 +85,6 @@ public class BfsPathFinder implements PathFinder {
 
     private Coordinates getCoordinates(int id, int height){
         return new Coordinates(id/height, id%height);
-    }
-
-    private boolean isCoordinatesCorrect(Coordinates coordinates, SimulationMap simulationMap) {
-        return coordinates.x() >= 0 && coordinates.x() < simulationMap.getSize().width()
-        && coordinates.y() >= 0 && coordinates.y() < simulationMap.getSize().height();
     }
 
     private Class<? extends Entity> getResourceType(Class<? extends Creature> type){
