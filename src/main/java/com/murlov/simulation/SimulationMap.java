@@ -57,10 +57,6 @@ public class SimulationMap {
         return size;
     }
 
-    public int getNumberOfCells() {
-        return size.getArea();
-    }
-
     public boolean isInside(Coordinates coordinates) {
         return coordinates.x() >= 0 && coordinates.x() < size.width()
                 && coordinates.y() >= 0 && coordinates.y() < size.height();
