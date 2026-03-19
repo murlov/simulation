@@ -97,34 +97,34 @@ public abstract class Creature extends Entity {
         satiety--;
     }
 
-    public boolean makeMove(SimulationMap simulationMap, Coordinates oldCoordinates, PathFinder pathFinder) {
-        List<Coordinates> path = pathFinder.execute(simulationMap, this);
+    public boolean makeMove(SimulationMap simulationMap, Coordinates currentCoordinates, PathFinder pathFinder) {
+        List<Coordinates> path = pathFinder.execute(simulationMap, getCoordinates(), getTarget());
         if (path.isEmpty()) {
             return false;
         }
         Coordinates newCoordinates;
-        Creature creature = (Creature) simulationMap.getEntity(oldCoordinates);
+        Creature creature = (Creature) simulationMap.getEntity(currentCoordinates);
 
 
-        if (path.size() == NEIGHBOR_PATH_LENGTH && hasResourceNearby(oldCoordinates, simulationMap)) {
+        if (path.size() == NEIGHBOR_PATH_LENGTH && hasResourceNearby(currentCoordinates, simulationMap)) {
             newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
-            consumeResource(creature, oldCoordinates, newCoordinates, simulationMap);
+            consumeResource(creature, currentCoordinates, newCoordinates, simulationMap);
             return true;
         } else {
             newCoordinates = path.get(min(speed, path.size() - STOP_BEFORE_TARGET_OFFSET));
             simulationMap.moveEntity(this, newCoordinates);
             decrementSatiety();
 
-            notifyMove(creature.getClass(), oldCoordinates, newCoordinates);
-            oldCoordinates = newCoordinates;
-            if (hasResourceNearby(oldCoordinates, simulationMap)) {
-                path = pathFinder.execute(simulationMap, this);
+            notifyMove(creature.getClass(), currentCoordinates, newCoordinates);
+            currentCoordinates = newCoordinates;
+            if (hasResourceNearby(currentCoordinates, simulationMap)) {
+                path = pathFinder.execute(simulationMap, currentCoordinates, getTarget());
                 if (path.isEmpty()) {
                     return false;
                 }
                 if (path.size() == NEIGHBOR_PATH_LENGTH) {
                     newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
-                    consumeResource(creature, oldCoordinates, newCoordinates, simulationMap);
+                    consumeResource(creature, currentCoordinates, newCoordinates, simulationMap);
                 }
             }
             return true;
@@ -146,6 +146,15 @@ public abstract class Creature extends Entity {
             }
         }
         return false;
+    }
+
+    private Class<? extends Entity> getTarget(){
+        if (this.getClass() == Wolf.class) {
+            return Rabbit.class;
+        } else if (this.getClass() == Rabbit.class) {
+            return Grass.class;
+        }
+        throw new IllegalArgumentException("Unknown entity type: " + this.getClass());
     }
 
     private void consumeResource(Creature creature, Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap) {

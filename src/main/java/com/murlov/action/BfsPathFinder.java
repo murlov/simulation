@@ -20,9 +20,8 @@ public class BfsPathFinder implements PathFinder {
         this.numberOfCells = numberOfCells;
     }
 
-    public List<Coordinates> execute(SimulationMap simulationMap, Creature creature){
-
-        Class<? extends Entity> resourceType = getResourceType(creature.getClass());
+    @Override
+    public List<Coordinates> execute(SimulationMap simulationMap, Coordinates start, Class<? extends Entity> target){
 
         List<Coordinates> result = new LinkedList<>();
         Queue<Coordinates> queue = new LinkedList<>();
@@ -41,8 +40,8 @@ public class BfsPathFinder implements PathFinder {
                 {-1, -1}
         };
 
-        final int startId = getId(creature.getCoordinates(), sizeOfMap.height());
-        queue.add(creature.getCoordinates());
+        final int startId = getId(start, sizeOfMap.height());
+        queue.add(start);
         parents[startId] = startId;
 
         while(!queue.isEmpty()){
@@ -63,7 +62,7 @@ public class BfsPathFinder implements PathFinder {
                     if (simulationMap.getEntities().containsKey(nextCoordinates)) {
                         Entity next = simulationMap.getEntity(nextCoordinates);
 
-                        if (next.getClass() == resourceType) {
+                        if (next.getClass() == target) {
                             parents[nextCoordinatesId] = currentCoordinatesId;
                             createPath(startId, nextCoordinatesId, parents, sizeOfMap.height(), result);
                             return result;
@@ -85,15 +84,6 @@ public class BfsPathFinder implements PathFinder {
 
     private Coordinates getCoordinates(int id, int height){
         return new Coordinates(id/height, id%height);
-    }
-
-    private Class<? extends Entity> getResourceType(Class<? extends Creature> type){
-        if (type == Wolf.class) {
-            return Rabbit.class;
-        } else if (type == Rabbit.class) {
-            return Grass.class;
-        }
-        throw new IllegalArgumentException("Unknown entity type: " + type);
     }
 
     private void createPath(int startId, int goalId, int[] parents, int height, List<Coordinates> path) {
