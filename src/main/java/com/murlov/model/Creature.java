@@ -98,7 +98,7 @@ public abstract class Creature extends Entity {
     }
 
     public boolean makeMove(SimulationMap simulationMap, Coordinates currentCoordinates, PathFinder pathFinder) {
-        List<Coordinates> path = pathFinder.execute(simulationMap, getCoordinates(), getTarget());
+        List<Coordinates> path = pathFinder.find(simulationMap, getCoordinates(), getTarget());
         if (path.isEmpty()) {
             return false;
         }
@@ -118,7 +118,7 @@ public abstract class Creature extends Entity {
             notifyMove(creature.getClass(), currentCoordinates, newCoordinates);
             currentCoordinates = newCoordinates;
             if (hasResourceNearby(currentCoordinates, simulationMap)) {
-                path = pathFinder.execute(simulationMap, currentCoordinates, getTarget());
+                path = pathFinder.find(simulationMap, currentCoordinates, getTarget());
                 if (path.isEmpty()) {
                     return false;
                 }

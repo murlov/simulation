@@ -12,7 +12,7 @@ import java.util.Queue;
 public class BfsPathFinder implements PathFinder {
 
     @Override
-    public List<Coordinates> execute(SimulationMap simulationMap, Coordinates start, Class<? extends Entity> target){
+    public List<Coordinates> find(SimulationMap simulationMap, Coordinates start, Class<? extends Entity> target){
         if (!simulationMap.isInside(start)) {
             throw new IllegalArgumentException("Coordinates out of bounds:" + start);
         }

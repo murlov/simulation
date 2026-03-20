@@ -7,5 +7,5 @@ import com.murlov.simulation.SimulationMap;
 import java.util.List;
 
 public interface PathFinder {
-    List<Coordinates> execute(SimulationMap simulationMap, Coordinates start, Class<? extends Entity> target);
+    List<Coordinates> find(SimulationMap simulationMap, Coordinates start, Class<? extends Entity> target);
 }
