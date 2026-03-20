@@ -22,6 +22,9 @@ public class BfsPathFinder implements PathFinder {
 
     @Override
     public List<Coordinates> execute(SimulationMap simulationMap, Coordinates start, Class<? extends Entity> target){
+        if (!simulationMap.isInside(start)) {
+            throw new IllegalArgumentException("Coordinates out of bounds:" + start);
+        }
 
         List<Coordinates> result = new LinkedList<>();
         Queue<Coordinates> queue = new LinkedList<>();
