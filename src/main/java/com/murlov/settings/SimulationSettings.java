@@ -12,7 +12,7 @@ public class SimulationSettings {
     private static SimulationSettings instance;
     private double fillPercentage;
     private int numberOfEntitiesPerEntityType;
-    private Size sizeOfMap;
+    private Size mapSize;
     private Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes;
     private int numberOfRemainingEntities;
     private int herbivoreHealth;
@@ -24,7 +24,7 @@ public class SimulationSettings {
     private int predatorDamage;
 
     private SimulationSettings() {
-        sizeOfMap = new Size();
+        mapSize = new Size();
         fillPercentage = 0;
         numberOfEntitiesPerEntityType = 0;
         minNumbersForEntityTypes = new HashMap<>(NUMBER_OF_ENTITY_TYPES);
@@ -40,7 +40,7 @@ public class SimulationSettings {
 
     private SimulationSettings(int width, int height, int fillPercentage, Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes, int herbivoreHealth,
                                int herbivoreSpeed, int herbivoreSatiety, int predatorHealth, int predatorSpeed, int predatorSatiety, int predatorDamage) {
-        sizeOfMap = new Size(width, height);
+        mapSize = new Size(width, height);
         this.fillPercentage = fillPercentage * 0.01;
         numberOfEntitiesPerEntityType = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_ENTITY_TYPES;
         numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerEntityType * NUMBER_OF_ENTITY_TYPES;
@@ -81,12 +81,12 @@ public class SimulationSettings {
         return numberOfEntitiesPerEntityType;
     }
 
-    public Size getSizeOfMap() {
-        return sizeOfMap;
+    public Size getMapSize() {
+        return mapSize;
     }
 
-    public void setSizeOfMap(int x, int y) {
-        sizeOfMap = new Size(x, y);
+    public void setMapSize(int x, int y) {
+        mapSize = new Size(x, y);
         numberOfEntitiesPerEntityType = (int)(getNumberOfCells()*this.fillPercentage)/ NUMBER_OF_ENTITY_TYPES;
         numberOfRemainingEntities = (int)(getNumberOfCells()*this.fillPercentage) - numberOfEntitiesPerEntityType * NUMBER_OF_ENTITY_TYPES;
     }
@@ -100,7 +100,7 @@ public class SimulationSettings {
     }
 
     private int getNumberOfCells() {
-        return sizeOfMap.getArea();
+        return mapSize.getArea();
     }
 
     public Map<Class<? extends Entity>, Integer> getMinNumbersForEntityTypes() {

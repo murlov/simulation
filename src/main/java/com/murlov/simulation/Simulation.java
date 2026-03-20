@@ -23,7 +23,7 @@ public class Simulation {
 
 
     public Simulation(SimulationSettings settings, Renderer renderer) {
-        simulationMap = new SimulationMap(settings.getSizeOfMap());
+        simulationMap = new SimulationMap(settings.getMapSize());
         initActions = new ArrayList<>();
         MoveEventListener listener = new MoveEventLogger(renderer);
         MoveListenerRegistry listenerRegistry = new MoveListenerRegistry(listener);

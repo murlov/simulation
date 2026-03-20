@@ -47,7 +47,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
         int minSide = (int) Math.ceil(Math.sqrt(minArea));
         int x = input("Ширина карты", failMessage, minSide, MAX_VALUE_FOR_MAP_WIDTH);
         int y = input("Длина карты", failMessage, minSide, MAX_VALUE_FOR_MAP_HEIGHT);
-        settings.setSizeOfMap(x, y);
+        settings.setMapSize(x, y);
 
         Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes = new HashMap<>(settings.getNumberOfEntityTypes());
         List<Class<? extends Entity>> entityTypes = List.of(Wolf.class, Rabbit.class, Grass.class);
