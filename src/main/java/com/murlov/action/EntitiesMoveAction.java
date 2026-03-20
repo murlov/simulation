@@ -49,8 +49,7 @@ public class EntitiesMoveAction implements Action {
         boolean hasMoved = false;
         List<Coordinates> keys = new ArrayList<>(simulationMap.getEntities().keySet());
 
-        int numberOfCells = simulationMap.getSize().getArea();
-        PathFinder pathFinder = new BfsPathFinder(simulationMap.getSize(), numberOfCells);
+        PathFinder pathFinder = new BfsPathFinder();
 
         for (Coordinates coordinates : keys) {
             pauseCallback.waitIfPaused();

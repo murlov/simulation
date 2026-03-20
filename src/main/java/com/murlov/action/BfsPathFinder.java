@@ -3,7 +3,6 @@ package com.murlov.action;
 import com.murlov.model.*;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
-import com.murlov.simulation.Size;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -11,14 +10,6 @@ import java.util.List;
 import java.util.Queue;
 
 public class BfsPathFinder implements PathFinder {
-
-    private final int numberOfCells;
-    private final Size sizeOfMap;
-
-    public BfsPathFinder(Size sizeOfMap, int numberOfCells) {
-        this.sizeOfMap = sizeOfMap;
-        this.numberOfCells = numberOfCells;
-    }
 
     @Override
     public List<Coordinates> execute(SimulationMap simulationMap, Coordinates start, Class<? extends Entity> target){
@@ -29,8 +20,8 @@ public class BfsPathFinder implements PathFinder {
         List<Coordinates> result = new LinkedList<>();
         Queue<Coordinates> queue = new LinkedList<>();
 
-        int[] parents = new int[numberOfCells];
-        boolean[] visited = new boolean[numberOfCells];
+        int[] parents = new int[simulationMap.getSize().getArea()];
+        boolean[] visited = new boolean[simulationMap.getSize().getArea()];
 
         int[][] directions = {
                 {0, -1},
@@ -43,20 +34,20 @@ public class BfsPathFinder implements PathFinder {
                 {-1, -1}
         };
 
-        final int startId = getId(start, sizeOfMap.height());
+        final int startId = getId(start, simulationMap.getSize().height());
         queue.add(start);
         parents[startId] = startId;
 
         while(!queue.isEmpty()){
             Coordinates currentCoordinates = queue.poll();
-            int currentCoordinatesId = getId(currentCoordinates, sizeOfMap.height());
+            int currentCoordinatesId = getId(currentCoordinates, simulationMap.getSize().height());
 
             for (int[] direction : directions) {
                 int x, y;
                 x = currentCoordinates.x() + direction[0];
                 y = currentCoordinates.y() + direction[1];
                 Coordinates nextCoordinates = new Coordinates(x, y);
-                int nextCoordinatesId = getId(nextCoordinates, sizeOfMap.height());
+                int nextCoordinatesId = getId(nextCoordinates, simulationMap.getSize().height());
 
                 if (simulationMap.isInside(nextCoordinates)) {
                     if (visited[nextCoordinatesId]) continue;
@@ -67,7 +58,7 @@ public class BfsPathFinder implements PathFinder {
 
                         if (next.getClass() == target) {
                             parents[nextCoordinatesId] = currentCoordinatesId;
-                            createPath(startId, nextCoordinatesId, parents, sizeOfMap.height(), result);
+                            createPath(startId, nextCoordinatesId, parents, simulationMap.getSize().height(), result);
                             return result;
                         }
                     } else {
