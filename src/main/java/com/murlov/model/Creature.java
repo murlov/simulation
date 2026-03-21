@@ -14,6 +14,7 @@ public abstract class Creature extends Entity {
     private int satiety;
     private final int speed;
     public boolean isDead;
+    private final int maxSatiety;
     private static final int DAMAGE_FROM_HUNGER = 1;
     private static final int NEIGHBOR_PATH_LENGTH = 2;
     private static final int LAST_INDEX_OFFSET = 1;
@@ -24,6 +25,7 @@ public abstract class Creature extends Entity {
         this.health = health;
         this.satiety = satiety;
         this.speed = speed;
+        maxSatiety = satiety;
     }
 
     public int getHealth() {
@@ -33,6 +35,8 @@ public abstract class Creature extends Entity {
     public int getDamage() {
         return 0;
     }
+
+    public abstract Class<? extends Entity> getTarget();
 
     public void setMoveEventListener(MoveEventListener listener) {
         this.listener = listener;
@@ -87,7 +91,7 @@ public abstract class Creature extends Entity {
     }
 
     public void incrementSatiety() {
-        satiety = min(10, ++satiety);
+        satiety = min(maxSatiety, ++satiety);
     }
 
     public void decrementSatiety() {
@@ -146,15 +150,6 @@ public abstract class Creature extends Entity {
             }
         }
         return false;
-    }
-
-    private Class<? extends Entity> getTarget(){
-        if (this.getClass() == Wolf.class) {
-            return Rabbit.class;
-        } else if (this.getClass() == Rabbit.class) {
-            return Grass.class;
-        }
-        throw new IllegalArgumentException("Unknown entity type: " + this.getClass());
     }
 
     private void consumeResource(Creature creature, Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap) {

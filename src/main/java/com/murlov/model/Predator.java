@@ -12,4 +12,9 @@ public abstract class Predator extends Creature {
     public int getDamage() {
         return damage;
     }
+
+    @Override
+    public Class<? extends Entity> getTarget() {
+        return Herbivore.class;
+    }
 }
