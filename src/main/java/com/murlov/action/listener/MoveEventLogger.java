@@ -1,7 +1,7 @@
 package com.murlov.action.listener;
 
-import com.murlov.model.Creature;
-import com.murlov.model.Entity;
+import com.murlov.entity.Creature;
+import com.murlov.entity.Entity;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
 import com.murlov.view.Renderer;

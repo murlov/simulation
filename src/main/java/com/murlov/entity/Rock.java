@@ -1,4 +1,4 @@
-package com.murlov.model;
+package com.murlov.entity;
 
 public class Rock extends Entity {
 }

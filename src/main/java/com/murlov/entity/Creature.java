@@ -1,4 +1,4 @@
-package com.murlov.model;
+package com.murlov.entity;
 
 import com.murlov.action.listener.MoveEventListener;
 import com.murlov.action.PathFinder;

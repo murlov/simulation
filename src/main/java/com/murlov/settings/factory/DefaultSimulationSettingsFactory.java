@@ -1,6 +1,6 @@
 package com.murlov.settings.factory;
 
-import com.murlov.model.*;
+import com.murlov.entity.*;
 import com.murlov.settings.SimulationSettings;
 
 import java.util.HashMap;

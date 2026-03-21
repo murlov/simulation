@@ -1,7 +1,7 @@
-package com.murlov.model.factory;
+package com.murlov.entity.factory;
 
-import com.murlov.model.Entity;
-import com.murlov.model.Rabbit;
+import com.murlov.entity.Entity;
+import com.murlov.entity.Rabbit;
 
 public class RabbitFactory implements EntityFactory {
 

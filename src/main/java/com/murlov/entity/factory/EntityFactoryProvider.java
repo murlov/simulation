@@ -1,4 +1,4 @@
-package com.murlov.model.factory;
+package com.murlov.entity.factory;
 
 import com.murlov.settings.SimulationSettings;
 

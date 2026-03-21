@@ -1,15 +1,23 @@
 package com.murlov.action;
 
-import com.murlov.model.*;
+import com.murlov.entity.*;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class BfsPathFinder implements PathFinder {
+
+    private static final List<Coordinates> SHIFT_COORDINATES = List.of (
+            new Coordinates(0, -1),
+            new Coordinates(1, 0),
+            new Coordinates(0, 1),
+            new Coordinates(-1, 0),
+            new Coordinates(1, -1),
+            new Coordinates(1, 1),
+            new Coordinates(-1, 1),
+            new Coordinates(-1, -1)
+    );
 
     @Override
     public List<Coordinates> find(SimulationMap simulationMap, Coordinates start, Class<? extends Entity> target){
@@ -23,16 +31,6 @@ public class BfsPathFinder implements PathFinder {
         int[] parents = new int[simulationMap.getSize().getArea()];
         boolean[] visited = new boolean[simulationMap.getSize().getArea()];
 
-        int[][] directions = {
-                {0, -1},
-                {1, 0},
-                {0, 1},
-                {-1, 0},
-                {1, -1},
-                {1, 1},
-                {-1, 1},
-                {-1, -1}
-        };
 
         final int startId = getId(start, simulationMap.getSize().height());
         queue.add(start);
@@ -42,10 +40,10 @@ public class BfsPathFinder implements PathFinder {
             Coordinates currentCoordinates = queue.poll();
             int currentCoordinatesId = getId(currentCoordinates, simulationMap.getSize().height());
 
-            for (int[] direction : directions) {
+            for (Coordinates shift : SHIFT_COORDINATES) {
                 int x, y;
-                x = currentCoordinates.x() + direction[0];
-                y = currentCoordinates.y() + direction[1];
+                x = currentCoordinates.x() + shift.x();
+                y = currentCoordinates.y() + shift.y();
                 Coordinates nextCoordinates = new Coordinates(x, y);
                 int nextCoordinatesId = getId(nextCoordinates, simulationMap.getSize().height());
 

@@ -2,10 +2,10 @@ package com.murlov.action;
 
 import com.murlov.action.listener.MoveEventListener;
 import com.murlov.action.listener.MoveListenerRegistry;
-import com.murlov.model.Entity;
-import com.murlov.model.Grass;
-import com.murlov.model.Rabbit;
-import com.murlov.model.Wolf;
+import com.murlov.entity.Entity;
+import com.murlov.entity.Grass;
+import com.murlov.entity.Rabbit;
+import com.murlov.entity.Wolf;
 import com.murlov.simulation.SimulationMap;
 
 import java.util.Collection;

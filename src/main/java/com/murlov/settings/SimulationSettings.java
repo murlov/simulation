@@ -1,6 +1,6 @@
 package com.murlov.settings;
 
-import com.murlov.model.Entity;
+import com.murlov.entity.Entity;
 import com.murlov.simulation.Size;
 
 import java.util.HashMap;

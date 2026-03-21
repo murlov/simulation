@@ -1,7 +1,7 @@
 package com.murlov.action;
 
 import com.murlov.action.listener.MoveListenerRegistry;
-import com.murlov.model.*;
+import com.murlov.entity.*;
 import com.murlov.simulation.SimulationMap;
 import com.murlov.util.RandomProvider;
 

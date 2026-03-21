@@ -1,7 +1,7 @@
-package com.murlov.model.factory;
+package com.murlov.entity.factory;
 
-import com.murlov.model.Entity;
-import com.murlov.model.Grass;
+import com.murlov.entity.Entity;
+import com.murlov.entity.Grass;
 
 public class GrassFactory implements EntityFactory{
 

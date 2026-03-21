@@ -1,6 +1,6 @@
 package com.murlov.action.listener;
 
-import com.murlov.model.Creature;
+import com.murlov.entity.Creature;
 
 public class MoveListenerRegistry {
 

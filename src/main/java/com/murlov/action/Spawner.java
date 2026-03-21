@@ -2,10 +2,10 @@ package com.murlov.action;
 
 import com.murlov.action.listener.MoveEventListener;
 import com.murlov.action.listener.MoveListenerRegistry;
-import com.murlov.model.factory.EntityFactory;
-import com.murlov.model.factory.EntityFactoryProvider;
-import com.murlov.model.Creature;
-import com.murlov.model.Entity;
+import com.murlov.entity.factory.EntityFactory;
+import com.murlov.entity.factory.EntityFactoryProvider;
+import com.murlov.entity.Creature;
+import com.murlov.entity.Entity;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;

@@ -1,6 +1,6 @@
 package com.murlov.action;
 
-import com.murlov.model.Entity;
+import com.murlov.entity.Entity;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
 

@@ -1,4 +1,4 @@
-package com.murlov.model;
+package com.murlov.entity;
 
 public abstract class Predator extends Creature {
     private final int damage;
