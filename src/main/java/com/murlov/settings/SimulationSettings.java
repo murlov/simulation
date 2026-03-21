@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SimulationSettings {
-    private final static int NUMBER_OF_ENTITY_TYPES = 5;
+    private static final int NUMBER_OF_ENTITY_TYPES = 5;
 
     private static SimulationSettings instance;
     private double fillPercentage;

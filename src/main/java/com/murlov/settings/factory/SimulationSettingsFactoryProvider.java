@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class SimulationSettingsFactoryProvider {
 
-    private final static int DEFAULT_SETTINGS = 1;
-    private final static int INPUT_SETTINGS = 2;
+    private static final int DEFAULT_SETTINGS = 1;
+    private static final int INPUT_SETTINGS = 2;
 
     public SimulationSettingsFactory getFactory() {
         int settingsMode = getSettingsMode();
