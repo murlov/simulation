@@ -101,34 +101,32 @@ public abstract class Creature extends Entity {
         satiety--;
     }
 
-    public boolean makeMove(SimulationMap simulationMap, Coordinates currentCoordinates, PathFinder pathFinder) {
+    public boolean makeMove(SimulationMap simulationMap, PathFinder pathFinder) {
         List<Coordinates> path = pathFinder.find(simulationMap, getCoordinates(), getTarget());
         if (path.isEmpty()) {
             return false;
         }
         Coordinates newCoordinates;
-        Creature creature = (Creature) simulationMap.getEntity(currentCoordinates);
 
 
-        if (path.size() == NEIGHBOR_PATH_LENGTH && hasResourceNearby(currentCoordinates, simulationMap)) {
+        if (path.size() == NEIGHBOR_PATH_LENGTH && hasResourceNearby(getCoordinates(), simulationMap)) {
             newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
-            consumeResource(creature, currentCoordinates, newCoordinates, simulationMap);
+            consumeResource(getCoordinates(), newCoordinates, simulationMap);
             return true;
         } else {
             newCoordinates = path.get(min(speed, path.size() - STOP_BEFORE_TARGET_OFFSET));
             simulationMap.moveEntity(this, newCoordinates);
             decrementSatiety();
 
-            notifyMove(creature.getClass(), currentCoordinates, newCoordinates);
-            currentCoordinates = newCoordinates;
-            if (hasResourceNearby(currentCoordinates, simulationMap)) {
-                path = pathFinder.find(simulationMap, currentCoordinates, getTarget());
+            notifyMove(getClass(), getCoordinates(), newCoordinates);
+            if (hasResourceNearby(getCoordinates(), simulationMap)) {
+                path = pathFinder.find(simulationMap, getCoordinates(), getTarget());
                 if (path.isEmpty()) {
                     return false;
                 }
                 if (path.size() == NEIGHBOR_PATH_LENGTH) {
                     newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
-                    consumeResource(creature, currentCoordinates, newCoordinates, simulationMap);
+                    consumeResource(getCoordinates(), newCoordinates, simulationMap);
                 }
             }
             return true;
@@ -152,18 +150,18 @@ public abstract class Creature extends Entity {
         return false;
     }
 
-    private void consumeResource(Creature creature, Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap) {
-        if (creature.getClass() == Rabbit.class) {
+    private void consumeResource(Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap) {
+        if (getClass() == Rabbit.class) {
             Entity targetEntity = simulationMap.getEntity(newCoordinates);
             simulationMap.removeEntity(targetEntity);
-            notifyEat(creature.getClass(), oldCoordinates, targetEntity.getClass(), newCoordinates);
+            notifyEat(getClass(), oldCoordinates, targetEntity.getClass(), newCoordinates);
             incrementSatiety();
-        } else if (creature.getClass() == Wolf.class) {
+        } else if (getClass() == Wolf.class) {
             Creature herbivore = (Creature) simulationMap.getEntity(newCoordinates);
             herbivore.takeDamage(getDamage());
-            notifyAttack(creature.getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
+            notifyAttack(getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
             if (herbivore.getHealth() == 0) {
-                notifyEat(creature.getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
+                notifyEat(getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
                 simulationMap.removeEntity(herbivore);
             }
             incrementSatiety();

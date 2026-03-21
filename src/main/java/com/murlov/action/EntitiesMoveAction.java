@@ -59,7 +59,7 @@ public class EntitiesMoveAction implements Action {
             Entity entity = simulationMap.getEntity(coordinates);
             if (entity instanceof Creature creature) {
                 creature.notifyMoveStart();
-                if (creature.makeMove(simulationMap, coordinates, pathFinder)) {
+                if (creature.makeMove(simulationMap, pathFinder)) {
                     hasMoved = true;
 
                     if (creature.isDead) {
