@@ -15,6 +15,7 @@ public abstract class Creature extends Entity {
     private int health;
     private int satiety;
     private final int speed;
+    private Coordinates coordinates;
     public boolean isDead;
     private final int maxSatiety;
     private static final int DAMAGE_FROM_HUNGER = 1;
@@ -35,6 +36,14 @@ public abstract class Creature extends Entity {
 
     public int getDamage() {
         return 0;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
     }
 
     public abstract Class<? extends Entity> getTarget();
@@ -82,10 +91,11 @@ public abstract class Creature extends Entity {
             return true;
         } else {
             newCoordinates = path.get(min(speed, path.size() - STOP_BEFORE_TARGET_OFFSET));
-            simulationMap.moveEntity(this, newCoordinates);
+            simulationMap.moveCreature(this, newCoordinates);
             decrementSatiety();
             if (isDead) {
                 eventBus.publish(new DeathEvent(this, getCoordinates()));
+                simulationMap.removeEntity(getCoordinates());
             } else if (hasResourceNearby(getCoordinates(), simulationMap)) {
                 path = pathFinder.find(simulationMap, getCoordinates(), getTarget());
                 if (path.isEmpty()) {
@@ -121,14 +131,14 @@ public abstract class Creature extends Entity {
         if (getClass() == Rabbit.class) {
             Entity targetEntity = simulationMap.getEntity(newCoordinates);
             eventBus.publish(new EatEvent(this, oldCoordinates, targetEntity, newCoordinates));
-            simulationMap.removeEntity(targetEntity);
+            simulationMap.removeEntity(newCoordinates);
             incrementSatiety();
         } else if (getClass() == Wolf.class) {
             Creature herbivore = (Creature) simulationMap.getEntity(newCoordinates);
             herbivore.takeDamageFromAttack(getDamage());
             if (herbivore.getHealth() == 0) {
                 eventBus.publish(new EatEvent(this, oldCoordinates, herbivore, newCoordinates));
-                simulationMap.removeEntity(herbivore);
+                simulationMap.removeEntity(newCoordinates);
             }
             incrementSatiety();
         }

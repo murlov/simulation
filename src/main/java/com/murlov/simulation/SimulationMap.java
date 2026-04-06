@@ -1,5 +1,6 @@
 package com.murlov.simulation;
 
+import com.murlov.entity.Creature;
 import com.murlov.entity.Entity;
 
 import java.util.HashMap;
@@ -34,23 +35,25 @@ public class SimulationMap {
     public void setEntity(Entity entity, Coordinates coordinates) {
         validateCoordinate(coordinates);
 
-        entity.setCoordinates(coordinates);
+        if (entity instanceof Creature creature) {
+            creature.setCoordinates(coordinates);
+        }
         entities.put(coordinates, entity);
     }
 
-    public void removeEntity(Entity entity) {
-        validateCoordinate(entity.getCoordinates());
-
-        entities.remove(entity.getCoordinates());
-    }
-
-    public void moveEntity(Entity entity, Coordinates coordinates) {
-        validateCoordinate(entity.getCoordinates());
+    public void removeEntity(Coordinates coordinates) {
         validateCoordinate(coordinates);
 
-        entities.remove(entity.getCoordinates());
-        entity.setCoordinates(coordinates);
-        entities.put(coordinates, entity);
+        entities.remove(coordinates);
+    }
+
+    public void moveCreature(Creature creature, Coordinates coordinates) {
+        validateCoordinate(creature.getCoordinates());
+        validateCoordinate(coordinates);
+
+        entities.remove(creature.getCoordinates());
+        creature.setCoordinates(coordinates);
+        entities.put(coordinates, creature);
     }
 
     public Size getSize() {
