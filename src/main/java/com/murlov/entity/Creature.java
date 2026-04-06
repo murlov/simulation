@@ -85,7 +85,7 @@ public abstract class Creature extends Entity {
             simulationMap.moveEntity(this, newCoordinates);
             decrementSatiety();
             if (isDead) {
-                eventBus.publish(new DeathEvent(getClass(), getCoordinates()));
+                eventBus.publish(new DeathEvent(this, getCoordinates()));
             } else if (hasResourceNearby(getCoordinates(), simulationMap)) {
                 path = pathFinder.find(simulationMap, getCoordinates(), getTarget());
                 if (path.isEmpty()) {
@@ -120,14 +120,14 @@ public abstract class Creature extends Entity {
     private void consumeResource(Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap, EventBus eventBus) {
         if (getClass() == Rabbit.class) {
             Entity targetEntity = simulationMap.getEntity(newCoordinates);
-            eventBus.publish(new EatEvent(getClass(), oldCoordinates, targetEntity.getClass(), newCoordinates));
+            eventBus.publish(new EatEvent(this, oldCoordinates, targetEntity, newCoordinates));
             simulationMap.removeEntity(targetEntity);
             incrementSatiety();
         } else if (getClass() == Wolf.class) {
             Creature herbivore = (Creature) simulationMap.getEntity(newCoordinates);
             herbivore.takeDamageFromAttack(getDamage());
             if (herbivore.getHealth() == 0) {
-                eventBus.publish(new EatEvent(getClass(), oldCoordinates, herbivore.getClass(), newCoordinates));
+                eventBus.publish(new EatEvent(this, oldCoordinates, herbivore, newCoordinates));
                 simulationMap.removeEntity(herbivore);
             }
             incrementSatiety();

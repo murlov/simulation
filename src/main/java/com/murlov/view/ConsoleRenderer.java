@@ -45,13 +45,13 @@ public class ConsoleRenderer implements Renderer {
 
     @Override
     public void printEat(EatEvent event) {
-        System.out.println(event.creatureType().getSimpleName() + " " + event.from() + " has eaten " + event.victimType().getSimpleName() + " " + event.to() + "\n");
+        System.out.println(event.eater().getClass().getSimpleName() + " " + event.from() + " has eaten " + event.target().getClass().getSimpleName() + " " + event.to() + "\n");
     }
 
 
     @Override
     public void printDeath(DeathEvent event) {
-        System.out.println(event.creatureType().getSimpleName() + " " + event.coordinates() + " has died" + "\n");
+        System.out.println(event.creature().getClass().getSimpleName() + " " + event.coordinates() + " has died" + "\n");
     }
 
     @Override

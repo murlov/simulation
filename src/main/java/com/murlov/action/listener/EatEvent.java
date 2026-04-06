@@ -4,9 +4,9 @@ import com.murlov.entity.Creature;
 import com.murlov.entity.Entity;
 import com.murlov.simulation.Coordinates;
 
-public record EatEvent(Class<? extends Creature> creatureType,
+public record EatEvent(Creature eater,
                        Coordinates from,
-                       Class<? extends Entity> victimType,
+                       Entity target,
                        Coordinates to
 
 ) implements Event {
