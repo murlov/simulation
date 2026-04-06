@@ -1,10 +1,11 @@
 package com.murlov.action;
 
-import com.murlov.action.listener.MoveEventListener;
+import com.murlov.action.listener.*;
 import com.murlov.entity.Creature;
 import com.murlov.entity.Entity;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
+import com.murlov.view.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,11 @@ public class EntitiesMoveAction implements Action {
     private PauseCallback pauseCallback;
     private ExitCallback exitCallback;
     private SpawnCallback spawnCallback;
-    private final MoveEventListener listener;
+    private final EventBus eventBus;
 
-    public EntitiesMoveAction(MoveEventListener listener) {
-        this.listener = listener;
+    public EntitiesMoveAction(EventBus eventBus, Renderer renderer) {
+        this.eventBus = eventBus;
+        initEventBus(renderer);
     }
 
     public interface PauseCallback {
@@ -44,6 +46,11 @@ public class EntitiesMoveAction implements Action {
         this.spawnCallback = spawnCallback;
     }
 
+    private void initEventBus(Renderer renderer) {
+        eventBus.subscribe(DeathEvent.class, new DeathEventLogger(renderer));
+        eventBus.subscribe(EatEvent.class, new EatEventLogger(renderer));
+    }
+
     @Override
     public void execute(SimulationMap simulationMap) {
         boolean hasMoved = false;
@@ -58,15 +65,8 @@ public class EntitiesMoveAction implements Action {
             }
             Entity entity = simulationMap.getEntity(coordinates);
             if (entity instanceof Creature creature) {
-                creature.notifyMoveStart();
-                if (creature.makeMove(simulationMap, pathFinder)) {
+                if (creature.makeMove(simulationMap, pathFinder, eventBus)) {
                     hasMoved = true;
-
-                    if (creature.isDead) {
-                        creature.notifyDeath(creature.getClass(), creature.getCoordinates());
-                        simulationMap.removeEntity(creature);
-                    }
-                    listener.onMoveEnd(simulationMap);
                 }
             }
             spawnCallback.spawn(simulationMap);

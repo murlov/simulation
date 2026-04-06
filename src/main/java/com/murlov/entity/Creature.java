@@ -1,7 +1,9 @@
 package com.murlov.entity;
 
-import com.murlov.action.listener.MoveEventListener;
 import com.murlov.action.PathFinder;
+import com.murlov.action.listener.DeathEvent;
+import com.murlov.action.listener.EatEvent;
+import com.murlov.action.listener.EventBus;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
 
@@ -19,7 +21,6 @@ public abstract class Creature extends Entity {
     private static final int NEIGHBOR_PATH_LENGTH = 2;
     private static final int LAST_INDEX_OFFSET = 1;
     private static final int STOP_BEFORE_TARGET_OFFSET = 2;
-    private MoveEventListener listener;
 
     public Creature(int health, int speed, int satiety) {
         this.health = health;
@@ -38,48 +39,14 @@ public abstract class Creature extends Entity {
 
     public abstract Class<? extends Entity> getTarget();
 
-    public void setMoveEventListener(MoveEventListener listener) {
-        this.listener = listener;
-    }
-
-    public void notifyMove(Class<? extends Creature> creatureType, Coordinates from, Coordinates to) {
-        if (listener != null) {
-            listener.onMove(creatureType, from, to);
-        }
-    }
-
-    public void notifyAttack(Class<? extends Creature> attackerType, Coordinates from, Class<? extends Creature> victimType, Coordinates to) {
-        if (listener != null) {
-            listener.onAttack(attackerType, from, victimType, to);
-        }
-    }
-
-    public void notifyEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to) {
-        if (listener != null) {
-            listener.onEat(creatureType, from, victimType, to);
-        }
-    }
-
-    public void notifyDeath(Class<? extends Creature> creatureType, Coordinates coordinates) {
-        if (listener != null) {
-            listener.onDeath(creatureType, coordinates);
-        }
-    }
-
-    public void notifyMoveStart() {
-        if (listener != null) {
-            listener.onMoveStart();
-        }
-    }
-
-    public void takeDamage (){
+    public void takeDamageFromHunger(){
         health = Math.max(0, health - DAMAGE_FROM_HUNGER);
         if (health == 0) {
             die();
         }
     }
 
-    public void takeDamage(int damage) {
+    public void takeDamageFromAttack(int damage) {
         health = Math.max(0, health - damage);
         if (health == 0) {
             die();
@@ -96,12 +63,12 @@ public abstract class Creature extends Entity {
 
     public void decrementSatiety() {
         if (satiety <= 0) {
-            takeDamage();
+            takeDamageFromHunger();
         }
         satiety--;
     }
 
-    public boolean makeMove(SimulationMap simulationMap, PathFinder pathFinder) {
+    public boolean makeMove(SimulationMap simulationMap, PathFinder pathFinder, EventBus eventBus) {
         List<Coordinates> path = pathFinder.find(simulationMap, getCoordinates(), getTarget());
         if (path.isEmpty()) {
             return false;
@@ -111,22 +78,22 @@ public abstract class Creature extends Entity {
 
         if (path.size() == NEIGHBOR_PATH_LENGTH && hasResourceNearby(getCoordinates(), simulationMap)) {
             newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
-            consumeResource(getCoordinates(), newCoordinates, simulationMap);
+            consumeResource(getCoordinates(), newCoordinates, simulationMap, eventBus);
             return true;
         } else {
             newCoordinates = path.get(min(speed, path.size() - STOP_BEFORE_TARGET_OFFSET));
             simulationMap.moveEntity(this, newCoordinates);
             decrementSatiety();
-
-            notifyMove(getClass(), getCoordinates(), newCoordinates);
-            if (hasResourceNearby(getCoordinates(), simulationMap)) {
+            if (isDead) {
+                eventBus.publish(new DeathEvent(getClass(), getCoordinates()));
+            } else if (hasResourceNearby(getCoordinates(), simulationMap)) {
                 path = pathFinder.find(simulationMap, getCoordinates(), getTarget());
                 if (path.isEmpty()) {
                     return false;
                 }
                 if (path.size() == NEIGHBOR_PATH_LENGTH) {
                     newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
-                    consumeResource(getCoordinates(), newCoordinates, simulationMap);
+                    consumeResource(getCoordinates(), newCoordinates, simulationMap, eventBus);
                 }
             }
             return true;
@@ -150,18 +117,17 @@ public abstract class Creature extends Entity {
         return false;
     }
 
-    private void consumeResource(Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap) {
+    private void consumeResource(Coordinates oldCoordinates, Coordinates newCoordinates, SimulationMap simulationMap, EventBus eventBus) {
         if (getClass() == Rabbit.class) {
             Entity targetEntity = simulationMap.getEntity(newCoordinates);
+            eventBus.publish(new EatEvent(getClass(), oldCoordinates, targetEntity.getClass(), newCoordinates));
             simulationMap.removeEntity(targetEntity);
-            notifyEat(getClass(), oldCoordinates, targetEntity.getClass(), newCoordinates);
             incrementSatiety();
         } else if (getClass() == Wolf.class) {
             Creature herbivore = (Creature) simulationMap.getEntity(newCoordinates);
-            herbivore.takeDamage(getDamage());
-            notifyAttack(getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
+            herbivore.takeDamageFromAttack(getDamage());
             if (herbivore.getHealth() == 0) {
-                notifyEat(getClass(), oldCoordinates, herbivore.getClass(), newCoordinates);
+                eventBus.publish(new EatEvent(getClass(), oldCoordinates, herbivore.getClass(), newCoordinates));
                 simulationMap.removeEntity(herbivore);
             }
             incrementSatiety();

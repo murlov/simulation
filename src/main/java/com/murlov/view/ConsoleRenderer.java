@@ -1,5 +1,7 @@
 package com.murlov.view;
 
+import com.murlov.action.listener.DeathEvent;
+import com.murlov.action.listener.EatEvent;
 import com.murlov.entity.*;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
@@ -41,27 +43,18 @@ public class ConsoleRenderer implements Renderer {
         };
     }
 
-    public void printMove(Class<? extends Creature> creatureType, Coordinates from, Coordinates to) {
-        System.out.println(creatureType.getSimpleName() + " has moved from " + from + " to " + to + "\n");
+    @Override
+    public void printEat(EatEvent event) {
+        System.out.println(event.creatureType().getSimpleName() + " " + event.from() + " has eaten " + event.victimType().getSimpleName() + " " + event.to() + "\n");
     }
 
-    public void printAttack(Class<? extends Creature> attackerType, Coordinates from, Class<? extends Creature> victimType, Coordinates to) {
-        System.out.println(attackerType.getSimpleName() + " " + from + " has attacked " + victimType.getSimpleName() + " on " + to + "\n");
-    }
 
-    public void printEat(Class<? extends Creature> creatureType, Coordinates from, Class<? extends Entity> victimType, Coordinates to) {
-        System.out.println(creatureType.getSimpleName() + " " + from + " has eaten " + victimType.getSimpleName() + " on " + to + "\n");
+    @Override
+    public void printDeath(DeathEvent event) {
+        System.out.println(event.creatureType().getSimpleName() + " " + event.coordinates() + " has died" + "\n");
     }
 
     @Override
-    public void printSpawn(Class<? extends Entity> entityType, Coordinates coordinates) {
-        System.out.println(entityType.getSimpleName() + " has spawned on " + coordinates + "\n");
-    }
-
-    public void printDeath(Class<? extends Creature> creatureType, Coordinates coordinates) {
-        System.out.println(creatureType.getSimpleName() + " has died on " + coordinates + "\n");
-    }
-
     public void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();

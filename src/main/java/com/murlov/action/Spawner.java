@@ -1,10 +1,7 @@
 package com.murlov.action;
 
-import com.murlov.action.listener.MoveEventListener;
-import com.murlov.action.listener.MoveListenerRegistry;
 import com.murlov.entity.factory.EntityFactory;
 import com.murlov.entity.factory.EntityFactoryProvider;
-import com.murlov.entity.Creature;
 import com.murlov.entity.Entity;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Coordinates;
@@ -16,27 +13,14 @@ import java.util.Random;
 
 public class Spawner {
 
-    public static void execute(SimulationMap simulationMap, String entityName, MoveListenerRegistry listenerRegistry,
-                               int count, boolean isLoggingRequired, MoveEventListener listener) {
+    public static void execute(SimulationMap simulationMap, String entityName, int count) {
         SimulationSettings settings = SimulationSettings.getInstance();
         EntityFactory entityFactory = EntityFactoryProvider.getFactory(entityName, settings);
         for (int i = 0; i < count; i++) {
             Entity entity = entityFactory.create();
             Coordinates coordinates = getFreeCellCoordinates(simulationMap);
             simulationMap.setEntity(entity, coordinates);
-            if (entity instanceof Creature creature) {
-                listenerRegistry.attachListener(creature);
-            }
-            if (isLoggingRequired && listener != null) {
-                listener.onSpawn(entity.getClass(), coordinates);
-                listener.onMoveEnd(simulationMap);
-            }
         }
-    }
-
-    public static void execute(SimulationMap simulationMap, String entityName, MoveListenerRegistry listenerRegistry,
-                               int count, boolean isLoggingRequired) {
-        execute(simulationMap, entityName, listenerRegistry, count, isLoggingRequired, null);
     }
 
     private static Coordinates getRandomCoordinates(Size size) {

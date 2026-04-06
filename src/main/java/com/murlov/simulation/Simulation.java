@@ -1,9 +1,7 @@
 package com.murlov.simulation;
 
 import com.murlov.action.*;
-import com.murlov.action.listener.MoveEventListener;
-import com.murlov.action.listener.MoveEventLogger;
-import com.murlov.action.listener.MoveListenerRegistry;
+import com.murlov.action.listener.EventBus;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.view.Renderer;
 
@@ -25,13 +23,11 @@ public class Simulation {
     public Simulation(SimulationSettings settings, Renderer renderer) {
         simulationMap = new SimulationMap(settings.getMapSize());
         initActions = new ArrayList<>();
-        MoveEventListener listener = new MoveEventLogger(renderer);
-        MoveListenerRegistry listenerRegistry = new MoveListenerRegistry(listener);
-        initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerEntityType(), settings.getNumberOfRemainingEntities(), listenerRegistry));
+        initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerEntityType(), settings.getNumberOfRemainingEntities()));
         turnActions = new ArrayList<>();
-        EntitiesSpawnAction entitiesSpawnAction = new EntitiesSpawnAction(settings.getMinNumbersForEntityTypes(), listenerRegistry, listener);
+        EntitiesSpawnAction entitiesSpawnAction = new EntitiesSpawnAction(settings.getMinNumbersForEntityTypes());
         turnActions.add(entitiesSpawnAction);
-        EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction(listener);
+        EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction(new EventBus(), renderer);
         entitiesMoveAction.setPauseCallback(this::pause);
         entitiesMoveAction.setExitCallback(this::exite);
         entitiesMoveAction.setSpawnCallback(entitiesSpawnAction::execute);
@@ -76,6 +72,8 @@ public class Simulation {
 
         while (running) {
             nextTurn();
+            renderer.clearScreen();
+            renderer.printMap(simulationMap);
         }
     }
 
