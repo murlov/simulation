@@ -20,7 +20,7 @@ public abstract class Creature extends Entity {
     private int satiety;
     private final int speed;
     private Coordinates coordinates;
-    public boolean isDead;
+    private boolean isDead;
     private final int maxSatiety;
 
     public Creature(int health, int speed, int satiety) {
@@ -91,7 +91,6 @@ public abstract class Creature extends Entity {
         if (path.size() == NEIGHBOR_PATH_LENGTH && hasResourceNearby(getCoordinates(), simulationMap)) {
             newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
             consumeResource(getCoordinates(), newCoordinates, simulationMap, eventBus);
-            return true;
         } else {
             newCoordinates = path.get(min(speed, path.size() - STOP_BEFORE_TARGET_OFFSET));
             simulationMap.moveCreature(this, newCoordinates);
@@ -109,8 +108,8 @@ public abstract class Creature extends Entity {
                     consumeResource(getCoordinates(), newCoordinates, simulationMap, eventBus);
                 }
             }
-            return true;
         }
+        return true;
     }
 
     private boolean hasResourceNearby(Coordinates coordinates, SimulationMap simulationMap) {
