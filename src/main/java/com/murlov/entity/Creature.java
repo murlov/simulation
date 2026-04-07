@@ -12,16 +12,16 @@ import java.util.List;
 import static java.lang.Math.min;
 
 public abstract class Creature extends Entity {
+    private static final int DAMAGE_FROM_HUNGER = 1;
+    private static final int NEIGHBOR_PATH_LENGTH = 2;
+    private static final int LAST_INDEX_OFFSET = 1;
+    private static final int STOP_BEFORE_TARGET_OFFSET = 2;
     private int health;
     private int satiety;
     private final int speed;
     private Coordinates coordinates;
     public boolean isDead;
     private final int maxSatiety;
-    private static final int DAMAGE_FROM_HUNGER = 1;
-    private static final int NEIGHBOR_PATH_LENGTH = 2;
-    private static final int LAST_INDEX_OFFSET = 1;
-    private static final int STOP_BEFORE_TARGET_OFFSET = 2;
 
     public Creature(int health, int speed, int satiety) {
         this.health = health;
@@ -67,7 +67,10 @@ public abstract class Creature extends Entity {
     }
 
     public void incrementSatiety() {
-        satiety = min(maxSatiety, ++satiety);
+        satiety++;
+        if (satiety > maxSatiety) {
+            satiety = maxSatiety;
+        }
     }
 
     public void decrementSatiety() {
