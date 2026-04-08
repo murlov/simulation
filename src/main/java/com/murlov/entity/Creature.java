@@ -32,24 +32,12 @@ public abstract class Creature extends Entity {
         maxSatiety = satiety;
     }
 
-    public int getHealth() {
-        return health;
-    }
-
-    public int getDamage() {
-        return 0;
-    }
-
     public Coordinates getCoordinates() {
         return coordinates;
     }
 
     public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
-    }
-
-    private Class<? extends Entity> getFood() {
-        return food;
     }
 
     private void takeDamageFromHunger(){
@@ -85,7 +73,7 @@ public abstract class Creature extends Entity {
     }
 
     public boolean makeMove(SimulationMap simulationMap, PathFinder pathFinder, EventBus eventBus) {
-        List<Coordinates> path = pathFinder.find(simulationMap, getCoordinates(), getFood());
+        List<Coordinates> path = pathFinder.find(simulationMap, getCoordinates(), food);
         if (path.isEmpty()) {
             return false;
         }
@@ -103,7 +91,7 @@ public abstract class Creature extends Entity {
                 eventBus.publish(new DeathEvent(this, getCoordinates()));
                 simulationMap.removeEntity(getCoordinates());
             } else if (hasResourceNearby(getCoordinates(), simulationMap)) {
-                path = pathFinder.find(simulationMap, getCoordinates(), getFood());
+                path = pathFinder.find(simulationMap, getCoordinates(), food);
                 if (path.isEmpty()) {
                     return false;
                 }
@@ -141,8 +129,8 @@ public abstract class Creature extends Entity {
             incrementSatiety();
         } else if (getClass() == Wolf.class) {
             Creature herbivore = (Creature) simulationMap.getEntity(newCoordinates);
-            herbivore.takeDamageFromAttack(getDamage());
-            if (herbivore.getHealth() == 0) {
+            herbivore.takeDamageFromAttack(((Predator) this).damage);
+            if (herbivore.health == 0) {
                 eventBus.publish(new EatEvent(this, oldCoordinates, herbivore, newCoordinates));
                 simulationMap.removeEntity(newCoordinates);
             }
