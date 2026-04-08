@@ -101,7 +101,9 @@ public abstract class Creature extends Entity {
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 Coordinates targetCoordinates = new Coordinates(coordinates.x() + x,  coordinates.y() + y);
-                if (simulationMap.getEntities().containsKey(targetCoordinates) && simulationMap.getEntity(targetCoordinates).getClass() == food) {
+                boolean isFoodAtTargetCoordinates = simulationMap.getEntities().containsKey(targetCoordinates) &&
+                        simulationMap.getEntity(targetCoordinates).getClass() == food;
+                if (isFoodAtTargetCoordinates) {
                     return true;
                 }
             }
