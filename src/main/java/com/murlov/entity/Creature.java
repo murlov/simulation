@@ -72,10 +72,10 @@ public abstract class Creature extends Entity {
         satiety--;
     }
 
-    public boolean makeMove(SimulationMap simulationMap, PathFinder pathFinder, EventBus eventBus) {
+    public void makeMove(SimulationMap simulationMap, PathFinder pathFinder, EventBus eventBus) {
         List<Coordinates> path = pathFinder.find(simulationMap, getCoordinates(), food);
         if (path.isEmpty()) {
-            return false;
+            throw new RuntimeException("Creature cannot find food");
         }
         Coordinates newCoordinates;
 
@@ -93,7 +93,7 @@ public abstract class Creature extends Entity {
             } else if (hasResourceNearby(getCoordinates(), simulationMap)) {
                 path = pathFinder.find(simulationMap, getCoordinates(), food);
                 if (path.isEmpty()) {
-                    return false;
+                    throw new RuntimeException("Creature cannot find food");
                 }
                 if (path.size() == NEIGHBOR_PATH_LENGTH) {
                     newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
@@ -101,7 +101,6 @@ public abstract class Creature extends Entity {
                 }
             }
         }
-        return true;
     }
 
     private boolean hasResourceNearby(Coordinates coordinates, SimulationMap simulationMap) {

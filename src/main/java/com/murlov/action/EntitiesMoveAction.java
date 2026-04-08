@@ -53,7 +53,6 @@ public class EntitiesMoveAction implements Action {
 
     @Override
     public void execute(SimulationMap simulationMap) {
-        boolean hasMoved = false;
         List<Coordinates> keys = new ArrayList<>(simulationMap.getEntities().keySet());
 
         PathFinder pathFinder = new BfsPathFinder();
@@ -65,14 +64,9 @@ public class EntitiesMoveAction implements Action {
             }
             Entity entity = simulationMap.getEntity(coordinates);
             if (entity instanceof Creature creature) {
-                if (creature.makeMove(simulationMap, pathFinder, eventBus)) {
-                    hasMoved = true;
-                }
+                creature.makeMove(simulationMap, pathFinder, eventBus);
             }
             spawnCallback.spawn(simulationMap);
-        }
-        if (!hasMoved) {
-            throw new RuntimeException("Creatures cannot move");
         }
     }
 }
