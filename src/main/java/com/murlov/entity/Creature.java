@@ -48,18 +48,18 @@ public abstract class Creature extends Entity {
         this.coordinates = coordinates;
     }
 
-    public Class<? extends Entity> getFood() {
+    private Class<? extends Entity> getFood() {
         return food;
     }
 
-    public void takeDamageFromHunger(){
+    private void takeDamageFromHunger(){
         health = Math.max(0, health - DAMAGE_FROM_HUNGER);
         if (health == 0) {
             die();
         }
     }
 
-    public void takeDamageFromAttack(int damage) {
+    private void takeDamageFromAttack(int damage) {
         health = Math.max(0, health - damage);
         if (health == 0) {
             die();
@@ -70,14 +70,14 @@ public abstract class Creature extends Entity {
         isDead = true;
     }
 
-    public void incrementSatiety() {
+    private void incrementSatiety() {
         satiety++;
         if (satiety > maxSatiety) {
             satiety = maxSatiety;
         }
     }
 
-    public void decrementSatiety() {
+    private void decrementSatiety() {
         if (satiety <= 0) {
             takeDamageFromHunger();
         }
