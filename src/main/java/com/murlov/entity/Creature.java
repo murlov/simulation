@@ -13,8 +13,7 @@ import static java.lang.Math.min;
 
 public abstract class Creature extends Entity {
     private static final int DAMAGE_FROM_HUNGER = 1;
-    private static final int NEIGHBOR_PATH_LENGTH = 2;
-    private static final int LAST_INDEX_OFFSET = 1;
+    private static final int NEIGHBOR_INDEX = 1;
     private static final int STOP_BEFORE_TARGET_OFFSET = 2;
     private int health;
     private int satiety;
@@ -80,8 +79,8 @@ public abstract class Creature extends Entity {
         Coordinates newCoordinates;
 
 
-        if (path.size() == NEIGHBOR_PATH_LENGTH && hasResourceNearby(getCoordinates(), simulationMap)) {
-            newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
+        if (hasResourceNearby(getCoordinates(), simulationMap)) {
+            newCoordinates = path.get(NEIGHBOR_INDEX);
             consumeResource(getCoordinates(), newCoordinates, simulationMap, eventBus);
         } else {
             newCoordinates = path.get(min(speed, path.size() - STOP_BEFORE_TARGET_OFFSET));
@@ -92,13 +91,8 @@ public abstract class Creature extends Entity {
                 simulationMap.removeEntity(getCoordinates());
             } else if (hasResourceNearby(getCoordinates(), simulationMap)) {
                 path = pathFinder.find(simulationMap, getCoordinates(), food);
-                if (path.isEmpty()) {
-                    throw new RuntimeException("Creature cannot find food");
-                }
-                if (path.size() == NEIGHBOR_PATH_LENGTH) {
-                    newCoordinates = path.get(NEIGHBOR_PATH_LENGTH - LAST_INDEX_OFFSET);
-                    consumeResource(getCoordinates(), newCoordinates, simulationMap, eventBus);
-                }
+                newCoordinates = path.get(NEIGHBOR_INDEX);
+                consumeResource(getCoordinates(), newCoordinates, simulationMap, eventBus);
             }
         }
     }
