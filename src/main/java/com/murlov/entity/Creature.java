@@ -104,15 +104,10 @@ public abstract class Creature extends Entity {
     }
 
     private boolean hasResourceNearby(Coordinates coordinates, SimulationMap simulationMap) {
-        Class<? extends Entity> targetEntityType = switch (this.getClass().getSimpleName()) {
-            case "Wolf" -> Rabbit.class;
-            case "Rabbit" -> Grass.class;
-            default -> throw new IllegalStateException("Unexpected entityType: " + this.getClass().getSimpleName());
-        };
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 Coordinates targetCoordinates = new Coordinates(coordinates.x() + x,  coordinates.y() + y);
-                if (simulationMap.getEntities().containsKey(targetCoordinates) && simulationMap.getEntity(targetCoordinates).getClass() == targetEntityType) {
+                if (simulationMap.getEntities().containsKey(targetCoordinates) && simulationMap.getEntity(targetCoordinates).getClass() == food) {
                     return true;
                 }
             }
