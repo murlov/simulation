@@ -2,7 +2,7 @@ package com.murlov.entity;
 
 public class Wolf extends Predator {
 
-    public Wolf(int health, int speed, int satiety, int damage) {
-        super(health, speed, satiety, damage);
+    public Wolf(int health, int speed, int satiety, int damage, Class<? extends Entity> food) {
+        super(health, speed, satiety, damage, food);
     }
 }

@@ -2,12 +2,8 @@ package com.murlov.entity;
 
 public abstract class Herbivore extends Creature {
 
-    public Herbivore(int health, int speed, int satiety) {
-        super(health, speed, satiety);
-    }
 
-    @Override
-    public Class<? extends Entity> getTarget() {
-        return Grass.class;
+    public Herbivore(int health, int speed, int satiety, Class<? extends Entity> food) {
+        super(health, speed, satiety, food);
     }
 }

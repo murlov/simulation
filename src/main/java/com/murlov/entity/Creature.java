@@ -22,11 +22,13 @@ public abstract class Creature extends Entity {
     private Coordinates coordinates;
     private boolean isDead;
     private final int maxSatiety;
+    private final Class<? extends Entity> food;
 
-    public Creature(int health, int speed, int satiety) {
+    public Creature(int health, int speed, int satiety, Class<? extends Entity> food) {
         this.health = health;
         this.satiety = satiety;
         this.speed = speed;
+        this.food = food;
         maxSatiety = satiety;
     }
 
@@ -46,7 +48,9 @@ public abstract class Creature extends Entity {
         this.coordinates = coordinates;
     }
 
-    public abstract Class<? extends Entity> getTarget();
+    public Class<? extends Entity> getFood() {
+        return food;
+    }
 
     public void takeDamageFromHunger(){
         health = Math.max(0, health - DAMAGE_FROM_HUNGER);
@@ -81,7 +85,7 @@ public abstract class Creature extends Entity {
     }
 
     public boolean makeMove(SimulationMap simulationMap, PathFinder pathFinder, EventBus eventBus) {
-        List<Coordinates> path = pathFinder.find(simulationMap, getCoordinates(), getTarget());
+        List<Coordinates> path = pathFinder.find(simulationMap, getCoordinates(), getFood());
         if (path.isEmpty()) {
             return false;
         }
@@ -99,7 +103,7 @@ public abstract class Creature extends Entity {
                 eventBus.publish(new DeathEvent(this, getCoordinates()));
                 simulationMap.removeEntity(getCoordinates());
             } else if (hasResourceNearby(getCoordinates(), simulationMap)) {
-                path = pathFinder.find(simulationMap, getCoordinates(), getTarget());
+                path = pathFinder.find(simulationMap, getCoordinates(), getFood());
                 if (path.isEmpty()) {
                     return false;
                 }
