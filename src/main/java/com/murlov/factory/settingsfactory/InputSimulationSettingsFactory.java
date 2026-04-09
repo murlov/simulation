@@ -1,4 +1,4 @@
-package com.murlov.settings.factory;
+package com.murlov.factory.settingsfactory;
 
 import com.murlov.entity.Entity;
 import com.murlov.entity.Grass;
