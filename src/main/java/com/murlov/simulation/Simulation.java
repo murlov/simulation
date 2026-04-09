@@ -28,8 +28,6 @@ public class Simulation {
         EntitiesSpawnAction entitiesSpawnAction = new EntitiesSpawnAction(settings.getMinNumbersForEntityTypes());
         turnActions.add(entitiesSpawnAction);
         EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction(new EventBus(), renderer);
-        entitiesMoveAction.setPauseCallback(this::pause);
-        entitiesMoveAction.setExitCallback(this::exite);
         entitiesMoveAction.setSpawnCallback(entitiesSpawnAction::execute);
         turnActions.add(entitiesMoveAction);
         this.renderer = renderer;
@@ -72,8 +70,6 @@ public class Simulation {
 
         while (running) {
             nextTurn();
-            renderer.clearScreen();
-            renderer.printMap(simulationMap);
         }
     }
 
@@ -89,12 +85,11 @@ public class Simulation {
         }
     }
 
-    private boolean exite() {
-        return !running;
-    }
-
     private void nextTurn() {
         executeTurnActions();
+        renderer.clearScreen();
+        renderer.printMap(simulationMap);
+        pause();
     }
 
     private void executeInitActions() {

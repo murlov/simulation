@@ -12,8 +12,6 @@ import java.util.List;
 
 public class EntitiesMoveAction implements Action {
 
-    private PauseCallback pauseCallback;
-    private ExitCallback exitCallback;
     private SpawnCallback spawnCallback;
     private final EventBus eventBus;
 
@@ -22,24 +20,8 @@ public class EntitiesMoveAction implements Action {
         initEventBus(renderer);
     }
 
-    public interface PauseCallback {
-        void waitIfPaused();
-    }
-
-    public interface ExitCallback {
-        boolean shouldExit();
-    }
-
     public interface SpawnCallback {
         void spawn(SimulationMap simulationMap);
-    }
-
-    public void setPauseCallback(PauseCallback pauseCallback) {
-        this.pauseCallback = pauseCallback;
-    }
-
-    public void setExitCallback(ExitCallback exitCallback) {
-        this.exitCallback = exitCallback;
     }
 
     public void setSpawnCallback(SpawnCallback spawnCallback) {
@@ -58,10 +40,6 @@ public class EntitiesMoveAction implements Action {
         PathFinder pathFinder = new BfsPathFinder();
 
         for (Coordinates coordinates : keys) {
-            pauseCallback.waitIfPaused();
-            if (exitCallback.shouldExit()) {
-                return;
-            }
             Entity entity = simulationMap.getEntity(coordinates);
             if (entity instanceof Creature creature) {
                 creature.makeMove(simulationMap, pathFinder, eventBus);
