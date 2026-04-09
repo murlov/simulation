@@ -27,7 +27,7 @@ public class Simulation {
         turnActions = new ArrayList<>();
         EntitiesSpawnAction entitiesSpawnAction = new EntitiesSpawnAction(settings.getMinNumbersForEntityTypes());
         turnActions.add(entitiesSpawnAction);
-        EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction(new EventBus(), renderer, entitiesSpawnAction);
+        EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction(new EventBus(), renderer, entitiesSpawnAction, new BfsPathFinder());
         turnActions.add(entitiesMoveAction);
         this.renderer = renderer;
         scanner = new Scanner(System.in);

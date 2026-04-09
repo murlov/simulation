@@ -14,11 +14,14 @@ public class EntitiesMoveAction implements Action {
 
     private final EventBus eventBus;
     private final EntitiesSpawnAction entitiesSpawnAction;
+    private final PathFinder pathFinder;
 
-    public EntitiesMoveAction(EventBus eventBus, Renderer renderer, EntitiesSpawnAction entitiesSpawnAction) {
+    public EntitiesMoveAction(EventBus eventBus, Renderer renderer, EntitiesSpawnAction entitiesSpawnAction,
+                              PathFinder pathFinder) {
         this.entitiesSpawnAction = entitiesSpawnAction;
         this.eventBus = eventBus;
         initEventBus(renderer);
+        this.pathFinder = pathFinder;
     }
 
     private void initEventBus(Renderer renderer) {
@@ -29,8 +32,6 @@ public class EntitiesMoveAction implements Action {
     @Override
     public void execute(SimulationMap simulationMap) {
         List<Coordinates> keys = new ArrayList<>(simulationMap.getEntities().keySet());
-
-        PathFinder pathFinder = new BfsPathFinder();
 
         for (Coordinates coordinates : keys) {
             Entity entity = simulationMap.getEntity(coordinates);
