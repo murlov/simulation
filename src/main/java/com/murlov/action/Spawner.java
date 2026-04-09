@@ -1,7 +1,6 @@
 package com.murlov.action;
 
-import com.murlov.entity.factory.EntityFactory;
-import com.murlov.entity.factory.EntityFactoryProvider;
+import com.murlov.factory.entityfactory.EntityFactory;
 import com.murlov.entity.Entity;
 import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Coordinates;
@@ -13,11 +12,11 @@ import java.util.Random;
 
 public class Spawner {
 
-    public static void execute(SimulationMap simulationMap, String entityName, int count) {
+    public static void execute(SimulationMap simulationMap, Class<? extends Entity> type, int count) {
         SimulationSettings settings = SimulationSettings.getInstance();
-        EntityFactory entityFactory = EntityFactoryProvider.getFactory(entityName, settings);
+        EntityFactory entityFactory = new EntityFactory(settings);
         for (int i = 0; i < count; i++) {
-            Entity entity = entityFactory.create();
+            Entity entity = entityFactory.get(type);
             Coordinates coordinates = getFreeCellCoordinates(simulationMap);
             simulationMap.setEntity(entity, coordinates);
         }

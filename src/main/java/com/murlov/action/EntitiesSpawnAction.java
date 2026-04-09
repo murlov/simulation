@@ -28,7 +28,7 @@ public class EntitiesSpawnAction implements Action {
         List<Class<? extends Entity>> entityTypes = List.of(Wolf.class, Rabbit.class, Grass.class);
         for (Class<? extends Entity> entityType : entityTypes) {
             int count = Math.max(0, getMinNumberBy(entityType) - getCountByType(entityType));
-            Spawner.execute(simulationMap, entityType.getSimpleName(), count);
+            Spawner.execute(simulationMap, entityType, count);
         }
 
         entityCounts.clear();
