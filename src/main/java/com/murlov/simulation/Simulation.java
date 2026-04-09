@@ -27,8 +27,7 @@ public class Simulation {
         turnActions = new ArrayList<>();
         EntitiesSpawnAction entitiesSpawnAction = new EntitiesSpawnAction(settings.getMinNumbersForEntityTypes());
         turnActions.add(entitiesSpawnAction);
-        EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction(new EventBus(), renderer);
-        entitiesMoveAction.setSpawnCallback(entitiesSpawnAction::execute);
+        EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction(new EventBus(), renderer, entitiesSpawnAction);
         turnActions.add(entitiesMoveAction);
         this.renderer = renderer;
         scanner = new Scanner(System.in);

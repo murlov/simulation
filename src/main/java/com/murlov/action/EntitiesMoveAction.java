@@ -12,20 +12,13 @@ import java.util.List;
 
 public class EntitiesMoveAction implements Action {
 
-    private SpawnCallback spawnCallback;
     private final EventBus eventBus;
+    private final EntitiesSpawnAction entitiesSpawnAction;
 
-    public EntitiesMoveAction(EventBus eventBus, Renderer renderer) {
+    public EntitiesMoveAction(EventBus eventBus, Renderer renderer, EntitiesSpawnAction entitiesSpawnAction) {
+        this.entitiesSpawnAction = entitiesSpawnAction;
         this.eventBus = eventBus;
         initEventBus(renderer);
-    }
-
-    public interface SpawnCallback {
-        void spawn(SimulationMap simulationMap);
-    }
-
-    public void setSpawnCallback(SpawnCallback spawnCallback) {
-        this.spawnCallback = spawnCallback;
     }
 
     private void initEventBus(Renderer renderer) {
@@ -44,7 +37,7 @@ public class EntitiesMoveAction implements Action {
             if (entity instanceof Creature creature) {
                 creature.makeMove(simulationMap, pathFinder, eventBus);
             }
-            spawnCallback.spawn(simulationMap);
+            entitiesSpawnAction.execute(simulationMap);
         }
     }
 }
