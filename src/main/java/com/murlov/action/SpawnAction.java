@@ -11,12 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EntitiesSpawnAction implements Action {
+public class SpawnAction implements Action {
 
     private final Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes;
     private final Map<Class<? extends Entity>, Integer> entityCounts;
 
-    public EntitiesSpawnAction(Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes) {
+    public SpawnAction(Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes) {
         this.minNumbersForEntityTypes = minNumbersForEntityTypes;
         entityCounts = new HashMap<>();
     }

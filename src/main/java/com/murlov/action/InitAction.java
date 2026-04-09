@@ -7,12 +7,12 @@ import com.murlov.util.RandomProvider;
 import java.util.List;
 import java.util.Random;
 
-public class EntitiesInitAction implements Action {
+public class InitAction implements Action {
 
     private final int numberOfEntitiesPerEntityType;
     private final int numberOfRemainingEntities;
 
-    public EntitiesInitAction(int numberOfEntitiesPerEntityType, int numberOfRemainingEntities) {
+    public InitAction(int numberOfEntitiesPerEntityType, int numberOfRemainingEntities) {
         this.numberOfEntitiesPerEntityType = numberOfEntitiesPerEntityType;
         this.numberOfRemainingEntities = numberOfRemainingEntities;
     }

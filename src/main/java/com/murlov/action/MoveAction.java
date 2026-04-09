@@ -10,15 +10,15 @@ import com.murlov.view.Renderer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntitiesMoveAction implements Action {
+public class MoveAction implements Action {
 
     private final EventBus eventBus;
-    private final EntitiesSpawnAction entitiesSpawnAction;
+    private final SpawnAction spawnAction;
     private final PathFinder pathFinder;
 
-    public EntitiesMoveAction(EventBus eventBus, Renderer renderer, EntitiesSpawnAction entitiesSpawnAction,
-                              PathFinder pathFinder) {
-        this.entitiesSpawnAction = entitiesSpawnAction;
+    public MoveAction(EventBus eventBus, Renderer renderer, SpawnAction spawnAction,
+                      PathFinder pathFinder) {
+        this.spawnAction = spawnAction;
         this.eventBus = eventBus;
         initEventBus(renderer);
         this.pathFinder = pathFinder;
@@ -38,7 +38,7 @@ public class EntitiesMoveAction implements Action {
             if (entity instanceof Creature creature) {
                 creature.makeMove(simulationMap, pathFinder, eventBus);
             }
-            entitiesSpawnAction.execute(simulationMap);
+            spawnAction.execute(simulationMap);
         }
     }
 }

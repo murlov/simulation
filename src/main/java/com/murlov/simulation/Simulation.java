@@ -23,12 +23,12 @@ public class Simulation {
     public Simulation(SimulationSettings settings, Renderer renderer) {
         simulationMap = new SimulationMap(settings.getMapSize());
         initActions = new ArrayList<>();
-        initActions.add(new EntitiesInitAction(settings.getNumberOfEntitiesPerEntityType(), settings.getNumberOfRemainingEntities()));
+        initActions.add(new InitAction(settings.getNumberOfEntitiesPerEntityType(), settings.getNumberOfRemainingEntities()));
         turnActions = new ArrayList<>();
-        EntitiesSpawnAction entitiesSpawnAction = new EntitiesSpawnAction(settings.getMinNumbersForEntityTypes());
-        turnActions.add(entitiesSpawnAction);
-        EntitiesMoveAction entitiesMoveAction = new EntitiesMoveAction(new EventBus(), renderer, entitiesSpawnAction, new BfsPathFinder());
-        turnActions.add(entitiesMoveAction);
+        SpawnAction spawnAction = new SpawnAction(settings.getMinNumbersForEntityTypes());
+        turnActions.add(spawnAction);
+        MoveAction moveAction = new MoveAction(new EventBus(), renderer, spawnAction, new BfsPathFinder());
+        turnActions.add(moveAction);
         this.renderer = renderer;
         scanner = new Scanner(System.in);
     }
