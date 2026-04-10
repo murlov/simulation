@@ -9,7 +9,6 @@ import java.util.Map;
 public class SimulationSettings {
     private static final int NUMBER_OF_ENTITY_TYPES = 5;
 
-    private static SimulationSettings instance;
     private double fillPercentage;
     private int numberOfEntitiesPerEntityType;
     private Size mapSize;
@@ -23,7 +22,7 @@ public class SimulationSettings {
     private int predatorSatiety;
     private int predatorDamage;
 
-    private SimulationSettings() {
+    public SimulationSettings() {
         mapSize = new Size();
         fillPercentage = 0;
         numberOfEntitiesPerEntityType = 0;
@@ -38,7 +37,7 @@ public class SimulationSettings {
         predatorDamage = 0;
     }
 
-    private SimulationSettings(int width, int height, int fillPercentage, Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes, int herbivoreHealth,
+    public SimulationSettings(int width, int height, int fillPercentage, Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes, int herbivoreHealth,
                                int herbivoreSpeed, int herbivoreSatiety, int predatorHealth, int predatorSpeed, int predatorSatiety, int predatorDamage) {
         mapSize = new Size(width, height);
         this.fillPercentage = fillPercentage * 0.01;
@@ -52,23 +51,6 @@ public class SimulationSettings {
         this.predatorSpeed = predatorSpeed;
         this.predatorSatiety = predatorSatiety;
         this.predatorDamage = predatorDamage;
-    }
-
-    public static SimulationSettings getInstance(int width, int height, int fillPercentage, Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes,
-                                                 int herbivoreHealth, int herbivoreSpeed, int herbivoreSatiety, int predatorHealth, int predatorSpeed,
-                                                 int predatorSatiety, int predatorDamage) {
-        if (instance == null) {
-            instance = new SimulationSettings(width, height, fillPercentage, minNumbersForEntityTypes, herbivoreHealth, herbivoreSpeed, herbivoreSatiety,
-                    predatorHealth, predatorSpeed, predatorSatiety, predatorDamage);
-        }
-        return instance;
-    }
-
-    public static SimulationSettings getInstance() {
-        if (instance == null) {
-            instance = new SimulationSettings();
-        }
-        return instance;
     }
 
     public void setFillPercentage(int fillPercentage) {

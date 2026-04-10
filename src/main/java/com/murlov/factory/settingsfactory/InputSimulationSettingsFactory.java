@@ -35,7 +35,7 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
 
     @Override
     public SimulationSettings get() {
-        SimulationSettings settings = SimulationSettings.getInstance();
+        SimulationSettings settings = new SimulationSettings();
         String failMessage = "Некорректный ввод";
 
         System.out.println("Введите данные");

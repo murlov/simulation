@@ -22,10 +22,11 @@ public class Simulation {
 
     public Simulation(SimulationSettings settings, Renderer renderer) {
         simulationMap = new SimulationMap(settings.getMapSize());
+        Spawner spawner = new Spawner(settings);
         initActions = new ArrayList<>();
-        initActions.add(new InitAction(settings.getNumberOfEntitiesPerEntityType(), settings.getNumberOfRemainingEntities()));
+        initActions.add(new InitAction(settings.getNumberOfEntitiesPerEntityType(), settings.getNumberOfRemainingEntities(), spawner));
         turnActions = new ArrayList<>();
-        SpawnAction spawnAction = new SpawnAction(settings.getMinNumbersForEntityTypes());
+        SpawnAction spawnAction = new SpawnAction(settings.getMinNumbersForEntityTypes(), spawner);
         turnActions.add(spawnAction);
         MoveAction moveAction = new MoveAction(new EventBus(), renderer, spawnAction, new BfsPathFinder());
         turnActions.add(moveAction);

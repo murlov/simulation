@@ -12,8 +12,12 @@ import java.util.Random;
 
 public class Spawner {
 
-    public static void execute(SimulationMap simulationMap, Class<? extends Entity> type, int count) {
-        SimulationSettings settings = SimulationSettings.getInstance();
+    private final SimulationSettings settings;
+
+    public Spawner(SimulationSettings settings) {
+        this.settings = settings;
+    }
+    public void execute(SimulationMap simulationMap, Class<? extends Entity> type, int count) {
         EntityFactory entityFactory = new EntityFactory(settings);
         for (int i = 0; i < count; i++) {
             Entity entity = entityFactory.get(type);
@@ -22,14 +26,14 @@ public class Spawner {
         }
     }
 
-    private static Coordinates getRandomCoordinates(Size size) {
+    private Coordinates getRandomCoordinates(Size size) {
         Random random = RandomProvider.getInstance();
         int x = random.nextInt(size.width());
         int y = random.nextInt(size.height());
         return new Coordinates(x, y);
     }
 
-    private static Coordinates getFreeCellCoordinates(SimulationMap simulationMap) {
+    private Coordinates getFreeCellCoordinates(SimulationMap simulationMap) {
 
         Coordinates coordinates = getRandomCoordinates(simulationMap.getSize());
 

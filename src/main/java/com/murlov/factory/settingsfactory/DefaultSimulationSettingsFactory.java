@@ -25,7 +25,7 @@ public class DefaultSimulationSettingsFactory implements SimulationSettingsFacto
 
     @Override
     public SimulationSettings get () {
-        return SimulationSettings.getInstance(MAP_WIDTH, MAP_LENGTH, FILL_PERCENTAGE, MIN_NUMBERS_FOR_CLASSES, HERBIVORE_HEALTH, HERBIVORE_SPEED, HERBIVORE_SATIETY,
+        return new SimulationSettings(MAP_WIDTH, MAP_LENGTH, FILL_PERCENTAGE, MIN_NUMBERS_FOR_CLASSES, HERBIVORE_HEALTH, HERBIVORE_SPEED, HERBIVORE_SATIETY,
                 PREDATOR_HEALTH, PREDATOR_SPEED, PREDATOR_SATIETY, PREDATOR_DAMAGE);
     }
 }

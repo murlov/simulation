@@ -15,10 +15,12 @@ public class SpawnAction implements Action {
 
     private final Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes;
     private final Map<Class<? extends Entity>, Integer> entityCounts;
+    private final Spawner spawner;
 
-    public SpawnAction(Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes) {
+    public SpawnAction(Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes, Spawner spawner) {
         this.minNumbersForEntityTypes = minNumbersForEntityTypes;
         entityCounts = new HashMap<>();
+        this.spawner = spawner;
     }
 
     @Override
@@ -28,7 +30,7 @@ public class SpawnAction implements Action {
         List<Class<? extends Entity>> entityTypes = List.of(Wolf.class, Rabbit.class, Grass.class);
         for (Class<? extends Entity> entityType : entityTypes) {
             int count = Math.max(0, getMinNumberBy(entityType) - getCountByType(entityType));
-            Spawner.execute(simulationMap, entityType, count);
+            spawner.execute(simulationMap, entityType, count);
         }
 
         entityCounts.clear();
