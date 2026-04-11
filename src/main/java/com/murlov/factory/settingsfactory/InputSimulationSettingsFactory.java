@@ -5,6 +5,8 @@ import com.murlov.entity.Grass;
 import com.murlov.entity.Rabbit;
 import com.murlov.entity.Wolf;
 import com.murlov.settings.SimulationSettings;
+import com.murlov.simulation.Size;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,49 +37,57 @@ public class InputSimulationSettingsFactory implements SimulationSettingsFactory
 
     @Override
     public SimulationSettings get() {
-        SimulationSettings settings = new SimulationSettings();
+        SimulationSettings.Parameters parameters = new SimulationSettings.Parameters();
         String failMessage = "Некорректный ввод";
 
         System.out.println("Введите данные");
-        int percent = input("Процент заполнения (При значении 25 — 25% карты заполнится объектами)",
-                failMessage, MIN_VALUE_FOR_FILL_PERCENTAGE, MAX_VALUE_FOR_FILL_PERCENTAGE);
-        settings.setFillPercentage(percent);
+        double fillPercentage = (double) input("Процент заполнения (При значении 25 — 25% карты заполнится объектами)",
+                failMessage, MIN_VALUE_FOR_FILL_PERCENTAGE, MAX_VALUE_FOR_FILL_PERCENTAGE) / 100.0;
 
-        double minArea = settings.getNumberOfEntityTypes()/(percent / 100.0);
+        double minArea = SimulationSettings.Parameters.NUMBER_OF_ENTITY_TYPES/(fillPercentage);
         int minSide = (int) Math.ceil(Math.sqrt(minArea));
         int x = input("Ширина карты", failMessage, minSide, MAX_VALUE_FOR_MAP_WIDTH);
         int y = input("Длина карты", failMessage, minSide, MAX_VALUE_FOR_MAP_HEIGHT);
-        settings.setMapSize(x, y);
+        Size mapSize = new Size(x, y);
+        parameters.mapSize = mapSize;
 
-        Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes = new HashMap<>(settings.getNumberOfEntityTypes());
+        parameters.numberOfEntitiesPerEntityType = (int) (mapSize.getArea()*fillPercentage) /
+                SimulationSettings.Parameters.NUMBER_OF_ENTITY_TYPES;
+        parameters.numberOfRemainingEntities = (int) (mapSize.getArea()*fillPercentage) -
+                parameters.numberOfEntitiesPerEntityType * SimulationSettings.Parameters.NUMBER_OF_ENTITY_TYPES;
+
+        Map<Class<? extends Entity>, Integer> minNumbersForEntityTypes =
+                new HashMap<>(SimulationSettings.Parameters.NUMBER_OF_ENTITY_TYPES);
         List<Class<? extends Entity>> entityTypes = List.of(Wolf.class, Rabbit.class, Grass.class);
 
-        System.out.println("Минимальное количество для каждой группы (Произойдет респаун, если указаных сущностей будет меньше заданного значения):");
+        System.out.println("Минимальное количество для каждой группы (Произойдет респаун, если указаных сущностей" +
+                " будет меньше заданного значения):");
         for (Class<? extends Entity> type: entityTypes) {
-            int value = input(type.getSimpleName(), failMessage, MIN_VALUE_FOR_MIN_NUMBERS_FOR_ENTITY_TYPES, settings.getNumberOfEntitiesPerEntityType());
+            int value = input(type.getSimpleName(), failMessage, MIN_VALUE_FOR_MIN_NUMBERS_FOR_ENTITY_TYPES,
+                    parameters.numberOfEntitiesPerEntityType);
             minNumbersForEntityTypes.put(type, value);
         }
-        settings.setMinNumbersForEntityTypes(minNumbersForEntityTypes);
+        parameters.minNumbersForEntityTypes = minNumbersForEntityTypes;
 
         System.out.println("Показатели для травоядных:");
         int health = input("Здоровье:", failMessage, MIN_VALUE_FOR_HERBIVORE_HEALTH, MAX_VALUE_FOR_HERBIVORE_HEALTH);
-        settings.setHerbivoreHealth(health);
+        parameters.herbivoreHealth = health;
         int speed = input("Скорость передвижения", failMessage, MIN_VALUE_FOR_HERBIVORE_SPEED, MAX_VALUE_FOR_HERBIVORE_SPEED);
-        settings.setHerbivoreSpeed(speed);
+        parameters.herbivoreSpeed = speed;
         int satiety = input("Сытость", failMessage, MIN_VALUE_FOR_HERBIVORE_SATIETY, MAX_VALUE_FOR_HERBIVORE_SATIETY);
-        settings.setHerbivoreSatiety(satiety);
+        parameters.herbivoreSatiety = satiety;
 
         System.out.println("Показатели для хищников:");
         health = input("Здоровье:", failMessage, MIN_VALUE_FOR_PREDATOR_HEALTH, MAX_VALUE_FOR_PREDATOR_HEALTH);
-        settings.setPredatorHealth(health);
+        parameters.predatorHealth = health;
         speed = input("Скорость передвижения", failMessage, MIN_VALUE_FOR_PREDATOR_SPEED, MAX_VALUE_FOR_PREDATOR_SPEED);
-        settings.setPredatorSpeed(speed);
+        parameters.predatorSpeed = speed;
         satiety = input("Сытость", failMessage, MIN_VALUE_FOR_PREDATOR_SATIETY, MAX_VALUE_FOR_PREDATOR_SATIETY);
-        settings.setPredatorSatiety(satiety);
+        parameters.predatorSatiety = satiety;
         int damage = input("Сила атаки", failMessage, MIN_VALUE_FOR_PREDATOR_DAMAGE, MAX_VALUE_FOR_PREDATOR_DAMAGE);
-        settings.setPredatorDamage(damage);
+        parameters.predatorDamage = damage;
 
-        return settings;
+        return new SimulationSettings(parameters);
     }
 
     private int input(String title, String failMessage, int min, int max) {
