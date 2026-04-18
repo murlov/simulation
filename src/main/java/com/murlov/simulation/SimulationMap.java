@@ -15,10 +15,6 @@ public class SimulationMap {
         this(new HashMap<>(), size);
     }
 
-    public SimulationMap(SimulationMap simulationMap) {
-        this(simulationMap.entities,simulationMap.size);
-    }
-
     private SimulationMap(Map<Coordinates, Entity> entities, Size size) {
         this.entities = new HashMap<>(entities);
         this.size = size;
