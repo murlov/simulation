@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Simulation {
+    private final static String QUIT = "q";
     private final SimulationMap simulationMap;
     private final Renderer renderer;
     private final List<Action> initActions;
@@ -36,14 +37,14 @@ public class Simulation {
             String input;
             while (true) {
                 input = scanner.nextLine();
-                if (input.equals("") && paused) {
+                if (input.isEmpty() && paused) {
                     paused = false;
                     synchronized (pauseLock) {
                         pauseLock.notify();
                     }
-                } else if (input.equals("") && !paused) {
+                } else if (input.isEmpty() && !paused) {
                     paused = true;
-                } else if (input.equals("q")) {
+                } else if (input.equals(QUIT)) {
                     running = false;
                     paused = false;
                     synchronized (pauseLock) {
@@ -56,7 +57,7 @@ public class Simulation {
 
         thread.start();
 
-        System.out.println("Для начала/паузы симуляции используйте Enter. Для выхода введите q.");
+        System.out.printf("Для начала/паузы симуляции используйте Enter. Для выхода введите %s. %n", QUIT);
         pause();
         renderer.clearScreen();
 
