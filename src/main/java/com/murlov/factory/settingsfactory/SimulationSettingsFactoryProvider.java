@@ -1,11 +1,14 @@
 package com.murlov.factory.settingsfactory;
 
+import com.murlov.util.PropertiesProvider;
+
 import java.util.Scanner;
 
 public class SimulationSettingsFactoryProvider {
 
     private static final int DEFAULT_SETTINGS = 1;
     private static final int INPUT_SETTINGS = 2;
+    private static final PropertiesProvider propertiesProvider = new PropertiesProvider();
 
     public SimulationSettingsFactory getFactory() {
         int settingsMode = getSettingsMode();
@@ -17,23 +20,41 @@ public class SimulationSettingsFactoryProvider {
 
         System.out.println("Как поступить с настройками?");
         while (true) {
-            System.out.println("""
+            System.out.printf("""
                     1. Использовать настройки по-умолчанию:
-                        - Размер карты — 10x10
-                        - Процент заполнения — 40 (40% карты заполнится объектами)
-                        - Минимальное количество хищников, травоядных и травы — 8 (Произойдет респаун, если указаных сущностей будет меньше заданного значения)
+                        - Размер карты — %sx%s
+                        - Процент заполнения — %s (%s%% карты заполнится объектами)
+                        - Минимальное количество сущностей (Произойдет респаун, если указаных сущностей будет меньше заданного значения):
+                            - Хищников - %s
+                            - Травоядных - %s
+                            - Травы - %s
                         - Травоядные:
-                            - Здоровье — 10
-                            - Скорость передвижения  — 1
-                            - Сытость — 10
+                            - Здоровье — %s
+                            - Скорость передвижения  — %s
+                            - Сытость — %s
                         - Хищники:
-                            - Здоровье — 10
-                            - Скорость передвижения  — 1
-                            - Сытость — 10
-                            - Сила атаки — 1
+                            - Здоровье — %s
+                            - Скорость передвижения  — %s
+                            - Сытость — %s
+                            - Сила атаки — %s
                             
                     2. Задать свои настройки
-                    """);
+                    """,
+                    propertiesProvider.getString("map.width"),
+                    propertiesProvider.getString("map.height"),
+                    propertiesProvider.getString("fillPercentage"),
+                    propertiesProvider.getString("fillPercent"),
+                    propertiesProvider.getString("wolfsNumber"),
+                    propertiesProvider.getString("rabbitsNumber"),
+                    propertiesProvider.getString("grassNumber"),
+                    propertiesProvider.getString("herbivore.health"),
+                    propertiesProvider.getString("herbivore.speed"),
+                    propertiesProvider.getString("herbivore.satiety"),
+                    propertiesProvider.getString("predator.health"),
+                    propertiesProvider.getString("predator.speed"),
+                    propertiesProvider.getString("predator.satiety"),
+                    propertiesProvider.getString("predator.damage")
+                    );
 
             String input = scanner.nextLine();
             if (isInteger(input)) {
@@ -66,5 +87,13 @@ public class SimulationSettingsFactoryProvider {
             case INPUT_SETTINGS -> new InputSimulationSettingsFactory();
             default -> throw new IllegalArgumentException();
         };
+    }
+
+    public static void main(String[] args) {
+        System.out.printf("""
+                There are
+                %d apples
+                """,
+                5);
     }
 }
