@@ -11,6 +11,7 @@ target/
 *.iws
 *.iml
 *.ipr
+test.properties
 
 ### Eclipse ###
 .apt_generated
@@ -37,5 +38,4 @@ build/
 ### Mac OS ###
 .DS_Store
 
-test.properties
 D:\Programming\java\simulation\test.properties
