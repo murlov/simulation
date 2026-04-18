@@ -6,7 +6,6 @@ import com.murlov.settings.SimulationSettings;
 import com.murlov.simulation.Coordinates;
 import com.murlov.simulation.SimulationMap;
 import com.murlov.simulation.Size;
-import com.murlov.util.RandomProvider;
 
 import java.util.Random;
 
@@ -27,7 +26,7 @@ public class Spawner {
     }
 
     private Coordinates getRandomCoordinates(Size size) {
-        Random random = RandomProvider.getInstance();
+        Random random = new Random();
         int x = random.nextInt(size.width());
         int y = random.nextInt(size.height());
         return new Coordinates(x, y);

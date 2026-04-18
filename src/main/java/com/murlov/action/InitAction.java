@@ -2,7 +2,6 @@ package com.murlov.action;
 
 import com.murlov.entity.*;
 import com.murlov.simulation.SimulationMap;
-import com.murlov.util.RandomProvider;
 
 import java.util.List;
 import java.util.Random;
@@ -28,7 +27,7 @@ public class InitAction implements Action {
         }
 
         for (int i = 0; i < numberOfRemainingEntities; i++) {
-            Random random = RandomProvider.getInstance();
+            Random random = new Random();
             Class<? extends Entity> type = types.get(random.nextInt(types.size()));
             spawner.execute(simulationMap, type, 1);
         }
