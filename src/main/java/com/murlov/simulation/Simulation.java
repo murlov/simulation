@@ -64,12 +64,14 @@ public class Simulation {
         renderer.clearScreen();
 
         executeInitActions();
-        renderer.clearScreen();
-        renderer.printMap(simulationMap);
-
 
         while (running) {
             nextTurn();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
@@ -86,9 +88,9 @@ public class Simulation {
     }
 
     private void nextTurn() {
-        executeTurnActions();
-        renderer.clearScreen();
         renderer.printMap(simulationMap);
+        renderer.clearScreen();
+        executeTurnActions();
         pause();
     }
 

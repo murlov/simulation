@@ -24,12 +24,6 @@ public class ConsoleRenderer implements Renderer {
         }
 
         System.out.println("\n\n");
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 
     private String getIcon(Class<? extends Entity> entityType) {
