@@ -61,7 +61,7 @@ public class Simulation {
         pause();
         renderer.clearScreen();
 
-        executeInitActions();
+        executeActions(initActions);
 
         while (running) {
             nextTurn();
@@ -88,19 +88,14 @@ public class Simulation {
     private void nextTurn() {
         renderer.printMap(simulationMap);
         renderer.clearScreen();
-        executeTurnActions();
+        executeActions(turnActions);
         pause();
     }
 
-    private void executeInitActions() {
-        for (Action action : initActions) {
+    private void executeActions(List<Action> actions) {
+        for (Action action: actions) {
             action.execute(simulationMap);
         }
     }
 
-    private void executeTurnActions() {
-        for (Action action : turnActions) {
-            action.execute(simulationMap);
-        }
-    }
 }
